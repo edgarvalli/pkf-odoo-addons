@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="pkf_app_action" model="ir.actions.act_url">
+        <field name="name">PKFApp</field>
+        <field name="url">/app</field>
+        <field name="target">self</field>
+    </record>
+
+    <record id="pkf_app_menu_action" model="ir.actions.act_window">
+        <field name="name">Menu PKF Action</field>
+        <field name="res_model">pkf.app.menu</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+
+</odoo>

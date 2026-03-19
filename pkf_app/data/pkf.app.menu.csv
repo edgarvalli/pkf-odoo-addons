@@ -1,0 +1,4 @@
+id,name,text,icon,url
+dashboard,dashboard, Dashboard,fa fa-users-viewfinder,/
+recibos,recibos,Recibos de Nominas,fa fa-receipt,/recibos-de-nomina
+clients,clients,Clientes,fa fa-people-group,/clientes

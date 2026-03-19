@@ -1,0 +1,59 @@
+* {
+  font-size: 12px;
+  font-family: sans-serif;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse !important;
+  border-spacing: 0 !important;
+}
+
+table,
+thead,
+tbody,
+tr,
+th,
+td {
+  border: 0 !important;
+  border-bottom: 0 !important;
+  border-top: 0 !important;
+  border-left: 0 !important;
+  border-right: 0 !important;
+  outline: 0 !important;
+}
+
+td,
+th {
+  padding: 6px 8px;
+  vertical-align: middle;
+}
+
+th {
+  font-weight: bold !important;
+}
+
+.align-top {
+  vertical-align: top;
+}
+
+.bg-grey {
+  background-color: #eee;
+}
+.text-end {
+  text-align: right !important;
+}
+.text-start {
+  text-align: left !important;
+}
+
+.text-center {
+  text-align: center !important;
+}
+.wrap-text {
+  white-space: normal !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  word-break: break-all !important;
+  max-width: 100%;
+}

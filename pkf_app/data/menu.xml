@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem
+        id="pkf_root_menu"
+        name="PKF App"
+        action="pkf_app_action"
+        sequence="10"
+    />
+
+    <menuitem
+        id="pkf_app_menu"
+        name="Menu PKF"
+        action="pkf_app_menu_action"
+        parent="base.menu_administration"
+        sequence="10"
+    />
+
+</odoo>

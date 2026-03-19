@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_pkf_app_menu_users,pkf_app_menu_users,model_pkf_app_menu,base.group_user,1,0,0,0
+access_pkf_app_menu_admin,pkf_app_menu_admin,model_pkf_app_menu,base.group_system,1,1,1,1

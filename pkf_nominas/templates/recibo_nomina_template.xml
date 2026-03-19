@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+
+    <template id="pkf_nomina_recibo_pdf">
+        <t t-call="web.basic_layout">
+            <link rel="stylesheet" href="pkf_nominas/static/css/recibo.nomina.css" />
+
+            <main>
+                <div class="page">
+                    <div class="container">
+
+                        <!-- ENCABEZADO -->
+                        <table class="mb16">
+                            <tr>
+                                <td>
+                                    <img t-att-src="logo_pkf" width="60" height="30" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-start text-muted">
+                                    Comprobante por internet
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- EMISOR -->
+                        <table class="bg-grey mb16">
+                            <tr>
+                                <th colspan="6" class="fw-bold text-start">
+                                    <t t-out="doc.emisor.nombre" />
+                                </th>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">RFC</td>
+                                <td t-out="doc.emisor.rfc" />
+                                <td class="fw-bold">Régimen</td>
+                                <td t-out="doc.emisor.regimen_fiscal" />
+                                <td class="fw-bold">Lugar</td>
+                                <td t-out="doc.lugar_expedicion" />
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">Fecha</td>
+                                <td t-out="doc.fecha" />
+                                <td class="fw-bold">Hora</td>
+                                <td t-out="doc.hora" />
+                                <td colspan="2" />
+                            </tr>
+                        </table>
+
+                        <!-- EMPLEADO -->
+                        <table class="mb16">
+                            <tr>
+                                <th colspan="4" class="fw-bold text-start">
+                                    <strong>
+                                        <span t-out="doc.empleado.nombre" />
+                                    </strong>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td width="50%">
+                                    <table>
+                                        <tr>
+                                            <td class="fw-bold">RFC</td>
+                                            <td t-out="doc.empleado.rfc" />
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">CURP</td>
+                                            <td t-out="doc.empleado.curp" />
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Fecha Inicio Relacion Lab</td>
+                                            <td t-out="doc.empleado.fecha_inicio_rel_laboral" />
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Jornada</td>
+                                            <td t-out="doc.empleado.jornada" />
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Tipo Salario</td>
+                                            <td t-out="doc.empleado.tipo_salario" />
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Domicilio Fiscal</td>
+                                            <td t-out="doc.empleado.codigo_postal" />
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td width="50%">
+                                    <table>
+                                        <tr>
+                                            <td class="fw-bold">Ejercicio</td>
+                                            <td t-out="doc.ejercicio" />
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Periodo</td>
+                                            <td t-out="doc.periodo_text" />
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Días de Pago</td>
+                                            <td t-out="doc.dias_pagados" />
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Fecha de Pago</td>
+                                            <td t-out="doc.fecha_pago" />
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Puesto</td>
+                                            <td t-out="doc.empleado.puesto" />
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Depto</td>
+                                            <td t-out="doc.empleado.departamento" />
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">SBC</td>
+                                            <td t-out="doc.empleado.sbc" />
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Régimen Fiscal</td>
+                                            <td t-out="doc.empleado.regimen_fiscal" />
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- PRECEPCPIONES Y DEDUCCIONES -->
+
+                        <table class="mb16">
+                            <tr>
+                                <td width="50%" class="fw-bold bg-grey">Percepciones</td>
+                                <td width="50%" class="fw-bold bg-grey">Deducciones</td>
+                            </tr>
+                            <tr>
+                                <!-- PRECEPCIONES -->
+                                <td width="50%">
+                                    <table>
+                                        <thead class="bg-grey">
+                                            <tr>
+                                                <th>Agrup. SAT</th>
+                                                <th>No.</th>
+                                                <th>Concepto</th>
+                                                <th class="text-right ">Gravado</th>
+                                                <th class="text-right ">Exento</th>
+                                                <th class="text-right ">Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr t-foreach="doc.percepciones" t-as="p">
+                                                <td t-out="p.clave_sat" />
+                                                <td t-out="p.codigo" />
+                                                <td t-out="p.concepto" />
+                                                <td class="text-right"
+                                                    t-out="'{:,.2f}'.format(p.importe_gravado)" />
+                                                <td class="text-right"
+                                                    t-out="'{:,.2f}'.format(p.importe_exento)" />
+                                                <td class="text-right"
+                                                    t-out="'{:,.2f}'.format(p.importe)" />
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+
+                                <!-- DEDUCCIONES -->
+                                <td width="50%">
+                                    <table>
+                                        <thead class="bg-grey">
+                                            <tr>
+                                                <th>Agrup. SAT</th>
+                                                <th>No.</th>
+                                                <th>Concepto</th>
+                                                <th class="text-right">Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr t-foreach="doc.deducciones" t-as="d">
+                                                <td t-out="d.clave_sat" />
+                                                <td t-out="d.codigo" />
+                                                <td t-out="d.concepto" />
+                                                <td class="text-right"
+                                                    t-out="'{:,.2f}'.format(d.importe)" />
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- TOTALES -->
+
+                        <table class="mb16">
+                            <tr>
+                                <td width="50%">
+                                    <table>
+                                        <tr class="align-top">
+                                            <td class="fw-bold align-top" colspan="3">
+                                                Total Percepcion mas Otros Pagos: $
+                                            </td>
+
+                                            <td class="align-top"
+                                                t-out="'{:,.2f}'.format(doc.totales.percepcion.total_gravado)" />
+
+                                            <td class="align-top"
+                                                t-out="'{:,.2f}'.format(doc.totales.percepcion.total_exento)" />
+
+                                            <td class="align-top"
+                                                t-out="'{:,.2f}'.format(doc.totales.percepcion.total_gravado + doc.totales.percepcion.total_exento)" />
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td width="50%">
+                                    <table>
+
+                                        <tr>
+                                            <td colspan="2" class="fw-bold text-end">Subtotal: $</td>
+                                            <td colspan="2"
+                                                t-out="'{:,.2f}'.format(doc.totales.subtotal)" />
+                                        </tr>
+
+                                        <tr>
+                                            <td colspan="2" class="fw-bold text-end">Descuentos: $</td>
+                                            <td colspan="2"
+                                                t-out="'{:,.2f}'.format(doc.totales.total_otras_deducciones)" />
+                                        </tr>
+
+                                        <tr>
+                                            <td colspan="2" class="fw-bold text-end">Retenciones: $</td>
+                                            <td colspan="2"
+                                                t-out="'{:,.2f}'.format(doc.totales.total_impuestos_retenidos)" />
+                                        </tr>
+
+                                        <tr>
+                                            <td colspan="2" class="fw-bold text-end">Total: $</td>
+                                            <td colspan="2"
+                                                t-out="'{:,.2f}'.format(doc.totales.neto)" />
+                                        </tr>
+
+                                        <tr>
+                                            <td colspan="2" class="fw-bold text-end">Neto del
+                                                recibo: $</td>
+                                            <td colspan="2"
+                                                t-out="'{:,.2f}'.format(doc.totales.neto)" />
+                                        </tr>
+
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table class="mb16">
+                            <tr class="fw-bold">
+                                <td width="50%">
+                                    <table>
+                                        <tr>
+                                            <td colspan="6"></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td width="50%">
+                                    <table>
+                                        <tr>
+                                            <td colspan="6" class="bg-grey text-center">
+                                                Importe
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="6" class="text-muted text-center"
+                                                t-out="doc.totales.importe_letra" />
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table class="mb16">
+                            <tr>
+                                <td width="70%">
+                                    <table>
+                                        <tr>
+                                            <td colspan="6" class="text-muted"
+                                                style="font-size: 8px;"> Se puso a mi disposición el
+                                                archivo XML correspondiente y recibí de la empresa. <br />
+                                                arriba mencionada la cantidad neta a que este
+                                                documento se refiere estando <br /> conforme con las
+                                                percepciones y deducciones que en él aparecen
+                                                especificados. </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td width="30%"></td>
+                            </tr>
+                        </table>
+
+                        <!-- QR -->
+                        <table class="mb16">
+                            <tr>
+                                <td width="30%" style="vertical-align: top;">
+                                    <img t-att-src="doc.image_qr" width="200" />
+                                </td>
+                                <td width="70%" style="vertical-align: top;">
+                                    <table>
+                                        <tr>
+                                            <td class="fw-bold bg-grey text-center">
+                                                Este documento es una representación impresa de un
+                                                CFDI
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center" t-out="doc.cfdi.metodo_pago" />
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <table>
+
+                                                    <tr>
+                                                        <td class="text-end">Serie del Certificado
+                                                            del emisor:</td>
+                                                        <td t-out="doc.cfdi.no_certificado" />
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="text-end">Folio Fiscal UUID:</td>
+                                                        <td t-out="doc.cfdi.uuid" />
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="text-end">No. de serie del
+                                                            Certificado del SAT:</td>
+                                                        <td
+                                                            t-out="doc.cfdi.timbre.no_certificado_sat" />
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="text-end">Fecha y hora de
+                                                            certificación:</td>
+                                                        <td t-out="doc.cfdi.timbre.fecha" />
+                                                    </tr>
+
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Sello Digital -->
+                        <table class="mb8">
+                            <tr>
+                                <td class="bg-grey">
+                                    Sello digital del CFDI
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td t-out="doc.cfdi.timbre.sello" class="wrap-text" />
+                            </tr>
+                        </table>
+
+                        <table class="mb8">
+                            <tr>
+                                <td class="bg-grey">
+                                    Sello del SAT
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td t-out="doc.cfdi.timbre.sello_sat" class="wrap-text" />
+                            </tr>
+                        </table>
+
+                        <table class="mb8">
+                            <tr>
+                                <td class="bg-grey">
+                                    Cadena original del complemento de certificación digital del SAT
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td t-out="doc.cfdi.timbre.complemento_certificacion"
+                                    class="wrap-text" />
+                            </tr>
+                        </table>
+
+                    </div>
+                </div>
+            </main>
+        </t>
+    </template>
+
+
+    <record
+        id="paperformat_pkf_nomina_without_header" model="report.paperformat">
+        <field name="name">PKF Nómina sin Header</field>
+        <field name="default" eval="False" />
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+
+        <!-- MÁRGENES -->
+        <field name="margin_top">5</field>
+        <field name="margin_bottom">5</field>
+        <field name="margin_left">2.5</field>
+        <field name="margin_right">2.5</field>
+
+        <field name="header_line" eval="False" />
+        <field name="header_spacing">0</field>
+        <field name="dpi">90</field>
+    </record>
+
+</odoo>

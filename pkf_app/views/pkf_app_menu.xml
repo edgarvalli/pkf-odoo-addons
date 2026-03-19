@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_res_groups_form_inherit_pkf_menu" model="ir.ui.view">
+        <field name="name">res.groups.form.inherit.pkf.menu</field>
+        <field name="model">res.groups</field>
+        <field name="inherit_id" ref="base.view_groups_form" />
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page string="Menús PKF">
+                    <field name="app_menu_id" widget="many2many_tags" />
+                </page>
+            </notebook>
+        </field>
+    </record>
+
+    <record id="pkf_app_menu_form_view" model="ir.ui.view">
+        <field name="name">pkf.app.menu.form.view</field>
+        <field name="model">pkf.app.menu</field>
+        <field name="arch" type="xml">
+            <form string="Menu PKF">
+                <sheet>
+                    <group>
+                        <h1>
+                            <field name="text" />
+                        </h1>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="icon" />
+                            <field name="icon_display" />
+                        </group>
+                        <group>
+                            <field name="name" />
+                            <field name="url" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="ubmenus" string="Submenus">
+                            <field name="child_ids" />
+                        </page>
+                        <page name="groups" string="Grupos">
+                            <field name="group_ids" />
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="pkf_app_menu_list_view" model="ir.ui.view">
+        <field name="name">pkf.app.menu.list.view</field>
+        <field name="model">pkf.app.menu</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="text" />
+                <field name="icon_display" widget="html" />
+                <field name="url" widget="badge" />
+            </list>
+        </field>
+    </record>
+
+</odoo>

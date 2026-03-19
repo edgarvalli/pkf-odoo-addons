@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="pkf_app_fronted">
+        <t t-call="web.layout">
+            <link
+                rel="stylesheet"
+                href="/pkf_app/static/lib/fontawesome/css/all.min.css"
+            />
+            <link rel="stylesheet" href="/pkf_app/static/app/assets/index.css" />
+            <div id="root"></div>
+            <script src="/pkf_app/static/app/assets/index.js"></script>
+        </t>
+    </template>
+
+</odoo>
