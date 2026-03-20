@@ -47,7 +47,7 @@ class AppController(Controller):
         )
         return request.make_json_response({"error": False, "data": menu})
 
-    @route("/pkfmty/menu/check", methods=["POST"], type="http", auth="user")
+    @route("/pkfmty/menu/check", methods=["POST"], type="http", auth="user", csrf=False)
     def app_menu_allowed(self):
 
         data = request.get_json_data()
