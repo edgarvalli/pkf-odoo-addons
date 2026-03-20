@@ -5,7 +5,7 @@ from odoo.http import Controller, request
 
 class ApiController(Controller):
 
-    @api_route("/nominas/recibo/crear", auth="user", type="http", methods=["GET"])
+    @api_route("nominas/recibo/crear", auth="user", type="http", methods=["GET"])
     def api_print_document(self, **kwargs):
 
         evnominas = request.env["ev.contpaqi.nominas"]

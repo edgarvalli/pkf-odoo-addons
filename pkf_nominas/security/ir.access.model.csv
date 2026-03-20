@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_pkf_nominas,access.pkf.nominas,model_pkf_nominas,base.group_system,1,1,1,1
+access_pkf_nominas_user,access.pkf.nominas.user,model_pkf_nominas,base.group_user,1,0,0,0

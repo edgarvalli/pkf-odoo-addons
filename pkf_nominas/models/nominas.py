@@ -24,8 +24,10 @@ class Nominas(models.AbstractModel):
                 raise exceptions.UserError("Empleado no encontrado")
 
             return SimpleNamespace(**euser)
-        except:
-            raise exceptions.UserError("Ocurrio un error al buscar el empleado.")
+        except Exception as e:
+            raise exceptions.UserError(
+                f"Ocurrio un error al buscar el empleado: {str(e)}."
+            )
 
     def make_document(self, data, doc_type: str):
 
