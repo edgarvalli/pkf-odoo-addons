@@ -3,6 +3,11 @@
 
     <template id="pkf_app_fronted">
         <t t-call="web.layout">
+
+            <t t-set="head">
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+            </t>
+
             <link
                 rel="stylesheet"
                 href="/pkf_app/static/lib/fontawesome/css/all.min.css"
