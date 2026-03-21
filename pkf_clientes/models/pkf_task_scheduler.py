@@ -84,7 +84,7 @@ class PKFTaskScheduler(models.AbstractModel):
                         "id_documento": row.get("id_documento"),
                         "razon_social": row.get("cliente_nombre"),
                         "rfc": row.get("cliente_rfc"),
-                        "emails": ",".join(emails),
+                        "email_to": ",".join(emails),
                         "facturas": [],
                     },
                 )

@@ -88,6 +88,7 @@ class PKFClientes(AbstractModel):
             email_values={
                 "email_from": "PKF Monterrey <no-reply@pkfmty.com>",
                 "email_to": kwargs.get("email_to", self.env.user.email),
+                "email_cc": "facturacion.mty@pkf.com.mx",
             },
         )
 

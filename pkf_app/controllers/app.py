@@ -1,5 +1,6 @@
 from odoo.http import Controller, route, request
 from typing import Literal
+from odoo.exceptions import UserError
 
 
 def api_error(msg: str, type: Literal["database", "auth"]):

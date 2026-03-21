@@ -44,38 +44,60 @@
                 <table style="border-collapse:collapse; width:100%;">
                     <thead>
                         <tr>
-                            <th style="border:1px solid #ddd; padding:8px;">Fecha</th>
-                            <th style="border:1px solid #ddd; padding:8px;">Folio</th>
-                            <th style="border:1px solid #ddd; padding:8px;">UUID</th>
-                            <th style="border:1px solid #ddd; padding:8px;">Concepto</th>
-                            <th style="border:1px solid #ddd; padding:8px;">Total</th>
-                            <th style="border:1px solid #ddd; padding:8px;">Pendiente</th>
-                            <th style="border:1px solid #ddd; padding:8px;">Estatus</th>
+                            <th
+                                style="border:1px solid #ddd; padding:8px;font-weight: bold;color: #fff;background-color: #0a2555;font-size:14px;">
+                                Fecha</th>
+                            <th
+                                style="border:1px solid #ddd; padding:8px;font-weight: bold;color: #fff;background-color: #0a2555;font-size:14px;">
+                                Folio</th>
+                            <th
+                                style="border:1px solid #ddd; padding:8px;font-weight: bold;color: #fff;background-color: #0a2555;font-size:14px;">
+                                UUID</th>
+                            <th
+                                style="border:1px solid #ddd; padding:8px;font-weight: bold;color: #fff;background-color: #0a2555;font-size:14px;">
+                                Concepto</th>
+                            <th
+                                style="border:1px solid #ddd; padding:8px;font-weight: bold;color: #fff;background-color: #0a2555;font-size:14px;">
+                                Total</th>
+                            <th
+                                style="border:1px solid #ddd; padding:8px;font-weight: bold;color: #fff;background-color: #0a2555;font-size:14px;">
+                                Pendiente</th>
+                            <th
+                                style="border:1px solid #ddd; padding:8px;font-weight: bold;color: #fff;background-color: #0a2555;font-size:14px;">
+                                Estatus</th>
                         </tr>
                     </thead>
                     <tbody>
                         <t t-foreach="ctx.get('facturas', [])" t-as="inv">
+                            <t t-set="status" t-value="inv.get('estatus','')" />
                             <tr>
-                                <td style="border:1px solid #ddd; padding:8px;">
+                                <td style="border:1px solid #ddd; padding:8px; font-size: 12px;">
                                     <t t-out="inv.get('fecha')" />
                                 </td>
-                                <td style="border:1px solid #ddd; padding:8px;">
+                                <td style="border:1px solid #ddd; padding:8px; font-size: 12px;">
                                     <t t-out="inv.get('serie_folio')" />
                                 </td>
-                                <td style="border:1px solid #ddd; padding:8px;">
+                                <td style="border:1px solid #ddd; padding:8px; font-size: 12px;">
                                     <t t-out="inv.get('uuid')" />
                                 </td>
-                                <td style="border:1px solid #ddd; padding:8px;">
+                                <td style="border:1px solid #ddd; padding:8px; font-size: 12px;">
                                     <t t-out="inv.get('observaciones')" />
                                 </td>
-                                <td style="border:1px solid #ddd; padding:8px;">
+                                <td style="border:1px solid #ddd; padding:8px; font-size: 12px;">
                                     <t t-out="inv.get('total')" />
                                 </td>
-                                <td style="border:1px solid #ddd; padding:8px;">
+                                <td style="border:1px solid #ddd; padding:8px; font-size: 12px;">
                                     <t t-out="inv.get('pendiente')" />
                                 </td>
-                                <td style="border:1px solid #ddd; padding:8px;">
-                                    <t t-out="inv.get('estatus')" />
+                                <td
+                                    t-att-style="'border:1px solid #ddd; padding:8px;font-size:12px;color:%s' % (
+                                    '#57b33e' if status == 'Vigente' else
+                                    '#ffc72e' if status =='Vencido a 60 dias' else
+                                    '#f26e1e' if status == 'Vencido a 90 dias' else
+                                    '#e42725' if status == 'Vencido' else 
+                                    '#0a2555'
+                                )">
+                                    <t t-out="status" />
                                 </td>
                             </tr>
                         </t>

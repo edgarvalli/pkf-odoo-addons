@@ -1,4 +1,8 @@
 from odoo import models, fields
+from odoo.exceptions import UserError
+import logging
+
+_logger = logging.getLogger(__name__)
 
 
 class PKFAppMenu(models.Model):
