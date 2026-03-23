@@ -30,11 +30,11 @@ class PKFTaskScheduler(models.AbstractModel):
             folios.CUUID uuid,
             CONCAT_WS(',', c.CEMAIL1, c.CEMAIL2, c.CEMAIL3) emails,
             CASE
-                WHEN DATEDIFF(DAY,doc.CFECHA, @today) BETWEEN 1 AND 30 THEN 'Vigente'
-                WHEN DATEDIFF(DAY,doc.CFECHA, @today) BETWEEN 31 AND 60 THEN 'Vencido a 60 dias'
-                WHEN DATEDIFF(DAY,doc.CFECHA, @today) BETWEEN 61 AND 90 THEN 'Vencido a 90 dias'
-                WHEN DATEDIFF(DAY,doc.CFECHA, @today) > 90 THEN 'Vencido'
-            END AS estatus
+                WHEN DATEDIFF(DAY,doc.CFECHA, @today) BETWEEN 1 AND 30 THEN 'vigente'
+                WHEN DATEDIFF(DAY,doc.CFECHA, @today) BETWEEN 31 AND 60 THEN 'vencido_60'
+                WHEN DATEDIFF(DAY,doc.CFECHA, @today) BETWEEN 61 AND 90 THEN 'vencido_90'
+                WHEN DATEDIFF(DAY,doc.CFECHA, @today) > 90 THEN 'vencido'
+            END AS estatus,
         FROM admDocumentos doc
         INNER JOIN admFoliosDigitales folios ON folios.CIDDOCTO = doc.CIDDOCUMENTO
         INNER JOIN admClientes c ON c.CIDCLIENTEPROVEEDOR = doc.CIDCLIENTEPROVEEDOR
