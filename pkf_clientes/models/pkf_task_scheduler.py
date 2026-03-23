@@ -7,7 +7,7 @@ _logger = logging.getLogger(__name__)
 
 class PKFTaskScheduler(models.AbstractModel):
     _name = "pkf.clientes.taskscheduler"
-    _description = "Modulo para programar tareas"
+    _description = "Tarea Programada Envio de Estado de Cuenta PKF"
 
     uid = str(uuid.uuid4())
 
