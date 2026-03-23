@@ -24,6 +24,14 @@ class PKFClientes(AbstractModel):
         with open(path, "rb") as f:
             return "data:image/png;base64," + base64.b64encode(f.read()).decode()
 
+    def _get_banner_b64(self):
+        path = Path(get_module_path("pkf_clientes")) / "static/img/banner.png"
+        if not path.exists():
+            return None
+
+        with open(path, "rb") as f:
+            return "data:image/png;base64," + base64.b64encode(f.read()).decode()
+
     # -------------------------
     # Helpers
     # -------------------------
@@ -47,19 +55,56 @@ class PKFClientes(AbstractModel):
 
     def _formatear_saldo(self, facturas):
 
-        resultado = []
+        grupos = {
+            "vencido": {
+                "title": "Vencido",
+                "color": "#ae2821",
+                "order": 1,
+                "facturas": [],
+            },
+            "vencido_90": {
+                "title": "Vencido a 90 días",
+                "color": "#d24e12",
+                "order": 2,
+                "facturas": [],
+            },
+            "vencido_60": {
+                "title": "Vencido a 60 días",
+                "color": "#e1ab16",
+                "order": 3,
+                "facturas": [],
+            },
+            "vigente": {
+                "title": "Vigente",
+                "color": "#388e27",
+                "order": 4,
+                "facturas": [],
+            },
+        }
 
         for inv in facturas:
-            resultado.append(
-                {
-                    **inv,
-                    "fecha": self._format_fecha(inv.get("fecha")),
-                    "total": self._format_money(inv.get("total")),
-                    "pendiente": self._format_money(inv.get("pendiente")),
-                }
-            )
+            if "estatus" in inv and inv["estatus"] in grupos:
+                grupos[inv["estatus"]]["facturas"].append(
+                    {
+                        **inv,
+                        "fecha": self._format_fecha(inv.get("fecha")),
+                        "total": self._format_money(inv.get("total")),
+                        "pendiente": self._format_money(inv.get("pendiente")),
+                    }
+                )
 
-        return resultado
+        return sorted(grupos.values(), key=lambda x: x["order"])
+
+    def _fechas(self):
+        from datetime import datetime
+        import pytz
+
+        timezone = pytz.timezone("America/Monterrey")
+        today = datetime.now(tz=timezone)
+        return {
+            "fecha": today.strftime("%d de %B de %Y"),
+            "titulo_header": f"Estado de Cuenta %B {today.year}",
+        }
 
     # -------------------------
     # Contexto de template
@@ -68,11 +113,15 @@ class PKFClientes(AbstractModel):
     def _build_context(self, cliente):
 
         facturas = cliente.pop("facturas", [])
+        fechas = self._fechas()
+
         return {
             **cliente,
+            **fechas,
             "facturas": self._formatear_saldo(facturas),
             "metadata": self._calcular_totales(facturas),
             "logo": self._get_logo_b64(),
+            "banner": self._get_banner_b64(),
         }
 
     # -------------------------
