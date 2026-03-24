@@ -1,7 +1,6 @@
 import io
 import base64
 import xlsxwriter
-from datetime import datetime
 from odoo import models, fields
 from odoo.fields import Datetime as OdooDatetime
 

@@ -42,7 +42,7 @@
                     teléfono <a
                         href="tel:8183638211"
                         style="font-weight:bold;color:#0f3780;text-decoration:none;">(81) 8363 8211
-                    y
+                        y
                         12</a>
                 </p>
 
@@ -81,21 +81,26 @@
 
                         <table style="border-collapse:collapse; width:100%;">
                             <thead t-att-style="'color:#fff;background-color:' + color">
+                                <t
+                                    t-set="col_style"
+                                    t-value="'padding:8px;font-weight: bold;color: #fff;background-color: ' + color+';'"
+                                />
+                                <t t-value="'width: 60px;'" t-set="col_width" />
                                 <tr>
                                     <th
-                                        t-att-style="'padding:8px;font-weight: bold;color: #fff;background-color: ' + color+';'">
+                                        t-att-style="col_style + col_width">
                                         Fecha</th>
                                     <th
-                                        t-att-style="'padding:8px;font-weight: bold;color: #fff;background-color: ' + color+';'">
+                                        t-att-style="col_style + col_width">
                                         Folio</th>
                                     <th
-                                        t-att-style="'padding:8px;font-weight: bold;color: #fff;background-color: ' + color+';'">
+                                        t-att-style="col_style">
                                         Concepto</th>
                                     <th
-                                        t-att-style="'padding:8px;font-weight: bold;color: #fff;background-color: ' + color+';'">
+                                        t-att-style="col_style + col_width">
                                         Total</th>
                                     <th
-                                        t-att-style="'padding:8px;font-weight: bold;color: #fff;background-color: ' + color+';'">
+                                        t-att-style="col_style + col_width">
                                         Pendiente</th>
                                 </tr>
                             </thead>
@@ -103,29 +108,44 @@
                                 <t t-foreach="facturas" t-as="inv">
                                     <t t-set="status" t-value="inv.get('estatus','')" />
                                     <tr>
+                                        <t
+                                            t-set="cell_style"
+                                            t-value="'border:1px solid #e8e8e8;padding:8px;font-size:12px;'"
+                                        />
                                         <td
-                                            style="border:1px solid #e8e8e8; padding:8px; font-size: 12px;">
+                                            t-att-style="cell_style">
                                             <t t-out="inv.get('fecha')" />
                                         </td>
                                         <td
-                                            style="border:1px solid #ddd; padding:8px; font-size: 12px;">
+                                            t-att-style="cell_style">
                                             <t t-out="inv.get('serie_folio')" />
                                         </td>
                                         <td
-                                            style="border:1px solid #e8e8e8; padding:8px; font-size: 12px;">
+                                            t-att-style="cell_style">
                                             <t t-out="inv.get('observaciones')" />
                                         </td>
                                         <td
-                                            style="border:1px solid #e8e8e8; padding:8px; font-size: 12px;">
+                                            t-att-style="cell_style">
                                             <t t-out="inv.get('total')" />
                                         </td>
                                         <td
-                                            style="border:1px solid #e8e8e8; padding:8px; font-size: 12px;">
+                                            t-att-style="cell_style">
                                             <t t-out="inv.get('pendiente')" />
                                         </td>
                                     </tr>
                                 </t>
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3" />
+                                    <td style="text-align: center;font-weight: bold;">
+                                        <t t-out="fact.get('total', 0)" />
+                                    </td>
+                                    <td style="text-align: center;font-weight: bold;">
+                                        <t t-out="fact.get('total_pendiente', 0)" />
+                                    </td>
+                                </tr>
+                            </tfoot>
                         </table>
                     </t>
                 </t>
