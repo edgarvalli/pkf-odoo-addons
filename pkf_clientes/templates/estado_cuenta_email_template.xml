@@ -8,7 +8,7 @@
 
         <field name="auto_delete" eval="True" />
 
-        <field name="subject">Estado de cuenta - {{ ctx.get('razon_social', '') }}</field>
+        <field name="subject">[EDO] Estado de cuenta - {{ ctx.get('razon_social', '') }}</field>
 
         <field name="body_html" type="html">
             <t t-set="metadata" t-value="ctx.get('metadata', {})" />

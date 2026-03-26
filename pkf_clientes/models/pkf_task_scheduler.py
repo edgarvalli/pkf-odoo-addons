@@ -1,6 +1,6 @@
 from odoo import models
 from datetime import datetime
-import logging, uuid
+import logging
 
 _logger = logging.getLogger(__name__)
 
@@ -9,7 +9,7 @@ class PKFTaskScheduler(models.AbstractModel):
     _name = "pkf.clientes.taskscheduler"
     _description = "Tarea Programada Envio de Estado de Cuenta PKF"
 
-    uid = str(uuid.uuid4())
+    uid: str
 
     sql = """
         DECLARE @today DATE = CAST(GETDATE() AS DATE);
@@ -28,7 +28,11 @@ class PKFTaskScheduler(models.AbstractModel):
             doc.CTOTAL total,
             doc.CPENDIENTE pendiente,
             folios.CUUID uuid,
-            CONCAT_WS(',', c.CEMAIL1, c.CEMAIL2, c.CEMAIL3) emails,
+            CONCAT_WS(',',
+                NULLIF(TRIM(c.CEMAIL1), ''),
+                NULLIF(TRIM(c.CEMAIL2), ''),
+                NULLIF(TRIM(c.CEMAIL3), '')
+            ) AS emails,
             CASE
                 WHEN DATEDIFF(DAY,doc.CFECHA, @today) BETWEEN 1 AND 30 THEN 'vigente'
                 WHEN DATEDIFF(DAY,doc.CFECHA, @today) BETWEEN 31 AND 60 THEN 'vencido_60'
@@ -72,11 +76,7 @@ class PKFTaskScheduler(models.AbstractModel):
             }
 
             if cliente_id not in root:
-                emails = [
-                    e.strip()
-                    for e in str(row.get("emails", "")).split(",")
-                    if e and "@" in e
-                ]
+                emails = [e for e in row.get("emails", "").split(",") if "@" in e]
 
                 root.setdefault(
                     cliente_id,
@@ -131,6 +131,11 @@ class PKFTaskScheduler(models.AbstractModel):
         mail.send()
 
     def run(self):
+        from ..services import EstadoCuentaService
+
+        edo = EstadoCuentaService(self.env)
+        self.uid = edo.uid
+
         data = self._get_facturas()
         _logger.info("Iniciando proceso....")
         start_process = datetime.now()
@@ -148,7 +153,7 @@ class PKFTaskScheduler(models.AbstractModel):
                         evento="No tiene correos configurados para envio.",
                     )
                 else:
-                    self.env["pkf.clientes.acciones"].enviar_correo(cliente)
+                    edo.enviar_correo(cliente)
 
                     self._set_log(
                         cliente=_cliente_name,
@@ -164,6 +169,6 @@ class PKFTaskScheduler(models.AbstractModel):
                     evento=str(e),
                 )
 
-        end_process = datetime.now()
-
-        self._send_bitacora(start=start_process, end=end_process)
+        self.env["pkf.envios.logs"].send_bitacora(
+            uid=self.uid, start=start_process, end=datetime.now()
+        )

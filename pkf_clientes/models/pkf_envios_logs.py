@@ -1,6 +1,7 @@
 import io
 import base64
 import xlsxwriter
+from datetime import datetime
 from odoo import models, fields
 from odoo.fields import Datetime as OdooDatetime
 
@@ -109,3 +110,21 @@ class PKFEnviosLog(models.Model):
         )
 
         return attachment
+
+    def send_bitacora(self, uid: str, start: datetime, end: datetime):
+        attachment = self.generar_bitacora_excel(uid, startdate=start, enddate=end)
+        mail = self.env["mail.mail"].create(
+            {
+                "subject": f"Bitácora proceso {uid}",
+                "body_html": f"""
+                <p>Se ha completado el proceso.</p>
+                <p>UUID: {uid}</p>
+                <p>Se adjunta la bitácora en Excel.</p>
+            """,
+                "email_to": self.env.user.email,
+                "email_from": "PKF Monterrey <no-reply@pkfmty.com>",
+                "attachment_ids": [(6, 0, [attachment.id])],
+            }
+        )
+
+        mail.send()

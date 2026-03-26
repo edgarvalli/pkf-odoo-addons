@@ -1,5 +1,9 @@
 from odoo.http import Controller, request
-from .tools import api_route, api_ok, api_error
+from ..utils.api_tools import api_route, api_ok, api_error
+from ..services import EstadoCuentaService
+import logging
+
+_logger = logging.getLogger(__name__)
 
 
 def clientes_url(path: str = ""):
@@ -43,8 +47,39 @@ class ApiController(Controller):
         methods=["GET"],
     )
     def api_enviar_edo(self, id):
-        pkf = request.env["pkf.clientes.acciones"]
-        result = pkf.enviar_estado_de_cuenta(id)
-        if result.error:
+        edo = EstadoCuentaService(env=request.env)
+        result = edo.enviar_estado_cuenta_cliente(id)
+        if not result and result == False:
             return api_error(message=result.message)
         return api_ok(data={}, message="Se envio correo correctamente.")
+
+    @api_route(
+        clientes_url("/envio-facturas"),
+        type="http",
+        auth="user",
+        methods=["POST"],
+        csrf=False,
+    )
+    def api_enviar_facturas_zip(self):
+        _logger.info("Obteniendo ZIP")
+        file = request.httprequest.files.get("file")
+
+        send_to_client = request.httprequest.form.get("send_to_client", "0")
+        send_to_client = int(send_to_client) == 1
+
+        if not file:
+            return api_error("No envio un archivo")
+
+        result = request.env["pkf.envio.facturas.service"].enviar_todos(
+            file, send_to_client
+        )
+
+        uid = result.get("uid")
+
+        message = (
+            "Se envio los correos correctamente"
+            if result.get("type") == "instant"
+            else f"Correos programados. UUID {uid}"
+        )
+
+        return api_ok(message=message)

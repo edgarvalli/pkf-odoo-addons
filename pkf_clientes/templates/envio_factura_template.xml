@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="envio_factura_template" model="mail.template">
+        <field name="name">Correo de envio de Facturas PKF</field>
+        <field name="model_id" ref="base.model_ir_ui_view" />
+        <field name="auto_delete" eval="True" />
+        <field name="subject">[INV] Factura CFDI 4.0 {{ctx.get('subject', '')}}</field>
+        <field name="body_html" type="html">
+            <t t-set="msg"
+                t-value="'le hacemos llegar sus facturas.' if len(ctx.get('facturas', [])) > 1 else 'le hacemos llegar su factura.'" />
+            <br />
+            <p>Estimado <strong>
+                    <t t-out="ctx.get('razon_social','')" />
+                </strong></p>
+            <p> Por este medio <![CDATA[&nbsp;]]>
+                <t t-out="msg" />
+            </p>
+
+            <br />
+
+            <p>
+                <strong>Banco:</strong>
+                <![CDATA[&nbsp;]]> BANREGIO </p>
+            <p>
+                <strong>Cuenta:</strong>
+                <![CDATA[&nbsp;]]> 021048610011 </p>
+            <p><strong>CLABE:</strong>
+                <![CDATA[&nbsp;]]>058580210486100116</p>
+            <p>
+                <strong>Razón Social:</strong>
+                <![CDATA[&nbsp;]]> PKF MONTERREY S.C.</p>
+            <p>
+                <strong>Rfc:</strong>
+                <![CDATA[&nbsp;]]>PMO221111S7A</p>
+
+            <br />
+            <br />
+            <img t-att-src="ctx.get('banner', '')" alt="banner" width="450" height="120" />
+            <br />
+            <a
+                href="https://maps.app.goo.gl/JrjAnRPg6h5cqXrM9"
+                style="font-size:10px;font-style:italic;color:#9E9E9E;"
+            >
+                Edificio Horizontes, Obispado H02 - Padre Mier No. 1545, Piso 6
+            </a>
+        </field>
+    </record>
+
+</odoo>

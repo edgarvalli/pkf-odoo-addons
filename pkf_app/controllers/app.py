@@ -3,7 +3,7 @@ from typing import Literal
 from odoo.exceptions import UserError
 
 
-def api_error(msg: str, type: Literal["database", "auth"]):
+def api_error(msg: str, type: Literal["database", "auth", "data_error"]):
     return request.make_json_response({"error": True, "message": msg, "type": type})
 
 
@@ -44,9 +44,20 @@ class AppController(Controller):
     def app_menu(self):
         menu = request.env["pkf.app.menu"].search_read(
             [("group_ids", "in", request.env.user.group_ids.ids)],
-            fields=["name", "text", "url", "icon"],
+            fields=["name", "text", "url", "icon", "child_ids"],
         )
         return request.make_json_response({"error": False, "data": menu})
+
+    @route(
+        "/pkfmty/menu/<int:menu_id>/children", methods=["GET"], auth="user", type="http"
+    )
+    def app_menu_children(self, menu_id):
+        menu_children = request.env["pkf.app.menu"].search_read(
+            [("parent_id", "=", menu_id)],
+            fields=["name", "text", "url", "icon", "child_ids"],
+        )
+
+        return request.make_json_response({"error": False, "data": menu_children})
 
     @route("/pkfmty/menu/check", methods=["POST"], type="http", auth="user", csrf=False)
     def app_menu_allowed(self):
