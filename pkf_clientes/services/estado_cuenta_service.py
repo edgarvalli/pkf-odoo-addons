@@ -133,11 +133,6 @@ class EstadoCuentaService:
         if not email_cc == self.env.user.email:
             email_values["email_cc"] = email_cc
 
-        email_values = {
-            "email_from": "PKF Monterrey <no-reply@pkfmty.com>",
-            "email_to": self.env.user.email,
-        }
-
         template.with_context(ctx).send_mail(
             res_id=self.env.user.partner_id.id,
             force_send=kwargs.get("force_send", False),
