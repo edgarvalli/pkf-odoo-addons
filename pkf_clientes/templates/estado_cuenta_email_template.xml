@@ -8,7 +8,7 @@
 
         <field name="auto_delete" eval="True" />
 
-        <field name="subject">[EDO] Estado de cuenta - {{ ctx.get('razon_social', '') }}</field>
+        <field name="subject">Estado de cuenta - {{ ctx.get('razon_social', '') }}</field>
 
         <field name="body_html" type="html">
             <t t-set="metadata" t-value="ctx.get('metadata', {})" />
@@ -18,53 +18,31 @@
                     style="border-bottom: solid thin #e8e8e8;border-collapse:collapse; width:100%;">
                     <tr>
                         <td>
-                            <img
-                                t-att-src="ctx.get('logo', 'https://pkf.com/media/30rftrgj/pkf-2-logo.svg')"
-                                alt="logo" width="250" />
-                        </td>
-                        <td>
-                            <p style="text-align: end;font-size: 16px;">Estado de Cuenta Marzo 2026</p>
+                            <h1>Estado de Cuenta</h1>
                         </td>
                     </tr>
                 </table>
                 <br />
-                <h1 style="color: #0f3780; font-size: 30px;">¡Buen día!</h1>
-                <br />
-                <p> Nos permitimos compartirle por este medio su <strong>Estado
-                        de Cuenta</strong> al día de <strong>
-                        <t t-out="ctx.get('fecha','')" />
-                    </strong>. En caso de
-                    requerir una aclaración, le agradecemos contactarnos al correo <a
-                        href="mailto:facturacion.mty@pkf.com.mx"
-                        style="color:#0f3780; font-weight:bold;text-decoration: none;">
-                    facturacion.mty@pkf.com.mx
-                    </a> o al
-                    teléfono <a
-                        href="tel:8183638211"
-                        style="font-weight:bold;color:#0f3780;text-decoration:none;">(81) 8363 8211
-                        y
-                        12</a>
-                </p>
 
+                <h3>Estimado(a)</h3>
+                <p>Enviamos el estado de cuenta actualizado al <t t-out="ctx.get('fecha')" />,
+                    correspondiente a las facturas pendientes de pago.</p>
+                <p>Le solicitamos amablemente su apoyo para regularizar el saldo pendiente a la
+                    mayor brevedad posible, ya que a la fecha se registra un atraso en el pago de
+                    sus facturas.</p>
+                <p>Agradeceremos nos pueda confirmar la fecha estimada de pago, o en su caso, nos
+                    comparta cualquier observación que pudiera tener al respecto, al correo: <a
+                        href="mailto:facturacion.mty@pkf.com.mx">facturacion.mty@pkf.com.mx</a></p>
                 <br />
                 <br />
 
                 <p>
                     <span
-                        style="background-color: #0f3780;color: #fff; padding:5px;font-weight: bold;">Saldo
+                        style="padding:5px;font-weight: bold;">Saldo
                         total:
                     </span>
                     <![CDATA[&nbsp;]]>
                     <t t-out="metadata.get('saldo_total')" />
-                </p>
-
-                <p>
-                    <span
-                        style="background-color: #0f3780;color: #fff; padding:5px;font-weight: bold;">Saldo
-                        pendiente:
-                    </span>
-                    <![CDATA[&nbsp;]]>
-                    <t t-out="metadata.get('pendiente_total')" />
                 </p>
 
                 <br />
@@ -150,8 +128,6 @@
                     </t>
                 </t>
                 <br />
-                <br />
-                <img t-att-src="ctx.get('banner', '')" alt="banner" width="450" height="120" />
                 <br />
                 <a
                     href="https://maps.app.goo.gl/JrjAnRPg6h5cqXrM9"

@@ -1,10 +1,10 @@
-import pytz, uuid
+import pytz
 from typing import List, Dict
 from datetime import datetime
 from dataclasses import dataclass, field
 from odoo.exceptions import UserError
 from odoo.orm.environments import Environment
-from ..utils.tools import format_money, format_fecha, get_img_b64
+from ..utils.tools import format_money, format_fecha
 from ..types.estado_cuenta_types import (
     GroupKeysDict,
     GroupDict,
@@ -17,22 +17,13 @@ from ..types.estado_cuenta_types import (
 @dataclass
 class EstadoCuentaService:
     env: Environment
-    uid: str = field(default_factory=lambda: str(uuid.uuid4()))
 
     def _get_groups(self) -> GroupKeysDict:
         return {
             "vencido": {
-                "title": "Vencido",
+                "title": "Vencido a más de 90 días",
                 "color": "#0f3780",
                 "order": 1,
-                "facturas": [],
-                "total": 0,
-                "total_pendiente": 0,
-            },
-            "vencido_90": {
-                "title": "Vencido a 90 días",
-                "color": "#0f3780",
-                "order": 2,
                 "facturas": [],
                 "total": 0,
                 "total_pendiente": 0,
@@ -40,29 +31,26 @@ class EstadoCuentaService:
             "vencido_60": {
                 "title": "Vencido a 60 días",
                 "color": "#0f3780",
-                "order": 3,
+                "order": 2,
                 "facturas": [],
                 "total": 0,
                 "total_pendiente": 0,
             },
             "vigente": {
-                "title": "Vigente",
+                "title": "Al corriente",
                 "color": "#0f3780",
-                "order": 4,
+                "order": 3,
                 "facturas": [],
                 "total": 0,
                 "total_pendiente": 0,
             },
         }
 
-    def _fecha_metadata(self) -> MetadataDict:
+    def _fecha(self) -> MetadataDict:
         """Entrega las fechas para el template"""
         timezone = pytz.timezone("America/Monterrey")
         today = datetime.now(tz=timezone)
-        return {
-            "fecha": today.strftime("%d de %B de %Y"),
-            "titulo_header": f"Estado de Cuenta %B {today.year}",
-        }
+        return today.strftime("%d de %B de %Y")
 
     def _calcular_totales(self, saldo: List[Dict]) -> TotalesDict:
         """Calcula cuanto esta pendiente y el saldo total"""
@@ -124,15 +112,13 @@ class EstadoCuentaService:
 
     def _build_context(self, cliente: Dict) -> ContextType:
         facturas = cliente.pop("facturas", [])
-        fechas = self._fecha_metadata()
+        fecha = self._fecha()
 
         return {
             **cliente,
-            **fechas,
+            "fecha": fecha,
             "facturas": self._formatear_saldo(facturas),
             "metadata": self._calcular_totales(facturas),
-            "logo": get_img_b64("logo.png"),
-            "banner": get_img_b64("banner.png"),
         }
 
     def enviar_correo(self, data: Dict, **kwargs):
@@ -146,6 +132,11 @@ class EstadoCuentaService:
 
         if not email_cc == self.env.user.email:
             email_values["email_cc"] = email_cc
+
+        email_values = {
+            "email_from": "PKF Monterrey <no-reply@pkfmty.com>",
+            "email_to": self.env.user.email,
+        }
 
         template.with_context(ctx).send_mail(
             res_id=self.env.user.partner_id.id,

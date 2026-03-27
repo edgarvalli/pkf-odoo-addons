@@ -1,8 +1,4 @@
 from odoo import models, fields
-from odoo.exceptions import UserError
-import logging
-
-_logger = logging.getLogger(__name__)
 
 
 class PKFAppMenu(models.Model):
@@ -13,7 +9,8 @@ class PKFAppMenu(models.Model):
     url = fields.Char(string="URL")
     icon = fields.Char(string="Icono")
     text = fields.Char(string="Nombre")
-    parent_id = fields.Many2one("pkf.app.menu", string="Menú padre")  # para submenús
+    parent_id = fields.Many2one("pkf.app.menu", string="Menú padre")
+    sequence = fields.Integer("Secuencia")
     child_ids = fields.One2many(
         "pkf.app.menu", "parent_id", string="Submenús"
     )  # inversa

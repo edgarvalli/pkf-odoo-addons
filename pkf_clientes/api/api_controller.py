@@ -1,6 +1,6 @@
 from odoo.http import Controller, request
 from ..utils.api_tools import api_route, api_ok, api_error
-from ..services import EstadoCuentaService
+from ..services import EstadoCuentaService, EnvioFacturasClienteService
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -70,9 +70,9 @@ class ApiController(Controller):
         if not file:
             return api_error("No envio un archivo")
 
-        result = request.env["pkf.envio.facturas.service"].enviar_todos(
-            file, send_to_client
-        )
+        envio_srv = EnvioFacturasClienteService(request.env)
+
+        result = envio_srv.enviar_todos(file, send_to_client)
 
         uid = result.get("uid")
 

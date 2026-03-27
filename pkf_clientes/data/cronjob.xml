@@ -4,7 +4,7 @@
     <record id="cronjob_estado_de_cuenta_pkf" model="ir.cron">
         <field name="name">Enviar Estado de Cuenta a Clientes PKF</field>
         <field name="model_id" ref="pkf_clientes.pkf_clientes_taskscheduler" />
-        <field name="code">pkf.clientes.taskscheduler.run()</field>
+        <field name="code">pkf.clientes.taskscheduler.run_saldos_comercial()</field>
         <field name="interval_number">1</field>
         <field name="interval_type">week</field>
     </record>

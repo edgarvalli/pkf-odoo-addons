@@ -2,48 +2,17 @@ from pathlib import Path
 import qrcode, base64, io
 from num2words import num2words
 from odoo import models, exceptions
-from types import SimpleNamespace
+from odoo.modules.module import get_module_path
 
 
 class Nominas(models.AbstractModel):
     _name = "pkf.nominas"
+    _description = "Modulo de Nominas PKF"
 
-    def empleado(self) -> SimpleNamespace:
-        try:
-            euser = self.env["hr.employee"].search(
-                [["user_id", "=", self.env.uid]], limit=1
-            )
-            if not euser:
-                raise exceptions.UserError("Empleado no encontrado")
-
-            euser: dict = self.env["ev.contpaqi.nominas"].buscar_empleado(
-                euser.ev_employee_code
-            )
-
-            if not euser:
-                raise exceptions.UserError("Empleado no encontrado")
-
-            return SimpleNamespace(**euser)
-        except Exception as e:
-            raise exceptions.UserError(
-                f"Ocurrio un error al buscar el empleado: {str(e)}."
-            )
-
-    def make_document(self, data, doc_type: str):
-
-        cwd = Path(__file__).parent.parent
-        temp_path = cwd / "static/files"
-        if not temp_path.exists():
-            temp_path.mkdir()
+    def _make_pdf(self, data):
+        cwd = Path(get_module_path("pkf_nominas"))
 
         report_action = self.env["ir.actions.report"]
-
-        if doc_type == "xml":
-            xml_content = data.cfdi.content
-            headers = [("Content-Type", "application/xml; charset=utf-8")]
-            return {"type": "xml", "headers": headers, "content": xml_content}
-
-        # Get logo b64
 
         logo_path = cwd / "static/images/pkf_logo.png"
 
@@ -95,3 +64,35 @@ class Nominas(models.AbstractModel):
         ]
 
         return {"type": "pdf", "content": pdf_content, "headers": headers}
+
+    def empleado(self):
+        try:
+            euser = self.env["hr.employee"].search(
+                [["user_id", "=", self.env.uid]], limit=1
+            )
+            if not euser:
+                raise exceptions.UserError("Empleado no encontrado")
+
+            euser: dict = self.env["ev.contpaqi.nominas"].buscar_empleado(
+                euser.ev_employee_code
+            )
+
+            if not euser:
+                raise exceptions.UserError("Empleado no encontrado")
+
+            return euser
+        except Exception as e:
+            raise exceptions.UserError(
+                f"Ocurrio un error al buscar el empleado: {str(e)}."
+            )
+
+    def make_document(self, data, doc_type: str):
+
+        if doc_type.lower() == "pdf":
+            return self._make_pdf(data)
+
+        xml_content = data.cfdi.content
+        headers = [("Content-Type", "application/xml; charset=utf-8")]
+        return {"type": "xml", "headers": headers, "content": xml_content}
+
+        # Get logo b64

@@ -2,7 +2,6 @@ import logging
 from lxml import etree
 from pathlib import Path
 from zipfile import ZipFile
-from odoo import models
 from typing import List
 import io, base64, uuid
 from datetime import datetime
@@ -15,13 +14,16 @@ from ..types.envio_factura_types import (
     EnvioResponse,
     FileAttachDict,
 )
+from odoo.orm.environments import Environment
+from dataclasses import dataclass
 
 _logger = logging.getLogger(__name__)
 
 
-class EnvioFacturasClienteService(models.AbstractModel):
-    _name = "pkf.envio.facturas.service"
-    _description = "Envio de Facturas Service - PKF"
+@dataclass
+class EnvioFacturasClienteService:
+
+    env: Environment
 
     job_name_prefix = "PKF_JOB_EFSERVICE"
 
@@ -205,16 +207,7 @@ class EnvioFacturasClienteService(models.AbstractModel):
 
         return job.id
 
-    def _unlink_jobs(self):
-        self = self.sudo()
-        jobs = self.env["ir.cron"].search([("name", "like", self.job_name_prefix)])
-
-        for job in jobs:
-            _logger.info(f"Removing cron job with id {job.id}")
-            job.unlink()
-
     def _job_enviar(self, attachment_id: int, uid: str, send_to_client=False):
-        self = self.sudo()
         attachment = self.env["ir.attachment"].browse(attachment_id)
 
         zip_bytes = base64.b64decode(attachment.datas)
@@ -279,6 +272,13 @@ class EnvioFacturasClienteService(models.AbstractModel):
             ids.append(rec.id)
 
         return ids
+
+    def unlink_jobs(self):
+        jobs = self.env["ir.cron"].search([("name", "like", self.job_name_prefix)])
+
+        for job in jobs:
+            _logger.info(f"Removing cron job with id {job.id}")
+            job.unlink()
 
     def enviar(self, ctx: ContextDict, **kwargs):
         template = self.env.ref("pkf_clientes.envio_factura_template").sudo()

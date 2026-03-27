@@ -16,21 +16,20 @@ class ApiController(Controller):
         doc_type = kwargs.get("type", "pdf")
 
         if not evnominas.verificar_pertenencia_comprobante(
-            empleado.codigo, iddocumento
+            empleado.get("codigo"), iddocumento
         ):
             raise UserError(f"El documento no pertenece a {empleado.codigo}")
 
         datos = evnominas.datos_comprobante(iddocumento)
 
-        resp = request.env["pkf.nominas"].make_document(datos, doc_type)
-
+        resp: dict = request.env["pkf.nominas"].make_document(datos, doc_type)
         return request.make_response(resp["content"], resp["headers"])
 
     @api_route("nominas/recibos", type="http", auth="user", methods=["GET"])
     def api_get_recibos(self, **kwargs):
         try:
             empleado = request.env["pkf.nominas"].empleado()
-            params = {"idempleado": empleado.id, **kwargs}
+            params = {"idempleado": empleado.get("id") or 0, **kwargs}
             comprobantes = request.env["ev.contpaqi.nominas"].comprobantes(**params)
             return request.make_json_response({"error": False, "data": comprobantes})
         except Exception as e:
