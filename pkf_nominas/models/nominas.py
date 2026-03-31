@@ -73,13 +73,13 @@ class Nominas(models.AbstractModel):
         uid = str(uuid.uuid4())
 
         model_id = self.env["ir.model"]._get("pkf.nominas").id
-
+        nextcall = next_5_min()
         self.env["pkf.tools"].create_job(
             uid=uid,
             model_id=model_id,
             state="code",
             code=f"model._job_bulk_recibos({json.dumps(ids)}, '{uid}')",
-            nextcall=next_5_min(),
+            nextcall=nextcall,
         )
 
-        return uid
+        return uid, nextcall

@@ -1,7 +1,7 @@
 from .tools import api_route, api_error, api_ok
 from odoo.exceptions import UserError
 from odoo.http import Controller, request
-from ..services import Empleado, ComprobanteNomina, ComprobantesZipService
+from ..services import Empleado, ComprobanteNomina
 
 
 class ApiController(Controller):
@@ -44,8 +44,9 @@ class ApiController(Controller):
 
         ids = data["ids"]
 
-        uid = request.env["pkf.nominas"].enqueue_builk_recibos(ids)
+        uid, nextcall = request.env["pkf.nominas"].enqueue_builk_recibos(ids)
+        date = nextcall.strftime("%d/%m/%Y %H:%M:%S")
 
         return api_ok(
-            message=f"En un momento llegara los comprobantes por correo. \n Tarea programada con UID: {uid}"
+            message=f"Se programo el envio de tus comprobantes {date} con un ID: {uid}"
         )
