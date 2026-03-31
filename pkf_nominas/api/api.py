@@ -36,6 +36,8 @@ class ApiController(Controller):
         "nominas/recibos/bulk", type="http", auth="user", methods=["POST"], csrf=False
     )
     def api_bulk_recibos(self):
+        import pytz
+
         data = request.get_json_data()
         if not "ids" in data:
             return api_error(
@@ -45,7 +47,10 @@ class ApiController(Controller):
         ids = data["ids"]
 
         uid, nextcall = request.env["pkf.nominas"].enqueue_builk_recibos(ids)
-        date = nextcall.strftime("%d/%m/%Y %H:%M:%S")
+
+        tz = pytz.timezone("America/Monterrey")
+        local_date = pytz.UTC.localize(nextcall).astimezone(tz)
+        date = local_date.strftime("%d/%m/%Y %H:%M:%S")
 
         return api_ok(
             message=f"Se programo el envio de tus comprobantes {date} con un ID: {uid}"

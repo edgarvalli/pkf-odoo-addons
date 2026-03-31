@@ -1,10 +1,8 @@
-import pytz
 from datetime import datetime, timedelta
 
 
 def next_5_min():
-    timezone = pytz.timezone("America/Monterrey")
-    now = datetime.now(tz=timezone)
+    now = datetime.now()
 
     # minutos que faltan para el siguiente múltiplo de 5
     minutes_to_add = 5 - (now.minute % 5)
