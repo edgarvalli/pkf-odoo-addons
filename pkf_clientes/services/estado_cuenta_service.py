@@ -1,10 +1,11 @@
 import pytz
 from typing import List, Dict
 from datetime import datetime
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from odoo.exceptions import UserError
 from odoo.orm.environments import Environment
 from ..utils.tools import format_money, format_fecha
+from ..types.saldos_types import SaldoCliente, FacturaDict
 from ..types.estado_cuenta_types import (
     GroupKeysDict,
     GroupDict,
@@ -52,7 +53,7 @@ class EstadoCuentaService:
         today = datetime.now(tz=timezone)
         return today.strftime("%d de %B de %Y")
 
-    def _calcular_totales(self, saldo: List[Dict]) -> TotalesDict:
+    def _calcular_totales(self, saldo: List[FacturaDict]) -> TotalesDict:
         """Calcula cuanto esta pendiente y el saldo total"""
         total = sum(inv.get("total", 0) for inv in saldo)
         pendiente = sum(inv.get("pendiente", 0) for inv in saldo)
@@ -75,7 +76,7 @@ class EstadoCuentaService:
 
         return groups
 
-    def _formatear_saldo(self, facturas: List[Dict]):
+    def _formatear_saldo(self, facturas: List[FacturaDict]):
         """Se formatea el saldo a 90,60 dias vencidos y las vigentes"""
         groups = self._get_groups()
         for inv in facturas:
@@ -110,7 +111,7 @@ class EstadoCuentaService:
 
         return cliente
 
-    def _build_context(self, cliente: Dict) -> ContextType:
+    def _build_context(self, cliente: SaldoCliente) -> ContextType:
         facturas = cliente.pop("facturas", [])
         fecha = self._fecha()
 
@@ -121,13 +122,13 @@ class EstadoCuentaService:
             "metadata": self._calcular_totales(facturas),
         }
 
-    def enviar_correo(self, data: Dict, **kwargs):
+    def enviar_correo(self, data: SaldoCliente, **kwargs):
         ctx = self._build_context(data)
         template = self.env.ref("pkf_clientes.estado_cuenta_email_template").sudo()
         email_cc = "facturacion.mty@pkf.com.mx"
         email_values = {
             "email_from": "PKF Monterrey <no-reply@pkfmty.com>",
-            "email_to": kwargs.get("email_to", self.env.user.email),
+            "email_to": data.get("emails", self.env.user.email),
         }
 
         if not email_cc == self.env.user.email:

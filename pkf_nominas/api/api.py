@@ -1,36 +1,51 @@
-from .tools import api_route
+from .tools import api_route, api_error, api_ok
 from odoo.exceptions import UserError
 from odoo.http import Controller, request
+from ..services import Empleado, ComprobanteNomina, ComprobantesZipService
 
 
 class ApiController(Controller):
 
-    @api_route("nominas/recibo/crear", auth="user", type="http", methods=["GET"])
-    def api_print_document(self, **kwargs):
+    @api_route(
+        "nominas/recibos/<int:id>/crear", auth="user", type="http", methods=["GET"]
+    )
+    def api_make_document(self, id, **kwargs):
+        try:
+            c = ComprobanteNomina(request.env, id)
+            doc_type = kwargs.get("type", "pdf")
+            if doc_type == "xml":
+                headers = [("Content-Type", "application/xml; charset=utf-8")]
+                return request.make_response(c.get_xml(), headers=headers)
+            else:
+                resp = c.make_pdf()
+                return request.make_response(resp["content"], resp["headers"])
 
-        evnominas = request.env["ev.contpaqi.nominas"]
-
-        empleado = request.env["pkf.nominas"].empleado()
-
-        iddocumento = int(kwargs.get("iddocumento", 0))
-        doc_type = kwargs.get("type", "pdf")
-
-        if not evnominas.verificar_pertenencia_comprobante(
-            empleado.get("codigo"), iddocumento
-        ):
-            raise UserError(f"El documento no pertenece a {empleado.codigo}")
-
-        datos = evnominas.datos_comprobante(iddocumento)
-
-        resp: dict = request.env["pkf.nominas"].make_document(datos, doc_type)
-        return request.make_response(resp["content"], resp["headers"])
+        except Exception as e:
+            raise UserError(str(e))
 
     @api_route("nominas/recibos", type="http", auth="user", methods=["GET"])
     def api_get_recibos(self, **kwargs):
         try:
-            empleado = request.env["pkf.nominas"].empleado()
-            params = {"idempleado": empleado.get("id") or 0, **kwargs}
-            comprobantes = request.env["ev.contpaqi.nominas"].comprobantes(**params)
-            return request.make_json_response({"error": False, "data": comprobantes})
+            empleado = Empleado(env=request.env)
+            comprobantes = empleado.get_comprobantes(**kwargs)
+            return api_ok(data=comprobantes)
         except Exception as e:
-            return request.make_json_response({"error": True, "message": str(e)})
+            return api_error(msg=str(e))
+
+    @api_route(
+        "nominas/recibos/bulk", type="http", auth="user", methods=["POST"], csrf=False
+    )
+    def api_bulk_recibos(self):
+        data = request.get_json_data()
+        if not "ids" in data:
+            return api_error(
+                msg="Debe de enviar la propiedad ids con los id de los comprobantes."
+            )
+
+        ids = data["ids"]
+
+        uid = request.env["pkf.nominas"].enqueue_builk_recibos(ids)
+
+        return api_ok(
+            message=f"En un momento llegara los comprobantes por correo. \n Tarea programada con UID: {uid}"
+        )

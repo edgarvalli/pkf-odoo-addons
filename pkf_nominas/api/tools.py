@@ -15,3 +15,11 @@ def api_route(
     url = f"/pkfmty/api/v1{path if path.startswith('/') else f'/{path}'}"
 
     return http.route(url, type=type, auth=auth, methods=methods, **kwargs)
+
+
+def api_error(msg: str, **kwargs):
+    return http.request.make_json_response({"error": False, "message": msg, **kwargs})
+
+
+def api_ok(**kwargs):
+    return http.request.make_json_response({"error": False, **kwargs})

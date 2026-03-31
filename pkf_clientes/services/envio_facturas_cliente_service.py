@@ -1,4 +1,4 @@
-import logging
+import logging, json
 from lxml import etree
 from pathlib import Path
 from zipfile import ZipFile
@@ -24,8 +24,6 @@ _logger = logging.getLogger(__name__)
 class EnvioFacturasClienteService:
 
     env: Environment
-
-    job_name_prefix = "PKF_JOB_EFSERVICE"
 
     def _set_log(self, **kwargs):
         self.env["pkf.envios.logs"].create(
@@ -188,24 +186,19 @@ class EnvioFacturasClienteService:
         return self._map_files(ctx_list)
 
     def _create_job(self, attachment_id: int, uid: str, send_to_client: bool):
-        self = self.sudo()
-        name_job = f"{self.job_name_prefix}_{uid}"
-        job = (
-            self.env["ir.cron"]
-            .sudo()
-            .create(
-                {
-                    "name": name_job,
-                    "model_id": self.env["ir.model"]._get(self._name).id,
-                    "state": "code",
-                    "code": f"model._job_enviar({attachment_id}, '{uid}', {send_to_client})",
-                    "nextcall": next_5_min(),
-                    "interval_number": 1,
-                }
-            )
+        job_id = self.env["pkf.tools"].create_job(
+            uid=uid,
+            model_id=self.env["ir.model"]._get(self._name).id,
+            state="code",
+            code=f"model._job_enviar({attachment_id}, '{uid}', {send_to_client})",
+            nextcall=next_5_min(),
+            interval_number=1,
+            interval_type="minutes",
+            numbercall=next_5_min(),
+            active=True,
         )
 
-        return job.id
+        return job_id.id
 
     def _job_enviar(self, attachment_id: int, uid: str, send_to_client=False):
         attachment = self.env["ir.attachment"].browse(attachment_id)
@@ -232,11 +225,6 @@ class EnvioFacturasClienteService:
         # limpiar
         _logger.info("Eliminando el archivo zip de las facturas")
         attachment.unlink()
-        jobs = self.env["ir.cron"].search([("name", "=", uid)])
-        if jobs:
-            for job in jobs:
-                _logger.info(f"Eliminando tarea programada con id {job.id}")
-                job.write({"active": False})
 
     def _count_facturas(self, zip_bytes: bytes) -> int:
         facturas = set()
@@ -272,13 +260,6 @@ class EnvioFacturasClienteService:
             ids.append(rec.id)
 
         return ids
-
-    def unlink_jobs(self):
-        jobs = self.env["ir.cron"].search([("name", "like", self.job_name_prefix)])
-
-        for job in jobs:
-            _logger.info(f"Removing cron job with id {job.id}")
-            job.unlink()
 
     def enviar(self, ctx: ContextDict, **kwargs):
         template = self.env.ref("pkf_clientes.envio_factura_template").sudo()

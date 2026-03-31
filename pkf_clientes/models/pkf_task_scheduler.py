@@ -42,16 +42,18 @@ class PKFTaskScheduler(models.AbstractModel):
         _logger.info("Iniciando proceso....")
         start_process = datetime.now()
         for cliente in data:
+            _cliente_name = cliente.get("razon_social")
+            _cliente_rfc = cliente.get("rfc")
+
             try:
                 # enviar correo
 
-                _cliente_name = cliente.get("razon_social")
                 _logger.info(f"Enviando estado de cuenta a cliente {_cliente_name}")
-                emails = cliente.get("email_to", None)
-                if not emails or emails == "":
+                emails = cliente.get("emails")
+                if not emails:
                     self._set_log(
                         cliente=_cliente_name,
-                        rfc=cliente["rfc"],
+                        rfc=_cliente_rfc,
                         evento="No tiene correos configurados para envio.",
                     )
                 else:
@@ -59,14 +61,14 @@ class PKFTaskScheduler(models.AbstractModel):
 
                     self._set_log(
                         cliente=_cliente_name,
-                        rfc=cliente["rfc"],
-                        evento="Correo enviado",
+                        rfc=_cliente_rfc,
+                        evento=f"Correo enviado a los correos {emails}",
                     )
 
             except Exception as e:
                 self._set_log(
-                    cliente=cliente["razon_social"],
-                    rfc=cliente["rfc"],
+                    cliente=_cliente_name,
+                    rfc=_cliente_rfc,
                     estatus="error",
                     evento=str(e),
                 )

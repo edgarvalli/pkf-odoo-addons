@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+
+    <template id="comprobante_nomina_pkf">
+        <t t-call="web.basic_layout">
+            <link rel="stylesheet" t-att-href="'/pkf_nominas/static/css/recibo.nomina.css'" />
+
+            <!-- helpers -->
+            <t t-set="emisor" t-value="doc.get('emisor', {})" />
+            <t t-set="empleado" t-value="doc.get('empleado', {})" />
+            <t t-set="totales" t-value="doc.get('totales', {})" />
+            <t t-set="percepcion_total" t-value="totales.get('percepcion', {})" />
+            <t t-set="deduccion_total" t-value="totales.get('deduccion', {})" />
+            <t t-set="cfdi" t-value="doc.get('cfdi', {})" />
+            <t t-set="timbre" t-value="cfdi.get('timbre', {})" />
+
+            <main>
+                <div class="page">
+                    <div class="container">
+
+                        <!-- ENCABEZADO -->
+                        <table class="mb16">
+                            <tr>
+                                <td>
+                                    <img t-att-src="logo_pkf" width="60" height="30" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-start text-muted">
+                                    Comprobante por internet
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- EMISOR -->
+                        <table class="bg-grey mb16">
+                            <tr>
+                                <th colspan="6" class="fw-bold text-start">
+                                    <t t-out="emisor.get('nombre')" />
+                                </th>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">RFC</td>
+                                <td t-out="emisor.get('rfc')" />
+                                <td class="fw-bold">Régimen</td>
+                                <td t-out="emisor.get('regimen_fiscal')" />
+                                <td class="fw-bold">Lugar</td>
+                                <td t-out="doc.get('lugar_expedicion')" />
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">Fecha</td>
+                                <td t-out="doc.get('fecha')" />
+                                <td class="fw-bold">Hora</td>
+                                <td t-out="doc.get('hora')" />
+                                <td colspan="2" />
+                            </tr>
+                        </table>
+
+                        <!-- EMPLEADO -->
+                        <table class="mb16">
+                            <tr>
+                                <th colspan="4" class="fw-bold text-start">
+                                    <strong>
+                                        <span t-out="empleado.get('nombre')" />
+                                    </strong>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td width="50%">
+                                    <table>
+                                        <tr>
+                                            <td class="fw-bold">RFC</td>
+                                            <td t-out="empleado.get('rfc')" />
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">CURP</td>
+                                            <td t-out="empleado.get('curp')" />
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Fecha Inicio Relacion Lab</td>
+                                            <td t-out="empleado.get('fecha_inicio_rel_laboral')" />
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Jornada</td>
+                                            <td t-out="empleado.get('jornada')" />
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Tipo Salario</td>
+                                            <td t-out="empleado.get('tipo_salario')" />
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Domicilio Fiscal</td>
+                                            <td t-out="empleado.get('codigo_postal')" />
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td width="50%">
+                                    <table>
+                                        <tr>
+                                            <td class="fw-bold">Ejercicio</td>
+                                            <td t-out="doc.get('ejercicio')" />
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Periodo</td>
+                                            <td t-out="doc.get('periodo_text')" />
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Días de Pago</td>
+                                            <td t-out="doc.get('dias_pagados')" />
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Fecha de Pago</td>
+                                            <td t-out="doc.get('fecha_pago')" />
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Puesto</td>
+                                            <td t-out="empleado.get('puesto')" />
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Depto</td>
+                                            <td t-out="empleado.get('departamento')" />
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">SBC</td>
+                                            <td t-out="empleado.get('sbc')" />
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Régimen Fiscal</td>
+                                            <td t-out="empleado.get('regimen_fiscal')" />
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- PERCEPCIONES Y DEDUCCIONES -->
+                        <table class="mb16">
+                            <tr>
+                                <td width="50%" class="fw-bold bg-grey">Percepciones</td>
+                                <td width="50%" class="fw-bold bg-grey">Deducciones</td>
+                            </tr>
+                            <tr>
+                                <td width="50%">
+                                    <table>
+                                        <thead class="bg-grey">
+                                            <tr>
+                                                <th>Agrup. SAT</th>
+                                                <th>No.</th>
+                                                <th>Concepto</th>
+                                                <th class="text-right">Gravado</th>
+                                                <th class="text-right">Exento</th>
+                                                <th class="text-right">Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr t-foreach="doc.get('percepciones', [])" t-as="p">
+                                                <td t-out="p.get('clave_sat')" />
+                                                <td t-out="p.get('codigo')" />
+                                                <td t-out="p.get('concepto')" />
+                                                <td class="text-right"
+                                                    t-out="'{:,.2f}'.format(p.get('importe_gravado', 0))" />
+                                                <td class="text-right"
+                                                    t-out="'{:,.2f}'.format(p.get('importe_exento', 0))" />
+                                                <td class="text-right"
+                                                    t-out="'{:,.2f}'.format(p.get('importe', 0))" />
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+
+                                <td width="50%">
+                                    <table>
+                                        <thead class="bg-grey">
+                                            <tr>
+                                                <th>Agrup. SAT</th>
+                                                <th>No.</th>
+                                                <th>Concepto</th>
+                                                <th class="text-right">Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr t-foreach="doc.get('deducciones', [])" t-as="d">
+                                                <td t-out="d.get('clave_sat')" />
+                                                <td t-out="d.get('codigo')" />
+                                                <td t-out="d.get('concepto')" />
+                                                <td class="text-right"
+                                                    t-out="'{:,.2f}'.format(d.get('importe', 0))" />
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- TOTALES -->
+                        <table class="mb16">
+                            <tr>
+                                <td width="50%">
+                                    <table>
+                                        <tr>
+                                            <td class="fw-bold" colspan="3">
+                                                Total Percepción más Otros Pagos: $
+                                            </td>
+                                            <td
+                                                t-out="'{:,.2f}'.format(percepcion_total.get('total_gravado', 0))" />
+                                            <td
+                                                t-out="'{:,.2f}'.format(percepcion_total.get('total_exento', 0))" />
+                                            <td
+                                                t-out="'{:,.2f}'.format(percepcion_total.get('total_gravado', 0) + percepcion_total.get('total_exento', 0))" />
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td width="50%">
+                                    <table>
+                                        <tr>
+                                            <td colspan="2" class="fw-bold text-end">Subtotal: $</td>
+                                            <td colspan="2"
+                                                t-out="'{:,.2f}'.format(totales.get('subtotal', 0))" />
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="fw-bold text-end">Descuentos: $</td>
+                                            <td colspan="2"
+                                                t-out="'{:,.2f}'.format(totales.get('total_otras_deducciones', 0))" />
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="fw-bold text-end">Retenciones: $</td>
+                                            <td colspan="2"
+                                                t-out="'{:,.2f}'.format(totales.get('total_impuestos_retenidos', 0))" />
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="fw-bold text-end">Total: $</td>
+                                            <td colspan="2"
+                                                t-out="'{:,.2f}'.format(totales.get('neto', 0))" />
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="fw-bold text-end">Neto del
+                                                recibo: $</td>
+                                            <td colspan="2"
+                                                t-out="'{:,.2f}'.format(totales.get('neto', 0))" />
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- QR + CFDI -->
+                        <table class="mb16">
+                            <tr>
+                                <td width="30%" style="vertical-align: top;">
+                                    <img t-att-src="image_qr" width="200" />
+                                </td>
+                                <td width="70%" style="vertical-align: top;">
+                                    <table>
+                                        <tr>
+                                            <td class="fw-bold bg-grey text-center">
+                                                Este documento es una representación impresa de un
+                                                CFDI
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center" t-out="cfdi.get('metodo_pago')" />
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <table>
+                                                    <tr>
+                                                        <td class="text-end">Serie del Certificado
+                                                            del emisor:</td>
+                                                        <td t-out="cfdi.get('no_certificado')" />
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-end">Folio Fiscal UUID:</td>
+                                                        <td t-out="cfdi.get('uuid')" />
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-end">No. SAT:</td>
+                                                        <td t-out="timbre.get('no_certificado_sat')" />
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-end">Fecha certificación:</td>
+                                                        <td t-out="timbre.get('fecha')" />
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- SELLOS -->
+                        <table class="mb8">
+                            <tr>
+                                <td class="bg-grey">Sello digital del CFDI</td>
+                            </tr>
+                            <tr>
+                                <td t-out="timbre.get('sello')" class="wrap-text" />
+                            </tr>
+                        </table>
+
+                        <table class="mb8">
+                            <tr>
+                                <td class="bg-grey">Sello del SAT</td>
+                            </tr>
+                            <tr>
+                                <td t-out="timbre.get('sello_sat')" class="wrap-text" />
+                            </tr>
+                        </table>
+
+                        <table class="mb8">
+                            <tr>
+                                <td class="bg-grey">
+                                    Cadena original del complemento de certificación digital del SAT
+                                </td>
+                            </tr>
+                            <tr>
+                                <td t-out="timbre.get('complemento_certificacion')"
+                                    class="wrap-text" />
+                            </tr>
+                        </table>
+
+                    </div>
+                </div>
+            </main>
+        </t>
+    </template>
+
+
+    <record
+        id="paperformat_pkf_nomina_without_header" model="report.paperformat">
+        <field name="name">PKF Nómina sin Header</field>
+        <field name="default" eval="False" />
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+
+        <!-- MÁRGENES -->
+        <field name="margin_top">5</field>
+        <field name="margin_bottom">5</field>
+        <field name="margin_left">2.5</field>
+        <field name="margin_right">2.5</field>
+
+        <field name="header_line" eval="False" />
+        <field name="header_spacing">0</field>
+        <field name="dpi">90</field>
+    </record>
+
+</odoo>

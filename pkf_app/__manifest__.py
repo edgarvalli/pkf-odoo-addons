@@ -7,7 +7,7 @@
         Aplicacion para control interno de PKF
         Se conecta a la aplicacion de contpaqi
     """,
-    "depends": ["base", "ev_tools", "ev_contpaqi", "pkf_nominas", "pkf_clientes"],
+    "depends": ["base", "ev_tools", "ev_contpaqi"],
     "data": [
         "data/actions.xml",
         "data/menu.xml",

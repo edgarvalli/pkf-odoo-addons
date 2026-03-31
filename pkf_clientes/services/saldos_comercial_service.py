@@ -1,12 +1,14 @@
+from typing import List
 from dataclasses import dataclass
 from odoo.orm.environments import Environment
+from ..types.saldos_types import DocumentoSaldoRow, SaldoCliente, FacturaDict
 
 
 @dataclass
 class SaldosComercialService:
     env: Environment
 
-    def get_saldos(self):
+    def get_saldos(self) -> List[SaldoCliente]:
         mssql = self.env["ev.tools.mssql"]
         dbname = self.env.company.ev_contpaqi_comercial_db.dbname
 
@@ -58,13 +60,23 @@ class SaldosComercialService:
         ORDER BY doc.CFECHA
     """
 
-    def _format_data(self, data: list[dict]):
+    def _format_data(self, data: list[DocumentoSaldoRow]) -> List[SaldoCliente]:
         root = {}
 
         for row in data:
             cliente_id = row.get("cliente_id")
+            if cliente_id not in root:
+                saldo: SaldoCliente = {
+                    "id_cliente": cliente_id,
+                    "razon_social": row.get("cliente_nombre"),
+                    "rfc": row.get("cliente_rfc"),
+                    "emails": row.get("emails"),
+                    "facturas": [],
+                }
 
-            inv = {
+                root[cliente_id] = saldo
+
+            inv: FacturaDict = {
                 "fecha": row.get("fecha"),
                 "serie_folio": row.get("serie_folio"),
                 "uuid": row.get("uuid"),
@@ -74,17 +86,7 @@ class SaldosComercialService:
                 "estatus": row.get("estatus"),
             }
 
-            if cliente_id not in root:
-                emails = [e for e in row.get("emails", "").split(",") if "@" in e]
-
-                root[cliente_id] = {
-                    "id_documento": row.get("id_documento"),
-                    "razon_social": row.get("cliente_nombre"),
-                    "rfc": row.get("cliente_rfc"),
-                    "email_to": ",".join(emails),
-                    "facturas": [],
-                }
-
-            root[cliente_id]["facturas"].append(inv)
+            cursor: SaldoCliente = root[cliente_id]
+            cursor["facturas"].append(inv)
 
         return list(root.values())

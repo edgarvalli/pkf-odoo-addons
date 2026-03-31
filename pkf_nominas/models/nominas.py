@@ -1,98 +1,85 @@
-from pathlib import Path
-import qrcode, base64, io
-from num2words import num2words
+import uuid, json, base64
+from typing import Literal
 from odoo import models, exceptions
-from odoo.modules.module import get_module_path
+from ..utils.tools import next_5_min
+from ..services import ComprobanteNomina, ComprobantesZipService, Empleado
 
 
 class Nominas(models.AbstractModel):
     _name = "pkf.nominas"
     _description = "Modulo de Nominas PKF"
 
-    def _make_pdf(self, data):
-        cwd = Path(get_module_path("pkf_nominas"))
-
-        report_action = self.env["ir.actions.report"]
-
-        logo_path = cwd / "static/images/pkf_logo.png"
-
-        if logo_path.exists():
-            with open(logo_path, "rb") as fimg:
-                img_data = fimg.read()
-                img_encode = base64.b64encode(img_data)
-                logo_pkf = f"data:image/png;base64, {img_encode.decode('utf-8')}"
-
-        setattr(data, "_name", self._name)
-        setattr(data, "id", self.id)
-        setattr(data, "lang", self.env.context.get("lang"))
-        setattr(data, "env", self.env)
-
-        buffer = io.BytesIO()
-        qr = qrcode.make(data.sat_url)
-        qr.save(buffer, format="PNG")
-        qrimage = base64.b64encode(buffer.getvalue()).decode()
-
-        setattr(data, "image_qr", f"data:image/png;base64,{qrimage}")
-
-        total = data.totales.neto
-        entero = int(total)
-        centavos = int(round((total - entero) * 100))
-
-        importe_letra = (
-            f"{num2words(entero, lang='es').upper()} PESOS {centavos:02d}/100 M.N."
-        )
-        setattr(data.totales, "importe_letra", importe_letra)
-
-        finicial = data.fecha_inicial_pago.strftime("%d/%m/%Y")
-        ffinal = data.fecha_final_pago.strftime("%d/%m/%Y")
-
-        periodo_text = (
-            f"{data.periodo} {data.empleado.periodicidad}        {finicial} - {ffinal}"
-        )
-
-        setattr(data, "periodo_text", periodo_text)
-
-        pdf_content, _ = report_action._render_qweb_pdf(
-            "pkf_nominas.report_pkf_nomina_recibo_pdf",
-            data={"doc": data, "logo_pkf": logo_pkf},
-        )
-
-        headers = [
-            ("Content-Type", "application/pdf"),
-            ("Content-Length", str(len(pdf_content))),
-            ("Content-Disposition", f'inline; filename="{data.cfdi.uuid}.pdf"'),
-        ]
-
-        return {"type": "pdf", "content": pdf_content, "headers": headers}
-
-    def empleado(self):
+    def empleado(self, id: int = None):
         try:
-            euser = self.env["hr.employee"].search(
-                [["user_id", "=", self.env.uid]], limit=1
-            )
-            if not euser:
-                raise exceptions.UserError("Empleado no encontrado")
+            e = Empleado(self.env, idempleado=id)
+            return e.get_empleado()
 
-            euser: dict = self.env["ev.contpaqi.nominas"].buscar_empleado(
-                euser.ev_employee_code
-            )
-
-            if not euser:
-                raise exceptions.UserError("Empleado no encontrado")
-
-            return euser
         except Exception as e:
             raise exceptions.UserError(
                 f"Ocurrio un error al buscar el empleado: {str(e)}."
             )
 
-    def make_document(self, data, doc_type: str):
-
+    def make_document(self, iddocumento: int, doc_type: Literal["pdf", "xml"]):
+        comprobante = ComprobanteNomina(self.env, id=iddocumento)
         if doc_type.lower() == "pdf":
-            return self._make_pdf(data)
+            return comprobante.make_pdf()
 
-        xml_content = data.cfdi.content
+        xml_content = comprobante.get_xml()
         headers = [("Content-Type", "application/xml; charset=utf-8")]
         return {"type": "xml", "headers": headers, "content": xml_content}
 
-        # Get logo b64
+    def send_comprobantes_zip(self, id_attachment: int, email: str = None):
+        email = email or self.env.user.email
+
+        if not email:
+            raise ValueError("No se encontró correo para el envío")
+
+        mail = self.env["mail.mail"].create(
+            {
+                "subject": "Recibos de nómina",
+                "body_html": "<p>Adjunto encontrarás tus recibos de nómina.</p>",
+                "email_to": email,
+                "attachment_ids": [(6, 0, [id_attachment])],
+                "auto_delete": True,
+            }
+        )
+
+        mail.send()
+
+        return True
+
+    def _job_bulk_recibos(self, ids: list[int], uid: str):
+        try:
+            zip_content = ComprobantesZipService(env=self.env, ids=ids).build_zip()
+
+            username = self.env.user.name.split(" ")
+
+            attachment = self.env["ir.attachment"].create(
+                {
+                    "name": f"recibos_nomina_{'_'.join(username)}.zip",
+                    "type": "binary",
+                    "datas": base64.b64encode(zip_content),
+                    "mimetype": "application/zip",
+                }
+            )
+
+            self.send_comprobantes_zip(attachment.id)
+
+        finally:
+            self.env["pkf.tools"].remove_current_job(uid)
+
+    def enqueue_builk_recibos(self, ids: list[int]):
+
+        uid = str(uuid.uuid4())
+
+        model_id = self.env["ir.model"]._get("pkf.nominas").id
+
+        self.env["pkf.tools"].create_job(
+            uid=uid,
+            model_id=model_id,
+            state="code",
+            code=f"model._job_bulk_recibos({json.dumps(ids)}, '{uid}')",
+            nextcall=next_5_min(),
+        )
+
+        return uid
