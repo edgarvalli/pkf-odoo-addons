@@ -82,4 +82,4 @@ class Nominas(models.AbstractModel):
             nextcall=nextcall,
         )
 
-        return uid, nextcall
+        return tuple([uid, nextcall])
