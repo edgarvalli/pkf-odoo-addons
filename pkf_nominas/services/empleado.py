@@ -13,19 +13,19 @@ class Empleado:
     env: Environment
     idempleado: Optional[int] = None
 
-    def _get_code_contpaqi(self):
+    def _get_id_contpaqi(self):
         uid = self.idempleado or self.env.uid
         domain = [("user_id", "=", uid)]
         euser = self.env["hr.employee"].search(domain, limit=1)
         if not euser:
             raise ValueError("Empleado no encontrado")
 
-        return euser.ev_employee_code
+        return euser.ev_idempleado
 
     def _get_data_empleado(self) -> EmpleadoDict:
         try:
-            code = self._get_code_contpaqi()
-            empleado = self.env["ev.contpaqi.nominas"].buscar_empleado(code)
+            idempleado = self._get_id_contpaqi()
+            empleado = self.env["ev.contpaqi.nominas"].buscar_empleado_id(idempleado)
 
             if not empleado:
                 raise ValueError("No se encontro el empleado en contpaqi.")

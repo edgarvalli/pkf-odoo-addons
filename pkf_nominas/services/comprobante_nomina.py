@@ -96,9 +96,10 @@ class ComprobanteNomina:
     def _check_owner(self):
         evnominas = self.env["ev.contpaqi.nominas"]
         empleado = Empleado(env=self.env).get_empleado()
-        codigo = empleado.get("codigo")
-        if evnominas.verificar_pertenencia_comprobante(codigo, self.id) == False:
-            raise ValueError(f"El documento no pertenece a {codigo}")
+        id = empleado.get("id")
+        empleado_name = empleado.get("nombre")
+        if evnominas.verificar_pertenencia_comprobante(id, self.id) == False:
+            raise ValueError(f"El documento no pertenece a {empleado_name}")
 
     ### Methods
 

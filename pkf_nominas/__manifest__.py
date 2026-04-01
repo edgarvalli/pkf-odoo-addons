@@ -11,7 +11,6 @@
     "summary": "Modulo para obtener los recibos de nominas de los empleados del PKF",
     "depends": ["base", "hr", "ev_tools", "ev_contpaqi", "pkf_app"],
     "data": [
-        "views/res_company_contpaqi.xml",
         "templates/recibo_nomina_template.xml",
         "templates/comprobante_nomina_template.xml",
         "data/actions.xml",
