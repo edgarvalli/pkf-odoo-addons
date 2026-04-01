@@ -18,7 +18,7 @@ def api_route(
 
 
 def api_error(msg: str, **kwargs):
-    return http.request.make_json_response({"error": False, "message": msg, **kwargs})
+    return http.request.make_json_response({"error": True, "message": msg, **kwargs})
 
 
 def api_ok(**kwargs):

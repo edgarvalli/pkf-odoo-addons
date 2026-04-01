@@ -1,5 +1,5 @@
 import pytz
-from typing import List, Dict
+from typing import List
 from datetime import datetime
 from dataclasses import dataclass
 from odoo.exceptions import UserError
