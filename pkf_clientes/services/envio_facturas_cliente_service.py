@@ -194,7 +194,6 @@ class EnvioFacturasClienteService:
             nextcall=next_5_min(),
             interval_number=1,
             interval_type="minutes",
-            numbercall=next_5_min(),
             active=True,
         )
 
