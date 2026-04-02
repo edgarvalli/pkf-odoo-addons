@@ -78,5 +78,6 @@ class PKFTaskScheduler(models.AbstractModel):
         )
 
     def run_envios_facturas(self, attachment_id: int, uid: str, send_to_client=False):
+        self = self.sudo()
         srv = EnvioFacturasClienteService(self.env)
         srv._job_enviar(attachment_id, uid, send_to_client)
