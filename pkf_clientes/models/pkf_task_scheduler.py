@@ -76,3 +76,7 @@ class PKFTaskScheduler(models.AbstractModel):
         self.env["pkf.envios.logs"].send_bitacora(
             uid=self.uid, start=start_process, end=datetime.now()
         )
+
+    def run_envios_facturas(self, attachment_id: int, uid: str, send_to_client=False):
+        srv = EnvioFacturasClienteService(self.env)
+        srv._job_enviar(attachment_id, uid, send_to_client)
