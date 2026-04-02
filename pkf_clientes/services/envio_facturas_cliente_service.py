@@ -188,7 +188,7 @@ class EnvioFacturasClienteService:
     def _create_job(self, attachment_id: int, uid: str, send_to_client: bool):
         job_id = self.env["pkf.tools"].create_job(
             uid=uid,
-            model_id=self.env["ir.model"]._get("res.partner").id,
+            model_id=self.env["ir.model"]._get("pkf.clientes.taskscheduler").id,
             state="code",
             code=f"model._job_enviar({attachment_id}, '{uid}', {send_to_client})",
             nextcall=next_5_min(),
