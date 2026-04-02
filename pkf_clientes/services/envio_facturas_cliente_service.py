@@ -190,7 +190,7 @@ class EnvioFacturasClienteService:
             uid=uid,
             model_id=self.env["ir.model"]._get("pkf.clientes.taskscheduler").id,
             state="code",
-            code=f"model._job_enviar({attachment_id}, '{uid}', {send_to_client})",
+            code=f"model.run_envios_facturas({attachment_id}, '{uid}', {send_to_client})",
             nextcall=next_5_min(),
             interval_number=1,
             interval_type="minutes",
