@@ -30,7 +30,18 @@ class PKFTools(AbstractModel):
         return job
 
     def unlink_jobs(self):
-        jobs = self.env["ir.cron"].search([("name", "like", self.prefix)])
+        current_cron_id = self.env.context.get("cron_id")
+
+        jobs = (
+            self.env["ir.cron"]
+            .sudo()
+            .search(
+                [
+                    ("name", "like", self.prefix),
+                    ("id", "!=", current_cron_id),
+                ]
+            )
+        )
 
         for job in jobs:
             _logger.info(f"Removing cron job with id {job.id}")
