@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<template xml:space="preserve">
+    <t t-name="pkf_nominas.ComprobantesHeader">
+        <div class="o_card_wide">
+            <div class="o_card_content">
+                <div class="o_card_main_info">
+                    <span class="o_card_label">Nombre Completo</span>
+                    <h2 class="o_card_title">
+                        <t t-out="state.user.nombre"/>
+                    </h2>
+                </div>
+                <div class="o_card_details d-none d-md-flex">
+                    <div class="o_card_item">
+                        <span class="o_card_label">Departamento</span>
+                        <span class="o_card_value">
+                            <t t-out="state.user.departamento"/>
+                        </span>
+                    </div>
+                    <div class="o_card_item">
+                        <span class="o_card_label">Puesto</span>
+                        <span class="o_card_value">
+                            <t t-out="state.user.puesto"/>
+                        </span>
+                    </div>
+                    <div class="o_card_item">
+                        <span class="o_card_label">Código Empleado</span>
+                        <span class="o_card_value">
+                            <t t-out="state.user.codigo"/>
+                        </span>
+                    </div>
+                    <div class="o_card_item">
+                        <span class="o_card_label">No. Seguro Social</span>
+                        <span class="o_card_value">
+                            <t t-out="state.user.numerosegurosocial"/>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="pkf_nominas.Filter">
+        <div class="d-flex justify-content-end align-items-center flex-column flex-md-row gap-2 mt-2">
+            <div class="d-flex justify-content-between align-items-center mb-3 w-100 w-md-auto">
+                <label for="startdate" class="form-label text-bold">F. Inical</label>
+                <input type="date" t-model="state.startdate" name="startdate" id="startdate" class="form-control w-75" t-on-input="handleChangeDate"/>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-3 w-100 w-md-auto">
+                <label for="enddate" class="form-label text-bold">F. Final</label>
+                <input type="date" t-model="state.enddate" name="enddate" id="enddate" class="form-control w-75" t-on-input="handleChangeDate"/>
+            </div>
+            <div class="d-flex justify-content-end align-items-center mb-3 w-100 w-md-auto">
+                <button class="btn btn-primary" t-on-click="onFilter">
+                    <i class="fa-solid fa-search"></i>
+                    Filtrar
+                </button>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="pkf_nominas.ComprobantesTable">
+        <div class="wrapper">
+            <div class="o_comprobantes_table_scroll content">
+            <table class="table table-sm table-hover">
+                <thead>
+                    <tr>
+                        <th>Emisor</th>
+                        <th>RFC Emisor</th>
+                        <th>UUID</th>
+                        <th>Total</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="state.comprobantes" t-as="item" t-key="item.guiddocumento">
+                        <tr>
+                            <td>
+                                <t t-esc="item.nombreemisor"/>
+                            </td>
+                            <td>
+                                <t t-esc="item.rfcemisor"/>
+                            </td>
+                            <td>
+                                <t t-esc="item.uuid"/>
+                            </td>
+                            <td>
+                                $ <t t-esc="formatCurrency(item.total)"/>
+                            </td>
+                            <td>
+                                <Dropdown>
+                                    <button class="o_ev_btn" type="button">
+                                        Ver Recibos
+                                    </button>
+
+                                    <t t-set-slot="content">
+                                        <DropdownItem onSelected="() => makeDocument(item.iddocumento,'pdf')">
+                                            <i class="fa-solid fa-file-pdf"></i>
+                                            PDF
+                                        </DropdownItem>
+                                        <DropdownItem onSelected="() => makeDocument(item.iddocumento,'xml')">
+                                            <i class="fa-regular fa-file-lines"></i>
+                                            XML
+                                        </DropdownItem>
+                                    </t>
+                                </Dropdown>
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+            </div>
+        </div>
+    </t>
+    
+    <t t-name="pkf_nominas.Comprobantes">
+        <t t-call="pkf_nominas.ComprobantesHeader"/>
+        <t t-call="pkf_nominas.Filter"/>
+        <div class="wrapper">
+            <t t-call="pkf_nominas.ComprobantesTable" />
+        </div>
+    </t>
+</template>

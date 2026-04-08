@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem
+        id="ev_clientes_menu"
+        name="Clientes"
+        action="action_saldo_clientes"
+        groups="base.group_system,sales_team.group_sale_salesman,sales_team.group_sale_salesman_all_leads,account.group_account_invoice,account.group_account_manager"
+        sequence="10" />
+
+
+    <!-- <menuitem
+        id="ev_saldos_clientes_menu"
+        name="Clientes"
+        action="action_saldo_clientes"
+    groups="base.group_system,sales_team.group_sale_salesman,sales_team.group_sale_salesman_all_leads,account.group_account_invoice,account.group_account_manager"
+        parent="ev_clientes_menu"
+        sequence="1" /> -->
+
+    <menuitem
+        id="ev_upload_invoices"
+        name="Subir Facturas"
+        action="action_upload_invoices_wizard"
+        groups="base.group_system,sales_team.group_sale_salesman,sales_team.group_sale_salesman_all_leads,account.group_account_invoice,account.group_account_manager"
+        parent="ev_clientes_menu"
+        sequence="4" />
+
+</odoo>

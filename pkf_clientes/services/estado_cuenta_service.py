@@ -140,14 +140,18 @@ class EstadoCuentaService:
             email_values=email_values,
         )
 
-    def enviar_estado_cuenta_cliente(self, idcliente: int):
+    def enviar_estado_cuenta_cliente(self, idcliente: int, emails: list[str] = None):
         if not idcliente:
             raise UserError("Debe de definir una id de cliente.")
         try:
             data = self._get_data_client(idcliente)
             if not data:
                 raise UserError(f"No se encontro el cliente con id {idcliente}")
-            self.enviar_correo(data, force_send=True)
+
+            if emails:
+                data["emails"] = ",".join(emails)
+
+            self.enviar_correo(data, force_send=False)
             return True
         except Exception as e:
             raise UserError(str(e))

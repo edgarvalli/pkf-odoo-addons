@@ -19,6 +19,14 @@ class Nominas(models.AbstractModel):
                 f"Ocurrio un error al buscar el empleado: {str(e)}."
             )
 
+    def comprobantes(self, filters=None):
+        emp = Empleado(self.env)
+
+        try:
+            return emp.get_comprobantes(**filters)
+        except Exception as e:
+            raise exceptions.UserError(e)
+
     def make_document(self, iddocumento: int, doc_type: Literal["pdf", "xml"]):
         comprobante = ComprobanteNomina(self.env, id=iddocumento)
         if doc_type.lower() == "pdf":

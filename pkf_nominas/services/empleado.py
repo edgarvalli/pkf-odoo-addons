@@ -41,9 +41,15 @@ class Empleado:
         return self._get_data_empleado()
 
     def get_comprobantes(self, **kwargs):
+        with_metadata = kwargs.pop("metadata", False)
         try:
             empleado = self._get_data_empleado()
-            params = {"idempleado": empleado.get("id"), **kwargs}
-            return self.env["ev.contpaqi.nominas"].comprobantes(**params)
+            params = {"idempleado": empleado.pop("id"), **kwargs}
+            comprobantes = self.env["ev.contpaqi.nominas"].comprobantes(**params)
+            if with_metadata:
+                return {"comprobantes": comprobantes, "empleado": empleado}
+
+            return comprobantes
+
         except Exception as e:
             raise ValueError(f"Ocurrio un error al buscar los comprobantes: {str(e)}")

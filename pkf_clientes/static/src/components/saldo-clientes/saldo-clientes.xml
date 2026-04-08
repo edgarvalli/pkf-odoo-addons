@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template xml:space="preserve">
+    <t t-name="pkf_clientes.SaldoClientesTHead">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>No. Cliente</th>
+                <th>Razon Social</th>
+                <th>Rfc</th>
+                <th>Grupo</th>
+                <th>30 Días</th>
+                <th>60 Días</th>
+                <th>90 Días</th>
+                <th>Saldo Vencido</th>
+                <th>Pendiente</th>
+            </tr>
+        </thead>
+    </t>
+
+    <t t-name="pkf_clientes.SaldoClientesTBody">
+        <tbody>
+            <t t-foreach="state.saldos" t-as="s" t-key="s.cliente.id">
+                <tr>
+                    <td>
+                        <t t-out="s.cliente.id"/>
+                    </td>
+                    <td>
+                        <t t-out="s.cliente.codigo"/>
+                    </td>
+                    <td>
+                        <t t-out="s.cliente.nombre"/>
+                    </td>
+                    <td>
+                        <t t-out="s.cliente.rfc"/>
+                    </td>
+                    <td>
+                        <t t-out="s.clasificacion.valor"/>
+                    </td>
+                    <td>
+                        <span t-att-class="mappedColor('vencido_30', s.saldo_a_30)">
+                            <t t-out="formatAccount(s.saldo_a_30)"/>
+                        </span>
+                    </td>
+                    <td>
+                        <span t-att-class="mappedColor('vencido_60', s.saldo_a_60)">
+                            <t t-out="formatAccount(s.saldo_a_60)"/>
+                        </span>
+                    </td>
+                    <td>
+                        <span t-att-class="mappedColor('vencido_90', s.saldo_a_90)">
+                            <t t-out="formatAccount(s.saldo_a_90)"/>
+                        </span>
+                    </td>
+                    <td>
+                        <span t-att-class="mappedColor('vencido', s.saldo_vencido)">
+                            <t t-out="formatAccount(s.saldo_vencido)"/>
+                        </span>
+                    </td>
+                    <td>
+                        <a href="#" t-on-click.prevent="() => openSaldo(s.cliente.id)">
+                            <t t-out="formatAccount(s.saldo_total)"/>
+                        </a>
+                    </td>
+                </tr>
+            </t>
+        </tbody>
+    </t>
+
+    <t t-name="pkf_clientes.SaldoClientes">
+        <div class="o_control_panel d-flex flex-column gap-3 px-3 pt-2 pb-3">
+            <div class="d-flex flex-wrap flex-lg-nowrap justify-content-center align-items-lg-start gap-2 gap-lg-3 flex-grow-1">
+                <input type="search" t-on-input="searchClient" class="form-control w-100 w-lg-75 w-xl-50" placeholder="Buscar cliente"/>
+            </div>
+        </div>
+        <div class="container-fluid wrapper">
+            <div class="ev-table-container content">
+                <table class="table o_ev_table">
+                    <t t-call="pkf_clientes.SaldoClientesTHead"/>
+                    <t t-call="pkf_clientes.SaldoClientesTBody">
+                        <t t-set="openSaldo" t-value="this.goToEstadoCuenta.bind(this)"/>
+                    </t>
+                </table>
+            </div>
+        </div>
+    </t>
+</template>

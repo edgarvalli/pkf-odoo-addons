@@ -1,0 +1,36 @@
+$ev-radius: 5px;
+$ev-surface: #fff;
+$ev-header-bg: #f5f5f5;
+$ev-header-text: #424242;
+$ev-border: #eeeeee;
+$ev-scroll: #bdbdbd;
+
+.ev-table-container {
+  overflow-x: auto;
+  height: 80vh;
+  font-size: 12px;
+  background-color: $ev-surface;
+  border-radius: $ev-radius;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: $ev-scroll transparent;
+
+  table {
+    border-radius: $ev-radius;
+  }
+
+  thead {
+    th {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background-color: $ev-header-bg;
+      color: $ev-header-text;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 12px 16px;
+      border-bottom: 2px solid $ev-border;
+    }
+  }
+}

@@ -292,15 +292,16 @@ class EnvioFacturasClienteService:
             email_values=email_values,
         )
 
-    def enviar_todos(self, file: FileStorage, send_to_client=False) -> EnvioResponse:
-        uid = str(uuid.uuid4())
+    def enviar_todos_http(
+        self, file: FileStorage, send_to_client=False
+    ) -> EnvioResponse:
+        return self.enviar_todos(file.read(), send_to_client)
 
-        file.stream.seek(0)
-        zip_bytes = file.read()
+    def enviar_todos(self, zip_bytes: bytes, send_to_client=False) -> EnvioResponse:
+        uid = str(uuid.uuid4())
 
         total = self._count_facturas(zip_bytes)
 
-        # 🔥 si es pesado → background
         if total > 10:
             attachment = self.env["ir.attachment"].create(
                 {
@@ -313,7 +314,6 @@ class EnvioFacturasClienteService:
             self._create_job(attachment.id, uid, send_to_client)
             return {"type": "job", "uid": uid}
 
-        # ⚡ rápido → síncrono
         for ctx in self._build_context_from_bytes(zip_bytes):
             self.enviar(ctx, send_to_client=send_to_client, force_send=True)
 

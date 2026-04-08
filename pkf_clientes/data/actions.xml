@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_saldo_clientes" model="ir.actions.client">
+        <field name="name">Saldo Clientes</field>
+        <field name="tag">pkf_clientes.SaldoClientes</field>
+        <field name="target">main</field>
+    </record>
+
+    <record id="action_edo_cliente" model="ir.actions.client">
+        <field name="name">Estado Cuenta Cliente</field>
+        <field name="tag">pkf_clientes.EstadoCuentaCliente</field>
+        <field name="target">main</field>
+    </record>
+
+    <record id="action_upload_invoices_wizard" model="ir.actions.act_window">
+        <field name="name">Subir Facturas</field>
+        <field name="res_model">pkf.clientes.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="ev_upload_invoices_form" />
+        <field name="target">new</field>
+    </record>
+</odoo>

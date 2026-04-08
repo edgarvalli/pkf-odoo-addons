@@ -1,0 +1,177 @@
+.text-bold {
+  font-weight: bold;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.content {
+  flex: 1;
+}
+
+.o_comprobantes_table_scroll {
+  /* Contenedor y Dimensiones */
+  max-height: 75vh;
+  overflow: auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  background-color: #ffffff;
+
+  /* Tipografía y Comportamiento */
+  font-size: 13px; /* Un poco más legible que 12px */
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: #bdbdbd transparent;
+
+  /* Estilo de la Tabla interna */
+  table {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+  }
+
+  thead th {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: #f5f5f5; /* Superficie tonal */
+    color: #424242; /* Texto de alta énfasis */
+    font-weight: 500; /* Material usa Medium para headers */
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 12px 16px;
+    border-bottom: 2px solid #eeeeee;
+  }
+
+  tbody td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #616161;
+    vertical-align: middle;
+  }
+
+  /* Efecto Hover en filas */
+  tbody tr:hover {
+    background-color: #f9f9f9;
+    transition: background-color 0.2s ease;
+  }
+}
+
+/* Personalización del Scrollbar para Chrome/Edge/Safari */
+.o_comprobantes_table_scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.o_comprobantes_table_scroll::-webkit-scrollbar-thumb {
+  background: #bdbdbd;
+  border-radius: 10px;
+}
+
+.o_comprobantes_table_scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.o_ev_btn {
+  background: none;
+  color: #0d47a1;
+  font-weight: bold;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: all 0.25s;
+  border-radius: 0.25rem;
+
+  &:hover {
+    background: #bbdefb;
+  }
+
+  &:active {
+    background: #2196f3;
+  }
+}
+
+.o_card_wide {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  padding: 20px 24px;
+  box-sizing: border-box;
+  transition: box-shadow 0.3s ease;
+}
+
+.o_card_wide:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Elevación al pasar el mouse */
+}
+
+.o_card_content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: 24px;
+}
+
+/* Sección del Nombre */
+.o_card_main_info {
+  flex: 2;
+}
+
+.o_card_title {
+  margin: 4px 0 0 0;
+  color: #1a1c1e;
+  font-family: "Roboto", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: 0.25px;
+}
+
+/* Sección de Datos Secundarios */
+.o_card_details {
+  display: flex;
+  flex: 3;
+  justify-content: space-around;
+  gap: 16px;
+}
+
+.o_card_item {
+  display: flex;
+  flex-direction: column;
+}
+
+.o_card_label {
+  font-family: "Roboto", sans-serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #74777f; /* Color "on-surface-variant" */
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+.o_card_value {
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  color: #44474e;
+  font-weight: 400;
+  margin-top: 2px;
+}
+
+/* Responsive: Se vuelve vertical en pantallas pequeñas */
+@media (max-width: 600px) {
+  .o_card_content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .o_card_details {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 32px;
+    margin-top: 16px;
+  }
+}

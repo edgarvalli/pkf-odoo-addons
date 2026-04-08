@@ -1,0 +1,38 @@
+@mixin ev-color($text, $bg) {
+  color: $text;
+  background-color: $bg;
+}
+
+.ev-md-red {
+  @include ev-color(#e53935, #ffcdd2);
+}
+
+.ev-md-pink {
+  @include ev-color(#d81b60, #f8bbd0);
+}
+
+.ev-md-purple {
+  @include ev-color(#8e24aa, #e1bee7);
+}
+
+.ev-md-green {
+  @include ev-color(#43a047, #c8e6c9);
+}
+
+.ev-md-yellow {
+  @include ev-color(#f9a825, #fff9c4);
+}
+
+.ev-md-blue {
+  @include ev-color(#1e88e5, #bbdefb);
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.content {
+  flex: 1;
+}

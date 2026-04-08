@@ -20,4 +20,10 @@
         <field name="paperformat_id" ref="paperformat_pkf_nomina_without_header" />
     </record>
 
+    <record id="action_comprobantes_view" model="ir.actions.client">
+        <field name="name">Comprobantes de Nominas PKF</field>
+        <field name="tag">pkf_nominas.Comprobantes</field>
+        <field name="target">main</field>
+    </record>
+
 </odoo>

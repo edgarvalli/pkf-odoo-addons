@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem
+        id="pkf_comprobantes_menu"
+        name="Recibos de Nominas"
+        action="action_comprobantes_view"
+        groups="base.group_system,base.group_user"
+        parent="hr.menu_hr_root"
+        sequence="10" />
+
+</odoo>

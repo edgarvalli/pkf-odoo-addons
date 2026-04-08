@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template xml:space="preserve">
+    <t t-name="pkf_clientes.EstadoCuentaCliente">
+        <div class="o-ev-account-dashboard d-flex flex-column h-100">
+
+            <!-- Header cliente -->
+            <div class="o-ev-client-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h2><t t-esc="state.client.razon_social"/></h2>
+                        <div class="text-muted">
+                            Código: <t t-esc="state.client.codigo"/>
+                        </div>
+                        <div>
+                            RFC: <strong><t t-esc="state.client.rfc"/></strong>
+                        </div>
+                        <div class="small text-muted">
+                            <t t-esc="state.client.emails"/>
+                        </div>
+                    </div>
+
+                    <div class="text-end">
+                        <div class="o-ev-badge-primary">
+                            <t t-esc="state.client.moneda?.clave_sat"/>
+                        </div>
+                        <div class="mt-2">
+                            <small>Clasificación</small>
+                            <div><t t-esc="state.client.clasificacion?.valor"/></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center mt-2">
+                    <button class="btn btn-primary me-4" t-on-click="sendEstadoCuenta">
+                        <i class="fa-solid fa-envelope"></i>
+                        Enviar Estado de cuenta
+                    </button>
+                    <CheckBox value="state.sendToClient" t-on-change="toggleSendToClient">
+                        Incluir cliente
+                    </CheckBox>
+                </div>
+            </div>
+
+            <div class="container-fluid">
+                <!-- Resumen -->
+                <div class="row g-3 mt-1">
+                    <div class="col-4">
+                        <div class="o-ev-stat-card">
+                            <div class="label">Facturas</div>
+                            <div class="value">
+                                <t t-esc="state.client.facturas.length"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-4">
+                        <div class="o-ev-stat-card">
+                            <div class="label">Saldo pendiente</div>
+                            <div class="value text-danger">
+                                $ <t t-esc="state.totalPendiente.toLocaleString('es-MX', {minimumFractionDigits: 2})"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-4">
+                        <div class="o-ev-stat-card">
+                            <div class="label">Moneda</div>
+                            <div class="value">
+                                <t t-esc="state.client.moneda?.nombre"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabla -->
+                <div class="o-ev-table-container flex-grow-1 mt-3">
+                    <table class="table table-sm table-hover">
+                        <thead>
+                            <tr>
+                                <th>Factura</th>
+                                <th>Fecha</th>
+                                <th>Vencimiento</th>
+                                <th>UUID</th>
+                                <th>Total</th>
+                                <th>Pendiente</th>
+                                <th>Estatus</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="state.client.facturas" t-as="factura" t-key="factura.id_documento">
+                                <td><t t-esc="factura.serie_folio"/></td>
+                                <td><t t-esc="factura.fecha"/></td>
+                                <td><t t-esc="factura.fecha_vencimiento"/></td>
+                                <td class="text-muted small"><t t-esc="factura.uuid"/></td>
+                                <td>
+                                    $ <t t-esc="factura.total.toLocaleString('es-MX', {minimumFractionDigits: 2})"/>
+                                </td>
+                                <td>
+                                    $ <t t-esc="factura.pendiente.toLocaleString('es-MX', {minimumFractionDigits: 2})"/>
+                                </td>
+                                <td>
+                                    <t t-value="mapStatus(factura.estatus)" t-set="statusMapped"/>
+                                    <span t-att-class="statusMapped.class">
+                                        <t t-esc="statusMapped.text"/>
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </t>
+</template>
