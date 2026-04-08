@@ -41,7 +41,7 @@
     </t>
 
     <t t-name="pkf_nominas.Filter">
-        <div class="d-flex justify-content-end align-items-center flex-column flex-md-row gap-2 mt-2">
+        <div class="d-flex justify-content-end align-items-center flex-column flex-md-row gap-2 mt-2 me-2">
             <div class="d-flex justify-content-between align-items-center mb-3 w-100 w-md-auto">
                 <label for="startdate" class="form-label text-bold">F. Inical</label>
                 <input type="date" t-model="state.startdate" name="startdate" id="startdate" class="form-control w-75" t-on-input="handleChangeDate"/>
