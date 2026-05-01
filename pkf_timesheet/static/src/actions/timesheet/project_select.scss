@@ -1,0 +1,53 @@
+.ev-select {
+  position: relative;
+
+  input {
+    width: 100%;
+    padding: 0.5rem 0.5rem 0 0.5rem;
+    border: none;
+    border-bottom: #8f8f8f solid thin;
+    &:focus {
+      outline: none;
+    }
+  }
+
+  ul {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 100%;
+    z-index: 100;
+    list-style: none;
+    padding: 0;
+    max-height: 200px;
+    background-color: #fff;
+    border: #f8f8f8 solid thin;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); // Sombra más realista
+    transition: all 0.2s ease;
+
+    // Control de visibilidad
+    transform: scaleY(0);
+    transform-origin: top;
+    visibility: hidden;
+    opacity: 0;
+
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  // Esta clase controlará la apertura
+  &.open ul {
+    transform: scaleY(1);
+    visibility: visible;
+    opacity: 1;
+    transform-origin: top;
+  }
+
+  li {
+    padding: 0.5rem;
+    cursor: pointer;
+    &:hover {
+      background: #f5f5f5;
+    }
+  }
+}

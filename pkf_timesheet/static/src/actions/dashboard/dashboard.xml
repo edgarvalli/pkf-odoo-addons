@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates xml:space="preserve">
+    <t t-name="pkf_control_tiempos.Dashboard">
+        <div class="container-fuild h-100 d-flex flex-column" t-ref="container-ref">
+            <div class="row">
+                <div class="col">
+                    <h1>Dashboard</h1>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="pkf_timesheet_project_phase_view_form" model="ir.ui.view">
+        <field name="name">pkf.timesheet.project.phase.view.form</field>
+        <field name="model">pkf.timesheet.project.phase</field>
+        <field name="arch" type="xml">
+            <form string="Fases del proyecto">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="code" />
+                        </group>
+                        <group>
+                            <field name="name" />
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page name="tasks" string="Tareas">
+                            <field name="task_ids">
+                                <form>
+                                    <group>
+                                        <field name="code" />
+                                        <field name="name" />
+                                    </group>
+                                </form>
+                                <list editable="top">
+                                    <field name="code" />
+                                    <field name="name" />
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="pkf_timesheet_project_phase_view_list" model="ir.ui.view">
+        <field name="name">pkf_timesheet_project_phase.view.list</field>
+        <field name="model">pkf.timesheet.project.phase</field>
+        <field name="arch" type="xml">
+            <list string="">
+                <field name="code" />
+                <field name="name" />
+                <field name="active" />
+            </list>
+        </field>
+    </record>
+
+</odoo>

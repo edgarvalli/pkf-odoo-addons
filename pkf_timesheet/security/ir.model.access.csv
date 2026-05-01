@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_pkf_timesheet_project_user,access.pkf.timesheet.project.user,model_pkf_timesheet_project,pkf_timesheet.group_user,1,0,0,0
+access_pkf_timesheet_project_manager,access.pkf.timesheet.project.manager,model_pkf_timesheet_project,pkf_timesheet.group_manager,1,1,1,1
+access_pkf_timesheet_phase_user,access.pkf.timesheet.phase.user,model_pkf_timesheet_project_phase,pkf_timesheet.group_user,1,0,0,0
+access_pkf_timesheet_phase_manager,access.pkf.timesheet.phase.manager,model_pkf_timesheet_project_phase,pkf_timesheet.group_manager,1,1,1,1
+access_pkf_timesheet_task_user,access.pkf.timesheet.task.user,model_pkf_timesheet_project_task,pkf_timesheet.group_user,1,0,0,0
+access_pkf_timesheet_task_manager,access.pkf.timesheet.task.manager,model_pkf_timesheet_project_task,pkf_timesheet.group_manager,1,1,1,1
+access_pkf_timesheet_time_entry_user,access.pkf.timesheet.time.entry.user,model_pkf_timesheet_time_entry,pkf_timesheet.group_user,1,1,1,0
+access_pkf_timesheet_time_entry_manager,access.pkf.timesheet.time.entry.manager,model_pkf_timesheet_time_entry,pkf_timesheet.group_manager,1,1,1,1

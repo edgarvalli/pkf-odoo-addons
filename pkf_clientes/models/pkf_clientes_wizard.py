@@ -1,5 +1,4 @@
 import base64
-from io import BytesIO
 from odoo import models, fields
 from odoo.exceptions import UserError
 from ..services import EnvioFacturasClienteService

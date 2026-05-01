@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem
+        id="pkf_timesheet_menu"
+        name="Control de Tiempos"
+        sequence="10">
+
+        <menuitem
+            id="pkf_ts_dashboard_menu"
+            name="Control de Tiempos"
+            action="action_pkf_ts_dashboard"
+            groups="pkf_timesheet.group_manager,pkf_timesheet.group_user"
+            sequence="0" />
+        <menuitem
+            id="pkf_timesheet_project_menu"
+            name="Proyectos"
+            groups="pkf_timesheet.group_manager"
+            action="pkf_timesheet_project_action"
+            sequence="1" />
+
+        <menuitem
+            id="pkf_timesheet_settings_menu"
+            name="Configuraciones"
+            groups="pkf_timesheet.group_manager"
+            sequence="10">
+
+            <menuitem
+                id="pkf_timesheet_setting_phase_menu"
+                name="Fases"
+                action="pkf_timesheet_phase_action"
+                sequence="0" />
+            <menuitem
+                id="pkf_timesheet_setting_task_menu"
+                name="Tareas"
+                action="pkf_timesheet_task_action"
+                sequence="1" />
+
+        </menuitem>
+    </menuitem>
+
+</odoo>

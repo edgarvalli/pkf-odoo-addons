@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="pkf_timesheet_project_task_view_form" model="ir.ui.view">
+        <field name="name">pkf.timesheet.project.task.view.form</field>
+        <field name="model">pkf.timesheet.project.task</field>
+        <field name="arch" type="xml">
+            <form string="Tareas de proyecto">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="code" />
+                            <field name="order" />
+                            <field name="phase_id" readonly="True" />
+                        </group>
+                        <group>
+                            <field name="name" />
+                            <field name="estimated_hours" />
+                        </group>
+                    </group>
+                    <group name="description">
+                        <separator string="Descripcion" />
+                        <field name="note" nolabel="1" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="pkf_timesheet_project_task_view_list" model="ir.ui.view">
+        <field name="name">pkf.timesheet.project.task.view.list</field>
+        <field name="model">pkf.timesheet.project.task</field>
+        <field name="arch" type="xml">
+            <list string="">
+                <field name="code" />
+                <field name="name" />
+                <field name="phase_id" />
+                <field name="estimated_hours" />
+            </list>
+        </field>
+    </record>
+
+    <record id="pkf_timesheet_project_task_view_search" model="ir.ui.view">
+        <field name="name">pkf.timesheet.project.task.view.search</field>
+        <field name="model">pkf.timesheet.project.task</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="code" />
+                <field name="name" />
+
+            </search>
+        </field>
+    </record>
+
+</odoo>

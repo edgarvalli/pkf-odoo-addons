@@ -1,0 +1,12 @@
+.client-url:hover {
+  color: #b1a8a8;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.client-avatar {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  object-fit: cover;
+}

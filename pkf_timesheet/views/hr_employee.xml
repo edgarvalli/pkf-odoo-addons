@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_hr_employee_form_inherit_pkf" model="ir.ui.view">
+        <field name="name">hr.employee.form.inherit.pkf</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='payroll_information']//field[@name='wage']" position="after">
+                <label for="timesheet_cost" string="Costo Hora" />
+                <div class="o_row" name="timesheet_cost_div">
+                    <field name="timesheet_cost" class="oe_inline" />
+                    <span> / hora</span>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

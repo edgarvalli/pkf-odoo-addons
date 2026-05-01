@@ -1,0 +1,160 @@
+// Variables
+$ev-border: #e5e7eb;
+$ev-hover: #f9fafb;
+$ev-active: #e0f2fe;
+$ev-header: #f8fafc;
+$ev-phase: #eef2f7;
+$ev-scroll: #bdbdbd;
+
+$breakpoints: (
+  "sm": 576px,
+  "md": 768px,
+  "lg": 992px,
+  "xl": 1200px,
+  "xxl": 1400px,
+);
+
+@mixin respond-to($breakpoint) {
+  // Verifica si el valor existe en el mapa
+  @if map-has-key($breakpoints, $breakpoint) {
+    @media (min-width: map-get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  } @else {
+    @warn "El valor '#{$breakpoint}' no fue encontrado en el mapa de breakpoints.";
+  }
+}
+
+.table-responsive-custom {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  position: relative;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: $ev-scroll transparent;
+  border: 1px solid $ev-border;
+  border-radius: 6px;
+
+  // Scrollbar Custom (WebKit)
+  &::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+    &-thumb {
+      background: $ev-scroll;
+      border-radius: 4px;
+    }
+  }
+
+  table {
+    margin-bottom: 0;
+    width: max-content; // Permite que la tabla se expanda según su contenido
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 13px;
+    table-layout: fixed; // Fuerza el respeto a los anchos definidos
+  }
+
+  thead {
+    th {
+      position: sticky;
+      top: 0;
+      min-width: 40px;
+      width: 40px;
+      text-align: center;
+      background-color: $ev-header;
+      z-index: 2;
+      border-bottom: 1px solid $ev-border;
+      border-right: 1px solid $ev-border;
+      padding: 6px 8px;
+      font-weight: 500;
+
+      &:first-child {
+        z-index: 4; // Prioridad sobre el resto del header y columnas
+      }
+    }
+  }
+
+  // Estilos para la primera columna (Sticky)
+  th:first-child,
+  td:first-child {
+    position: sticky;
+    left: 0;
+    background-color: $ev-header;
+    z-index: 3;
+    width: 100px;
+    min-width: 100px;
+    max-width: 100px;
+    border-right: 1px solid $ev-border;
+
+    // Prevención de desborde en nombres largos
+    overflow: hidden;
+    // text-overflow: ellipsis;
+    // white-space: nowrap;
+
+    @include respond-to("md") {
+      width: 220px;
+      min-width: 220px;
+      max-width: 220px;
+    }
+    @include respond-to("xl") {
+      width: 260px;
+      min-width: 260px;
+      max-width: 260px;
+    }
+    @include respond-to("xxl") {
+      width: 400px;
+      min-width: 400px;
+      max-width: 400px;
+    }
+  }
+
+  td {
+    border-bottom: 1px solid $ev-border;
+    border-right: 1px solid $ev-border;
+    padding: 0;
+    height: 36px;
+
+    &:first-child {
+      padding: 0.5rem 0.75rem;
+    }
+
+    &.active {
+      background-color: $ev-active;
+    }
+  }
+
+  tbody {
+    tr {
+      &:hover td {
+        background-color: $ev-hover;
+      }
+
+      // Fases (tipo agrupador)
+      &.phase-row th {
+        background-color: $ev-phase !important;
+        font-weight: 600;
+        text-align: left;
+        padding: 6px 10px;
+        border-bottom: 1px solid $ev-border;
+      }
+    }
+  }
+}
+
+// Estilos de Input (Fuera de la tabla o dentro)
+.cell-input {
+  width: 100%;
+  height: 100%;
+  border: none;
+  padding: 6px 8px;
+  background: transparent;
+  outline: none;
+  font-size: 13px;
+  transition: background-color 0.2s;
+
+  &:focus {
+    background-color: white;
+    box-shadow: inset 0 0 0 2px #3b82f6;
+  }
+}

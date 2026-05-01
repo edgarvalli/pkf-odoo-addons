@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates xml:space="preserve">
+    <t t-name="pkf_timesheet.TimeSheetActionBar">
+        <div class="d-flex flex-column h-100 p-3">
+
+            <!-- Título -->
+            <div class="mb-4">
+                <h1 style="font-size: 24px">Control de tiempos</h1>
+            </div>
+
+            <div class="mb-4" t-if="client">
+                <span class="text-muted small text-bold">Cliente</span>
+                <div class="d-flex gap-3 align-items-center mt-2 client-url" t-on-click="openClient">
+                    <img
+                        t-att-src="client.avatar" 
+                        class="client-avatar"
+                        t-att-alt="client.name"
+                    />
+                    <h2 style="font-size: 14px;" class="text-primary" t-out="client.name"/>
+                </div>
+            </div>
+
+            <!-- Proyecto -->
+            <div class="mb-4">
+                <ProjectSelect 
+                    onChange="onProjectChange.bind(this)" 
+                    value="state.projectId"
+                />
+            </div>
+
+            <!-- Desde -->
+            <div class="mb-4">
+                <label class="text-muted small text-bold">Desde:</label>
+                <input
+                    type="date"
+                    class="form-control"
+                    name="startdate"
+                    t-att-value="formatDate(state.startDate)"
+                    t-on-change="onDateChange"
+                />
+            </div>
+
+            <!-- Hasta -->
+            <div class="mb-4">
+                <label class="text-muted small text-bold">Hasta:</label>
+                <input
+                    type="date"
+                    class="form-control"
+                    name="enddate"
+                    t-att-value="formatDate(state.endDate)"
+                    t-on-change="onDateChange"
+                />
+            </div>
+
+            <!-- Botón filtrar -->
+            <div class="mb-3">
+                <button class="btn btn-outline-primary w-50" type="button" t-on-click="onFilter">
+                    Filtrar
+                </button>
+            </div>
+
+            <!-- 🔥 Spacer (empuja hacia abajo) -->
+            <div class="flex-fill"></div>
+
+            <!-- Botón guardar abajo -->
+            <div>
+                <button 
+                    class="btn btn-primary w-100" 
+                    type="button" 
+                    t-on-click="onSave"
+                >
+                    Guardar
+                </button>
+            </div>
+
+        </div>
+    </t>
+</templates>
