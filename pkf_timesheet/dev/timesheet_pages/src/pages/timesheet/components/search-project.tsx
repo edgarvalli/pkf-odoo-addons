@@ -3,6 +3,7 @@ import { useOrm } from "../../../hooks/use-orm";
 import { useTimesheet } from "../context";
 import type { Project } from "../types/models";
 import { EVSelect } from "@edgarvalli/ev-select";
+import "@edgarvalli/ev-select/style.css";
 import "../css/search-project.css";
 
 export function SearchProject() {
