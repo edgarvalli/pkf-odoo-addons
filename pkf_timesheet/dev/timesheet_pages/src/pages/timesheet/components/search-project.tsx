@@ -31,14 +31,6 @@ export function SearchProject() {
     getProjects("").then((result) => setProjects(result));
   }, []);
 
-  const handleSearch = async (val: string) => {
-    const newProjects = await getProjects(val);
-
-    if (newProjects) {
-      setProjects(newProjects);
-    }
-  };
-
   return (
     <div>
       <EVSelect<Project>
@@ -46,8 +38,6 @@ export function SearchProject() {
         label="Selecciona un Proyecto"
         keyExtractor={(item) => String(item.id)}
         keyName="name"
-        disableInternalFilter
-        onSearch={handleSearch}
         onChange={(project) => ctx.setProjectId(project.id)}
       />
     </div>
