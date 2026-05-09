@@ -61,7 +61,9 @@
             </div>
 
             <!-- 🔥 Spacer (empuja hacia abajo) -->
-            <div class="flex-fill"></div>
+            <div class="flex-fill">
+                <p class="text-muted" t-out="state.note" />
+            </div>
 
             <!-- Botón guardar abajo -->
             <div>

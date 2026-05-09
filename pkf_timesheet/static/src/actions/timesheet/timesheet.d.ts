@@ -54,6 +54,7 @@ export interface Phase {
 export interface Project {
   id: number;
   name: string;
+  note: string;
   client: Client;
   phases: Phase[];
 }
@@ -61,6 +62,7 @@ export interface Project {
 export interface TaskValue {
   phaseIndex: number;
   taskIndex: number;
+  entryId?: number;
   key: string;
   value: string;
 }

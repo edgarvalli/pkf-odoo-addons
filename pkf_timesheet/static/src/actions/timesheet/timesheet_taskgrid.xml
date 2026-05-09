@@ -2,6 +2,20 @@
 
 <templates xml:space="preserve">
     <t t-name="pkf_timesheet.TimeSheetTaskGrid">
+        <div class="container-fluid" t-if="state.project">
+            <div class="row bg-white mt-3 p-3">
+            <div class="col-12 col-sm-4">
+                <div class="ev-search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input
+                        type="search"
+                        t-on-keyup="searchTask"
+                        placeholder="Busca por actividades"
+                    />
+                </div>
+            </div>
+        </div>
+        </div>
         <div class="d-flex flex-column h-100 pt-3 pb-3 pe-3" style="min-height: 0">
             <div class="table-responsive-custom bg-white" t-ref="table-ref">
                 <table>
@@ -9,15 +23,18 @@
                         <tr>
                             <th class="bg-white" style="width: 300px">Tarea</th>
                             <t t-foreach="columns" t-as="col" t-key="col.name">
-                                <th class="text-center">
+                                <!-- <th class="text-center">
                                     <span t-out="col.label" style="font-size: 12px" />
                                     <h3 t-out="col.date.getDate()" />
+                                </th> -->
+                                <th class="text-center">
+                                    <span t-out="col.label +' ' + col.date.getDate()" style="font-size: 12px" />
                                 </th>
                             </t>
                         </tr>
                     </thead>
                     <tbody>
-                        <t t-if="project === null">
+                        <t t-if="state.project === null">
                             <tr>
                                 <th scope="row"></th>
                                 <t t-foreach="columns" t-as="col" t-key="col.name + '_row_1'">
@@ -44,7 +61,7 @@
                             </tr>
                         </t>
                         <t t-else="">
-                            <t t-foreach="project.phases" t-as="phase" t-key="phase.id">
+                            <t t-foreach="state.project.phases" t-as="phase" t-key="phase.id">
                                 <tr>
                                     <th t-out="phase.name" t-att-colspan="columns.length + 1" class="bg-secondary"/>
                                 </tr>
@@ -54,16 +71,18 @@
                                         <t t-foreach="columns" t-as="col" t-key="col.name + '_row_1'">
                                             <td>
                                                 <t t-set="name" t-value="formatDate(col.date)"/>
+                                                <t t-set="entry" t-value="task.entries[name]"/>
                                                 <input
                                                     class="cell-input"
                                                     type="text"
-                                                    t-att-value="task.entries[name] ? task.entries[name].hours : ''"
+                                                    t-att-value="entry ? entry.hours : ''"
                                                     t-on-change="handleChange"
                                                     t-att-name="name"
                                                     t-att-data-task-id="col.id"
                                                     t-att-data-phase-id="phase.id"
                                                     t-att-data-task-index="task_index"
                                                     t-att-data-phase-index="phase_index"
+                                                    t-att-data-entry-id="entry ? entry.id : ''"
                                                 />
                                             </td>
                                         </t>

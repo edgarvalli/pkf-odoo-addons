@@ -1,0 +1,16 @@
+* {
+  --odoo-color: #71639e;
+}
+
+.odoo-text-primary {
+  color: var(--odoo-color);
+}
+
+.odoo-bg-primary {
+  background-color: var(--odoo-color);
+  color: #fff;
+}
+
+.pointer {
+  cursor: pointer;
+}

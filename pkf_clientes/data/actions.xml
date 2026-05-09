@@ -20,4 +20,10 @@
         <field name="view_id" ref="ev_upload_invoices_form" />
         <field name="target">new</field>
     </record>
+
+    <record id="action_recurring_invoices_fronted" model="ir.actions.client">
+        <field name="name">PKF Facturas Recurrentes</field>
+        <field name="tag">pkf_clientes.RecurringInvoice</field>
+        <field name="target">main</field>
+    </record>
 </odoo>

@@ -14,6 +14,7 @@ export default class TimeSheetActionBar extends TimeSheetComponent {
     this.state = useState({
       ...this.getInitDate(),
       projectId: "0",
+      note: "",
     });
 
     this.action = useService("action");
@@ -24,6 +25,7 @@ export default class TimeSheetActionBar extends TimeSheetComponent {
       startDate: this.state.startDate,
       endDate: this.state.endDate,
       projectId: this.state.projectId,
+      note: this.props.note,
     };
   }
 

@@ -78,6 +78,7 @@ export default class TimeSheetComponent extends Component {
    * @returns {number}
    */
   getFullHeight(el) {
+    if (!el) return;
     const rec = el.getClientRects();
     if (!rec) return 0;
     return window.innerHeight - rec[0].top;

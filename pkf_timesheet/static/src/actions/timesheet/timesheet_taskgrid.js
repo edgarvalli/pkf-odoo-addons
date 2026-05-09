@@ -1,7 +1,22 @@
+import { onWillUpdateProps, useRef, useState } from "@odoo/owl";
 import TimeSheetComponent from "./timesheet_component";
 
 export default class TimeSheetTaskGrid extends TimeSheetComponent {
   static template = "pkf_timesheet.TimeSheetTaskGrid";
+
+  setup() {
+    this.state = useState({
+      project: this.props.project,
+    });
+
+    this.delayEvent = 0;
+
+    onWillUpdateProps((prev) => {
+      if (prev.project) {
+        this.state.project = prev.project;
+      }
+    });
+  }
 
   /**@returns {import("../@types/global").Params}*/
   get params() {
@@ -10,10 +25,6 @@ export default class TimeSheetTaskGrid extends TimeSheetComponent {
     }
     const initValues = this.getInitDate();
     return { ...initValues, projectId: 0 };
-  }
-
-  get project() {
-    return this.props.project;
   }
 
   get columns() {
@@ -35,6 +46,7 @@ export default class TimeSheetTaskGrid extends TimeSheetComponent {
 
     const phaseIndex = parseInt(target.dataset.phaseIndex);
     const taskIndex = parseInt(target.dataset.taskIndex);
+    const entryId = parseInt(target.getAttribute("data-entry-id") || "0");
     const value = parseFloat(target.value);
 
     if (Number.isNaN(value)) {
@@ -46,9 +58,36 @@ export default class TimeSheetTaskGrid extends TimeSheetComponent {
     this.props.onChange?.({
       phaseIndex,
       taskIndex,
+      entryId,
       value,
       key: target.name,
     });
+  }
+  /**@param {KeyboardEvent} ev*/
+  searchTask(ev) {
+    if (!this.props.project) return;
+
+    clearTimeout(this.delayEvent);
+
+    this.delayEvent = setTimeout(() => {
+      /**@type {HTMLInputElement} */
+      const target = ev.target;
+
+      const val = target.value.toLowerCase();
+      const newProject = {
+        ...this.state.project,
+        phases: this.props.project.phases.map((phase) => {
+          return {
+            ...phase,
+            tasks: phase.tasks.filter((task) =>
+              task.name.toLowerCase().includes(val),
+            ),
+          };
+        }),
+      };
+
+      this.state.project = newProject;
+    }, 500);
   }
 }
 

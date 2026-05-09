@@ -66,7 +66,7 @@ export default class TimeSheet extends TimeSheetComponent {
   }
 
   /**Eventos */
-  /**@param {import("./components/@types/global").ActionBarParams} params*/
+  /**@param {import("./timesheet").ActionBarParams} params*/
   handleFilter(params) {
     const currentProjectId = this.state.params.projectId;
     this.state.params = { ...params };
@@ -75,12 +75,12 @@ export default class TimeSheet extends TimeSheetComponent {
     }
   }
 
-  /** @param {import("./components/@types/global").TaskValue} vals */
+  /** @param {import("./timesheet").TaskValue} vals */
   handleChange(vals) {
     const phase = this.state.project.phases[vals.phaseIndex];
     const task = phase.tasks[vals.taskIndex];
 
-    /**@type {import("./components/@types/global").TimeEntry} */
+    /**@type {import("./timesheet").TimeEntry} */
     const entry = {
       project_id: this.state.project.id,
       phase_id: phase.id,
@@ -88,13 +88,21 @@ export default class TimeSheet extends TimeSheetComponent {
       hours: vals.value,
       date: vals.key,
     };
+
+    if (vals.entryId && vals.entryId > 0) {
+      entry["id"] = vals.entryId;
+    }
+
     task.entries[vals.key] = entry;
   }
 
-  /** @param {import("./components/@types/global").TimeEntry[]} entries */
+  /** @param {import("./timesheet").TimeEntry[]} entries */
   async _saveToServer(entries) {
     try {
-      await this.orm.call("pkf.timesheet.time.entry", "save_bulk", [entries]);
+      await this.orm.call("pkf.timesheet.time.entry", "save_bulk", [
+        [],
+        entries,
+      ]);
       this.notification.add("Se guardo correctamente", { type: "success" });
       this.getProject();
     } catch (error) {

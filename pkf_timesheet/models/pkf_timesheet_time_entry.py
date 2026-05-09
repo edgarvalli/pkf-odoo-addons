@@ -5,6 +5,7 @@ class PKFTimeSheetTimeEntry(models.Model):
     _name = "pkf.timesheet.time.entry"
     _description = "PKF - Timesheet Entry"
     _order = "date"
+    _rec_name = "project_id"
 
     employee_id = fields.Many2one(
         "hr.employee",

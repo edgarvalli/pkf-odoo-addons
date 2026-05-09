@@ -3,12 +3,13 @@
 
     <record id="form_hr_expense_inherit_pkf" model="ir.ui.view">
         <field name="name">form.hr.expense.inherit.pkf</field>
-        <field name="model">hr.exprense</field>
+        <field name="model">hr.expense</field>
         <field name="inherit_id" ref="hr_expense.hr_expense_view_form" />
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='manager_id']" position="after">
+            <xpath expr="//field[@name='employee_id']" position="after">
                 <field name="pfk_timesheet_project_id" widget="many2one_avatar_user"
-                    readonly="state != 'draft'" placeholder="Auto-validation" />
+                    readonly="state in ['posted','in_payment','paid','refused']"
+                    placeholder="Auto-validation" />
             </xpath>
         </field>
     </record>

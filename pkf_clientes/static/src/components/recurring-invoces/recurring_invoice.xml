@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates xml:space="preserve">
+    <t t-name="pkf_clientes.RecurringInvoice">
+        <main id="app"></main>
+        <script src="/pkf_clientes/static/lib/recurring_invoice_build.js"></script>
+    </t>
+</templates>

@@ -2,3 +2,6 @@ from .pkf_clientes import PKFClientes
 from .pkf_envios_logs import PKFEnviosLog
 from .pkf_task_scheduler import PKFTaskScheduler
 from .pkf_clientes_wizard import PKFClientesWizard
+from .pkf_recurring_invoice import PKFRecurringInvoice
+from .pkf_recurring_invoice_move import PKFRecurringInvoiceMove
+from .pkf_recurring_invoice_params import PKFRecurringInvoiceParams

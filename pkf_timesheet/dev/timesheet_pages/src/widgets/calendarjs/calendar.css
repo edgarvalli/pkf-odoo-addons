@@ -1,0 +1,31 @@
+.ev-calendar {
+  padding: 1rem;
+  box-shadow: 10px 3px 10px 1px rgba(255, 255, 255, 0.04);
+  border-radius: 5px;
+  border: solid thin #e9e9e9;
+
+  .ev-calendar-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+
+    .ev-calendar-field {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      font-size: 12px;
+      transition: all 0.25s ease-in-out;
+
+      &:hover,
+      &.selected {
+        cursor: pointer;
+        background-color: #71639e;
+        color: #fff;
+        font-weight: bold;
+      }
+    }
+  }
+}

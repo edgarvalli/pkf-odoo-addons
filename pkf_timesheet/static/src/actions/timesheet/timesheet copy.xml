@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates xml:space="preserve">
+    <t t-name="pkf_control_tiempos.TimeSheets">
+        <div class="container-fuild h-100 d-flex flex-column" t-ref="container-ref">
+            <div class="row flex-fill flex-nowrap" style="min-height: 0;">
+                <div class="col-3 col-xxl-2 bg-white d-flex flex-column">
+                    <TimeSheetActionBar
+                        onFilter="handleFilter.bind(this)"
+                        onSave="onSave.bind(this)"
+                        client="state.project?.client || null"
+                        note="state.project?.note || ''"
+                    />
+                </div>
+                <div class="col-9 col-xxl-10 d-flex flex-column">
+                    <TimeSheetTaskGrid
+                        params="state.params"
+                        project="state.project"
+                        onChange="handleChange.bind(this)"
+                    />
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

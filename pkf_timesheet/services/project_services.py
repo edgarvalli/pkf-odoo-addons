@@ -78,6 +78,7 @@ class ProjectService:
         return {
             "id": project.id,
             "name": project.name,
+            "note": project.note,
             "client": {
                 "id": project.client_id.id,
                 "name": project.client_id.name,

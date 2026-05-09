@@ -12,6 +12,25 @@
                         statusbar_visible="draft,in_progress,done" />
                 </header>
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button
+                            name="action_view_project_expenses"
+                            type="object"
+                            icon="fa-dollar-sign"
+                            class="oe_stat_button"
+                        >
+                            <field name="expense_count" widget="statinfo" string="Gastos" />
+                        </button>
+                        <button
+                            name="action_view_hours"
+                            type="object"
+                            icon="fa-clock"
+                            class="oe_stat_button"
+                        >
+                            <field name="hours_spend_count" widget="statinfo" string="Horas" />
+                        </button>
+                    </div>
+
                     <widget name="web_ribbon" title="En progreso" bg_color="text-bg-secondary"
                         invisible="state != 'in_progress'" />
 
@@ -32,7 +51,7 @@
                         <group string="Información de Proyecto">
                             <field name="client_id" />
                             <field name="cancellation_porcentage" widget="float" />
-                            <field name="state" />
+                            <field name="state" string="Estatus" />
                         </group>
                         <group string="Responsables">
                             <field name="manager_id" widget="many2one_avatar_user" />

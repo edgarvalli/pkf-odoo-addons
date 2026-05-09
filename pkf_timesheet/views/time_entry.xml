@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="pkf_timesheet_time_entry_view_list" model="ir.ui.view">
+        <field name="name">pkf.timesheet.time.entry.view.list</field>
+        <field name="model">pkf.timesheet.time.entry</field>
+        <field name="arch" type="xml">
+            <list string="Lista de horas Registradas">
+                <field name="date" string="Fecha de Registro" />
+                <field name="employee_id" string="Empleado" />
+                <field name="task_id" string="Tarea" />
+                <field name="project_id" string="Proyecto" />
+                <field name="hours" string="Horas Dedicadas" />
+            </list>
+        </field>
+    </record>
+
+    <record id="pkf_timesheet_time_entry_view_form" model="ir.ui.view">
+        <field name="name">pkf.timesheet.time.entry.view.form</field>
+        <field name="model">pkf.timesheet.time.entry</field>
+        <field name="arch" type="xml">
+            <form string="Horas Registradas">
+                <sheet>
+                    <group>
+                        <group string="Información">
+                            <field name="employee_id" string="Empleado" readonly="True" />
+                            <field name="project_id" string="Proyecto" readonly="True" />
+                        </group>
+                        <group string="Actividad">
+                            <field name="phase_id" string="Fase" />
+                            <field name="task_id" string="Tarea" />
+                        </group>
+                    </group>
+                    <group>
+                        <group name="entry" string="Datos">
+                            <field name="date" string="Fecha" />
+                            <field name="hours" string="Horas" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>

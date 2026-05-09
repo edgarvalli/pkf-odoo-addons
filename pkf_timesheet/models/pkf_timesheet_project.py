@@ -60,6 +60,14 @@ class PKFTimeSheetProject(models.Model):
 
     note = fields.Text("Notas")
 
+    expense_count = fields.Integer(
+        compute="_compute_expense_count", string="Cantidad de Gastos"
+    )
+
+    hours_spend_count = fields.Integer(
+        compute="_compute_hours_count", string="Cantidad de horas"
+    )
+
     # --- Computes ----
 
     @api.depends("name")
@@ -82,7 +90,7 @@ class PKFTimeSheetProject(models.Model):
             expenses = self.env["hr.expense"].search(
                 [
                     ("pfk_timesheet_project_id", "=", rec.id),
-                    ("state", "not in", ["draft", "reported", "refused"]),
+                    ("state", "in", ["posted", "in_payment", "paid", "refused"]),
                 ]
             )
             rec.total_expenses_amount = sum(expenses.mapped("total_amount"))
@@ -99,8 +107,6 @@ class PKFTimeSheetProject(models.Model):
             service = ProjectService(self.env, rec.id)
             entries = service._get_entries(ignore_dates=True)
             total_amount = 0
-
-            print(entries)
 
             for employee in rec.assigned_user_ids:
                 # Odoo usa timesheet_cost en hr.employee para el costo por hora
@@ -125,6 +131,23 @@ class PKFTimeSheetProject(models.Model):
             rec.total_amount_spend = rec.total_budget_amount - (
                 rec.total_timesheet_cost_amount + rec.total_expenses_amount
             )
+
+    def _compute_expense_count(self):
+        for rec in self:
+            # Contamos cuántos gastos pertenecen a este proyecto
+            rec.expense_count = self.env["hr.expense"].search_count(
+                [("pfk_timesheet_project_id", "=", rec.id)]
+            )
+
+    def _compute_hours_count(self):
+        for rec in self:
+            entries = self.env["pkf.timesheet.time.entry"].search(
+                [("project_id", "=", rec.id)]
+            )
+
+            print(entries)
+
+            rec.hours_spend_count = sum(entries.mapped("hours"))
 
     # --- Onchanges ---
 
@@ -160,3 +183,27 @@ class PKFTimeSheetProject(models.Model):
     def get_full_data(self, startdate, enddate):
         srv = ProjectService(self.env, self.id)
         return srv.get_project_data(startdate, enddate)
+
+    # --- Actions ---
+
+    def action_view_project_expenses(self):
+        return {
+            "name": "PKF - Gastos Proyecto",
+            "type": "ir.actions.act_window",
+            "res_model": "hr.expense",
+            "view_mode": "list,form",
+            "domain": [("pfk_timesheet_project_id", "=", self.id)],
+            "context": {"default_pfk_timesheet_project_id": self.id},
+            "target": "current",
+        }
+
+    def action_view_hours(self):
+        return {
+            "name": "PKF - Horas Gastadas",
+            "type": "ir.actions.act_window",
+            "res_model": "pkf.timesheet.time.entry",
+            "view_mode": "list,form",
+            "domain": [("project_id", "=", self.id)],
+            "context": {"default_project_id": self.id},
+            "target": "current",
+        }
