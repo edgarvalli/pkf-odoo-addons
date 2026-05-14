@@ -38,12 +38,12 @@ def mail_worker(
 
         for i, ctx in enumerate(srv._build_context_list()):
             try:
-                schedule_date = base_date + timedelta(seconds=(i * 10))
+                scheduled_date = base_date + timedelta(seconds=(i * 10))
                 srv.send(
                     ctx,
                     send_to_client=send_to_client,
                     email_cc=email_cc,
-                    schedule_date=schedule_date,
+                    scheduled_date=scheduled_date,
                 )
                 emails = ctx.get("emails")
                 _logger.info(f"Correo programado para envio a {emails}")
@@ -358,10 +358,10 @@ class InvoiceSenderService:
 
         email_values["email_to"] = emails or user_email
 
-        schedule_date = kwargs.get("schedule_date")
+        scheduled_date = kwargs.get("scheduled_date")
 
-        if schedule_date:
-            email_values["schedule_date"] = schedule_date
+        if scheduled_date:
+            email_values["scheduled_date"] = scheduled_date
 
         if send_to_client:
             email_cc = kwargs.get("email_cc")
