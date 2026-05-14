@@ -9,6 +9,12 @@
                 <group>
                     <field name="file" filename="filename" />
                     <field name="send_to_client" />
+                    <field
+                        name="email_cc"
+                        widget="text"
+                        invisible="not send_to_client"
+                        placeholder="correo1@dominio.com, correo2@dominio.com"
+                    />
                 </group>
                 <footer>
                     <button string="Procesar"

@@ -20,49 +20,57 @@ from ..types.envio_factura_types import (
 _logger = logging.getLogger(__name__)
 
 
-def mail_worker(uid: str, env_dict: dict, zip_bytes: bytes, send_to_client=False):
-    start = datetime.now()
-    env = build_env(
-        env_dict.get("dbname"),
-        env_dict.get("uid"),
-        env_dict.get("ctx"),
-        env_dict.get("su", False),
-    )
+def mail_worker(
+    uid: str, env_dict: dict, zip_bytes: bytes, send_to_client=False, email_cc=None
+):
+    try:
+        start = datetime.now()
+        env = build_env(
+            env_dict.get("dbname"),
+            env_dict.get("uid"),
+            env_dict.get("ctx"),
+            env_dict.get("su", False),
+        )
 
-    srv = InvoiceSenderService(env, zip_bytes)
+        srv = InvoiceSenderService(env, zip_bytes)
 
-    for ctx in srv._build_context_list():
-        try:
-            srv.send(ctx, send_to_client=send_to_client, send_force=False)
-            emails = ctx.get("emails")
-            _logger.info(f"Correo programado para envio a {emails}")
-            srv._set_log(
-                {
-                    "client": ctx.get("razon_social"),
-                    "event": f"Correo enviado a {emails}",
-                    "rfc": ctx.get("rfc"),
-                    "status": "ok",
-                    "uid": uid,
-                }
-            )
-            env.cr.commit()
-        except Exception as e:
-            env.cr.rollback()
-            _logger.exception("Error enviando correo")
-            srv._set_log(
-                uid=uid,
-                cliente=ctx.get("razon_social"),
-                rfc=ctx.get("rfc"),
-                estatus="error",
-                evento=str(e),
-            )
-            env.cr.commit()
+        for ctx in srv._build_context_list():
+            try:
+                srv.send(
+                    ctx,
+                    send_to_client=send_to_client,
+                    email_cc=email_cc,
+                )
+                emails = ctx.get("emails")
+                _logger.info(f"Correo programado para envio a {emails}")
+                srv._set_log(
+                    {
+                        "client": ctx.get("razon_social"),
+                        "event": f"Correo enviado a {emails}",
+                        "rfc": ctx.get("rfc"),
+                        "status": "ok",
+                        "uid": uid,
+                    }
+                )
+                env.cr.commit()
+            except Exception as e:
+                env.cr.rollback()
+                _logger.exception("Error enviando correo")
+                srv._set_log(
+                    uid=uid,
+                    cliente=ctx.get("razon_social"),
+                    rfc=ctx.get("rfc"),
+                    estatus="error",
+                    evento=str(e),
+                )
+                env.cr.commit()
 
-        time.sleep(random.uniform(0.1, 0.3))
+            time.sleep(random.uniform(0.1, 0.3))
 
-    env["pkf.envios.logs"].send_bitacora(uid, start, datetime.now())
-    srv._unlink_temp()
-    env.cr.close()
+    finally:
+        env["pkf.envios.logs"].send_bitacora(uid, start, datetime.now())
+        srv._unlink_temp()
+        env.cr.close()
 
 
 @dataclass
@@ -262,10 +270,35 @@ class InvoiceSenderService:
 
         return new_ctx_list
 
+    def _normalize_emails(self, emails: str) -> str:
+        if not emails:
+            return ""
+
+        clean = []
+
+        for email in emails.split(","):
+
+            email = email.strip().lower()
+
+            if "@" not in email:
+                continue
+
+            clean.append(email)
+
+        return ",".join(sorted(set(clean)))
+
     ###### Unlink ######
 
     def _unlink_temp(self):
-        Path(self.temppath).unlink()
+        if not self.temppath:
+            return
+
+        path = Path(self.temppath)
+
+        if path.exists():
+            path.unlink()
+
+        self.temppath = None
 
     ###### Builder ######
 
@@ -288,7 +321,7 @@ class InvoiceSenderService:
 
         ctx_list = self._map_emails_context(file_list.keys(), ctx_list)
         ctx_list = [
-            {**ctx, "files": file_list.get(ctx.get("uuid"), "")} for ctx in ctx_list
+            {**ctx, "files": file_list.get(ctx.get("uuid"), [])} for ctx in ctx_list
         ]
 
         return ctx_list
@@ -324,31 +357,41 @@ class InvoiceSenderService:
         email_values["email_to"] = emails or user_email
 
         if send_to_client:
-            email_values["email_cc"] = user_email
+            email_cc = kwargs.get("email_cc")
+            if email_cc:
+                email_cc = self._normalize_emails(
+                    ",".join(filter(None, [email_cc, user_email]))
+                )
+            else:
+                email_cc = user_email
+
+            email_values["email_cc"] = email_cc
 
         template.with_context(ctx).send_mail(
-            res_id=self.env.user.partner_id.id,
+            res_id=self.env.user.id,
             force_send=kwargs.get("force_send", False),
             email_values=email_values,
         )
 
-    def sendasync(self, uid: str, send_to_client=False):
-        args = (uid, self._get_env_dict(), self.zip_bytes, send_to_client)
+    def sendasync(self, uid: str, send_to_client=False, email_cc: str = None):
+        args = (uid, self._get_env_dict(), self.zip_bytes, send_to_client, email_cc)
         t = threading.Thread(target=mail_worker, args=args, name=f"pkf-mailer-{uid}")
         t.start()
 
         return {"type": "job", "uid": uid}
 
-    def sendall(self, send_to_client=False) -> ResponseDict:
+    def sendall(self, send_to_client=False, email_cc: str = None) -> ResponseDict:
         ctx_list = self._build_context_list()
         uid = str(uuid.uuid4())
 
         if self._is_batch():
-            self.sendasync(uid, send_to_client)
+            self.sendasync(uid, send_to_client, email_cc)
             return {"type": "job", "uid": uid}
 
         for ctx in ctx_list:
-            self.send(ctx, send_to_client=send_to_client, force_send=True)
+            self.send(
+                ctx, send_to_client=send_to_client, email_cc=email_cc, force_send=True
+            )
             emails = ctx.get("emails")
             self._set_log(
                 {

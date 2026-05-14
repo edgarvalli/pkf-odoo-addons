@@ -10,6 +10,7 @@ class PKFClientesWizard(models.TransientModel):
 
     file = fields.Binary("Facturas", required=True)
     filename = fields.Char()
+    email_cc = fields.Text(string="CC", help="Correos separados por coma")
     send_to_client = fields.Boolean("Enviar al cliente")
 
     def action_run(self):
@@ -22,7 +23,7 @@ class PKFClientesWizard(models.TransientModel):
 
         envio_srv = InvoiceSenderService(self.env, file_content)
 
-        result = envio_srv.sendall(self.send_to_client)
+        result = envio_srv.sendall(self.send_to_client, self.email_cc)
 
         uid = result.get("uid")
 
