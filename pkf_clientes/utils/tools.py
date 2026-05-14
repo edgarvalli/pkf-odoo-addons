@@ -1,4 +1,4 @@
-import base64, mimetypes
+import base64, mimetypes, subprocess
 from pathlib import Path
 from datetime import datetime, timedelta
 from odoo.modules.module import get_module_path
@@ -49,3 +49,14 @@ def next_5_min():
     future = future.replace(second=0, microsecond=0)
 
     return future
+
+
+def run_script(script_name: str, **args):
+    script_path = Path(__file__).parent.parent / f"scripts/{script_name}.py"
+
+    if not script_path.exists():
+        print("El script no existe.")
+        return False
+
+    subprocess.Popen()
+    return True

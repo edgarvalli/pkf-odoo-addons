@@ -6,6 +6,11 @@ class EnvioResponse(TypedDict):
     uid: str
 
 
+class ResponseDict(TypedDict):
+    type: Literal["job", "instant"]
+    uid: str
+
+
 class FileDict(TypedDict):
     filename: str
     content: bytes
@@ -39,3 +44,11 @@ class ContextDict(TypedDict):
     emails: str
     banner: str
     files: List[FileDict]
+
+
+class LogDic(TypedDict):
+    uid: int
+    client: str
+    rfc: str
+    status: str
+    event: str

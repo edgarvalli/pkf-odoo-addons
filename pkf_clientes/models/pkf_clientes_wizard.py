@@ -1,7 +1,7 @@
 import base64
 from odoo import models, fields
 from odoo.exceptions import UserError
-from ..services import EnvioFacturasClienteService
+from ..services import InvoiceSenderService
 
 
 class PKFClientesWizard(models.TransientModel):
@@ -20,9 +20,9 @@ class PKFClientesWizard(models.TransientModel):
 
         file_content = base64.b64decode(self.file)
 
-        envio_srv = EnvioFacturasClienteService(self.env)
+        envio_srv = InvoiceSenderService(self.env, file_content)
 
-        result = envio_srv.enviar_todos(file_content, self.send_to_client)
+        result = envio_srv.sendall(self.send_to_client)
 
         uid = result.get("uid")
 

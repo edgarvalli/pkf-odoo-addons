@@ -40,25 +40,27 @@ class ProjectService:
 
         return tasks_list
 
-    def _build_phases(self, phases: BaseModel):
+    def _build_phases(self, phases: BaseModel, get_entries: bool = None):
         task_fields = ["id", "code", "name", "order", "estimated_hours"]
 
         # --- OPTIMIZACIÓN: Pre-procesar todas las entradas del proyecto ---
-        all_entries = self._get_entries()
-        entries_by_task = {}
-        for entry in all_entries:
-            t_id = entry.task_id.id
-            if t_id not in entries_by_task:
-                entries_by_task[t_id] = {}
 
-            entries_by_task[t_id][str(entry.date)] = {
-                "id": entry.id,
-                "date": entry.date,
-                "hours": entry.hours,
-                "project_id": entry.project_id.id,
-                "phase_id": entry.phase_id.id,
-                "task_id": entry.task_id.id,
-            }
+        entries_by_task = {}
+        if get_entries:
+            all_entries = self._get_entries()
+            for entry in all_entries:
+                t_id = entry.task_id.id
+                if t_id not in entries_by_task:
+                    entries_by_task[t_id] = {}
+
+                entries_by_task[t_id][str(entry.date)] = {
+                    "id": entry.id,
+                    "date": entry.date,
+                    "hours": entry.hours,
+                    "project_id": entry.project_id.id,
+                    "phase_id": entry.phase_id.id,
+                    "task_id": entry.task_id.id,
+                }
         # ---------------------------------------------------------------
 
         return [
@@ -73,7 +75,7 @@ class ProjectService:
             if phase.active
         ]
 
-    def _build_data(self, project: BaseModel):
+    def _build_data(self, project: BaseModel, get_entries: bool = True):
         # Acceso directo a relaciones (Odoo usa cache)
         return {
             "id": project.id,
@@ -84,12 +86,10 @@ class ProjectService:
                 "name": project.client_id.name,
                 "avatar": project.client_id.avatar_128,
             },
-            "phases": self._build_phases(project.phase_ids),
+            "phases": self._build_phases(project.phase_ids, get_entries),
         }
 
     def get_project_data(self, startdate: str, enddate: str):
-        if not startdate or not enddate:
-            return None
 
         project = self.env["pkf.timesheet.project"].browse(self.id)
         if not project.exists():
@@ -97,5 +97,8 @@ class ProjectService:
 
         self.startdate = startdate
         self.enddate = enddate
+
+        if not startdate or not enddate:
+            return self._build_data(project, False)
 
         return self._build_data(project)

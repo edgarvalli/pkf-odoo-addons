@@ -23,8 +23,8 @@
         "web.assets_backend": [
             "pkf_timesheet/static/src/main.js",
             "pkf_timesheet/static/src/utils/**/*.js",
-            "pkf_timesheet/static/src/actions/**/*",
-            "pkf_timesheet/static/src/widgets/**/*",
+            "pkf_timesheet/static/src/components/**/*",
+            "pkf_timesheet/static/lib/timesheet.css",
         ]
     },
 }

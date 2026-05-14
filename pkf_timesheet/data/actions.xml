@@ -3,7 +3,7 @@
 
     <record id="action_pkf_ts_dashboard" model="ir.actions.client">
         <field name="name">PKF - Registro de Tiempos</field>
-        <field name="tag">pkf_timesheet.TimeSheet</field>
+        <field name="tag">pkf_timesheet.Timesheet</field>
         <field name="target">main</field>
     </record>
 

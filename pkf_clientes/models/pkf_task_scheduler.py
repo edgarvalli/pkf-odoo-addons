@@ -4,7 +4,6 @@ from datetime import datetime
 from ..services import (
     EstadoCuentaService,
     SaldosComercialService,
-    EnvioFacturasClienteService,
 )
 
 _logger = logging.getLogger(__name__)
@@ -28,10 +27,6 @@ class PKFTaskScheduler(models.AbstractModel):
                 "evento": kwargs.get("evento", ""),
             }
         )
-
-    def run_unlink_envios_facturas_jobs(self):
-        srv = EnvioFacturasClienteService(self.env)
-        srv.unlink_jobs()
 
     def run_saldos_comercial(self):
 
@@ -76,8 +71,3 @@ class PKFTaskScheduler(models.AbstractModel):
         self.env["pkf.envios.logs"].send_bitacora(
             uid=self.uid, start=start_process, end=datetime.now()
         )
-
-    def run_envios_facturas(self, attachment_id: int, uid: str, send_to_client=False):
-        self = self.sudo()
-        srv = EnvioFacturasClienteService(self.env)
-        srv._job_enviar(attachment_id, uid, send_to_client)

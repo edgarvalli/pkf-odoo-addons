@@ -1,0 +1,1 @@
+export { Recibos } from "./recibos";

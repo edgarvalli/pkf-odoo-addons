@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates xml:space="preserve">
+    <t t-name="pkf_timesheet.TimesheetTemplate">
+        <div id="timesheet-app"></div>
+        <script src="/pkf_timesheet/static/lib/timesheet_build.js"></script>
+    </t>
+</templates>
