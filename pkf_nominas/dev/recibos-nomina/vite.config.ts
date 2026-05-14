@@ -10,7 +10,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        entryFileNames: "timesheet_build.js",
+        entryFileNames: "recibos_nomina_build.js",
         manualChunks: undefined,
       },
     },

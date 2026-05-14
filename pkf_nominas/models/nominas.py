@@ -76,7 +76,7 @@ class Nominas(models.AbstractModel):
         finally:
             self.env["pkf.tools"].remove_current_job(uid)
 
-    def enqueue_builk_recibos(self, ids: list[int]):
+    def enqueue_bulk_recibos(self, ids: list[int]):
 
         uid = str(uuid.uuid4())
 
@@ -90,4 +90,4 @@ class Nominas(models.AbstractModel):
             nextcall=nextcall,
         )
 
-        return tuple([uid, nextcall])
+        return {"uid": uid, "nextcall": nextcall}

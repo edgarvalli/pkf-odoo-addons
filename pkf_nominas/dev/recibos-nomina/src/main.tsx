@@ -1,6 +1,7 @@
 import { Recibos } from "@/components";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import "./style/main.css";
 
 createRoot(document.getElementById("recibos-app")!).render(
   <StrictMode>

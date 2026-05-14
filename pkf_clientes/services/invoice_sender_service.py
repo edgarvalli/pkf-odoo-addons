@@ -2,11 +2,12 @@ import time, random, logging, tempfile, threading, base64, uuid
 from lxml import etree
 from pathlib import Path
 from zipfile import ZipFile
-from datetime import datetime
 from odoo.api import Environment
+from odoo.fields import Datetime
 from dataclasses import dataclass
 from typing import List, Iterable
 from odoo.exceptions import UserError
+from datetime import datetime, timedelta
 from ..utils.odoo_tools import build_env
 from ..types.envio_factura_types import (
     LogDic,
@@ -33,13 +34,16 @@ def mail_worker(
         )
 
         srv = InvoiceSenderService(env, zip_bytes)
+        base_date = Datetime.now()
 
-        for ctx in srv._build_context_list():
+        for i, ctx in enumerate(srv._build_context_list()):
             try:
+                schedule_date = base_date + timedelta(seconds=(i * 10))
                 srv.send(
                     ctx,
                     send_to_client=send_to_client,
                     email_cc=email_cc,
+                    schedule_date=schedule_date,
                 )
                 emails = ctx.get("emails")
                 _logger.info(f"Correo programado para envio a {emails}")
@@ -64,8 +68,6 @@ def mail_worker(
                     evento=str(e),
                 )
                 env.cr.commit()
-
-            time.sleep(random.uniform(0.1, 0.3))
 
     finally:
         env["pkf.envios.logs"].send_bitacora(uid, start, datetime.now())
@@ -355,6 +357,11 @@ class InvoiceSenderService:
         emails = ",".join(emails)
 
         email_values["email_to"] = emails or user_email
+
+        schedule_date = kwargs.get("schedule_date")
+
+        if schedule_date:
+            email_values["schedule_date"] = schedule_date
 
         if send_to_client:
             email_cc = kwargs.get("email_cc")
