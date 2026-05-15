@@ -26,4 +26,21 @@
         <field name="tag">pkf_clientes.RecurringInvoice</field>
         <field name="target">main</field>
     </record>
+
+    <!-- Acción de Ventana (Window Action) -->
+    <record id="action_pkf_email_queue" model="ir.actions.act_window">
+        <field name="name">Cola de Correos PKF</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">pkf.email.queue</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No hay correos en la cola de envío.
+            </p>
+            <p>
+                Los correos generados por el servicio masivo de CONTPAQi aparecerán aquí en estado
+                'Listo para enviar'.
+            </p>
+        </field>
+    </record>
 </odoo>

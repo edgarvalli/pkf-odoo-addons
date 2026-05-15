@@ -1,3 +1,3 @@
+from .mail_queue_service import MailQueueService
 from .estado_cuenta_service import EstadoCuentaService
 from .saldos_comercial_service import SaldosComercialService
-from .invoice_sender_service import InvoiceSenderService

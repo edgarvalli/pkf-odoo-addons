@@ -1,7 +1,7 @@
 import base64
 from odoo import models, fields
 from odoo.exceptions import UserError
-from ..services import InvoiceSenderService
+from ..services import MailQueueService
 
 
 class PKFClientesWizard(models.TransientModel):
@@ -21,16 +21,9 @@ class PKFClientesWizard(models.TransientModel):
 
         file_content = base64.b64decode(self.file)
 
-        envio_srv = InvoiceSenderService(self.env, file_content)
-
-        result = envio_srv.sendall(self.send_to_client, self.email_cc)
-
-        uid = result.get("uid")
-
-        message = (
-            "Se enviaron los correos correctamente"
-            if result.get("type") == "instant"
-            else f"Correos programados. UUID {uid}"
+        mailer = MailQueueService(self.env)
+        mailer.process_and_create_queue(
+            file_content, self.send_to_client, self.email_cc
         )
 
         return {
@@ -38,8 +31,9 @@ class PKFClientesWizard(models.TransientModel):
             "tag": "display_notification",
             "params": {
                 "title": "Proceso completado",
-                "message": message,
+                "message": "Se programo los correos para envio",
                 "type": "success",
                 "sticky": False,
+                "next": {"type": "ir.actions.act_window_close"},
             },
         }

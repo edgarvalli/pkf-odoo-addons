@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_pkf_email_queue_form" model="ir.ui.view">
+        <field name="name">view.pkf.email.queue.form</field>
+        <field name="model">pkf.email.queue</field>
+        <field name="arch" type="xml">
+            <form string="Correo Electrónico">
+                <!-- Barra de estado superior -->
+                <header>
+                    <field name="state" widget="statusbar"
+                        statusbar_visible="draft,ready,sent,error" />
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="subject" class="oe_edit_only" />
+                        <h1>
+                            <field name="subject" placeholder="Ej. Factura disponible: Seriefolio"
+                                readonly="[('state', '=', 'sent')]" />
+                        </h1>
+                    </div>
+
+                    <!-- Bloque de Destinatarios -->
+                    <group>
+                        <group string="Destinatarios">
+                            <field name="email_to"
+                                placeholder="correo1@ejemplo.com, correo2@ejemplo.com"
+                                readonly="[('state', '=', 'sent')]" />
+                            <field name="email_cc" placeholder="copia@ejemplo.com"
+                                readonly="[('state', '=', 'sent')]" />
+                            <field name="email_bcc" placeholder="copia_oculta@ejemplo.com"
+                                readonly="[('state', '=', 'sent')]" />
+                        </group>
+                        <group string="Información de Envío">
+                            <field name="date_sent" />
+                            <field name="create_date" string="Creado el" readonly="1" />
+                        </group>
+                    </group>
+
+                    <!-- Pestañas inferiores para organizar el contenido -->
+                    <notebook>
+                        <page string="Contenido del Mensaje">
+                            <!-- El widget html permite previsualizar el diseño que generó tu script -->
+                            <field name="body_html" widget="html" options="{'safe': True}"
+                                readonly="[('state', '=', 'sent')]" />
+                        </page>
+                        <page string="Archivos Adjuntos">
+                            <!-- Widget de many2many_binary para que se vean como bloques
+                            descargables -->
+                            <field name="attachment_ids" widget="many2many_binary"
+                                readonly="[('state', '=', 'sent')]" />
+                        </page>
+                        <!-- Esta pestaña solo aparece si hay un error reportado -->
+                        <page string="Logs de Error" invisible="[('error_notes', '=', False)]">
+                            <field name="error_notes"
+                                placeholder="Detalles técnicos del fallo del SMTP..." />
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_pkf_email_queue_list" model="ir.ui.view">
+        <field name="name">view.pkf.email.queue.list</field>
+        <field name="model">pkf.email.queue</field>
+        <field name="arch" type="xml">
+            <list string="Cola de Correos"
+                decoration-muted="state == 'draft'"
+                decoration-info="state == 'ready'"
+                decoration-success="state == 'sent'"
+                decoration-danger="state == 'error'">
+                <field name="create_date" string="Fecha Creación" />
+                <field name="subject" />
+                <field name="email_to" />
+                <field name="date_sent" />
+                <field name="state" widget="badge"
+                    decoration-muted="state == 'draft'"
+                    decoration-info="state == 'ready'"
+                    decoration-success="state == 'sent'"
+                    decoration-danger="state == 'error'" />
+            </list>
+        </field>
+    </record>
+
+</odoo>

@@ -10,8 +10,10 @@
         "templates/estado_cuenta_email_template.xml",
         "templates/envio_factura_template.xml",
         "views/upload_invoices_view.xml",
+        "views/pkf_email_queue.xml",
         "data/actions.xml",
         "data/menu.xml",
+        "data/ir_cron.xml",
         "security/ir.model.access.csv",
     ],
 }
