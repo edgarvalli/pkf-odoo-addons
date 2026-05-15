@@ -20,10 +20,11 @@ class PKFClientesWizard(models.TransientModel):
             raise UserError("Debe subir un archivo ZIP")
 
         file_content = base64.b64decode(self.file)
-
+        email_cc = self.email_cc.split(",") if self.email_cc else []
+        email_cc.append(self.env.user.email)
         mailer = MailQueueService(self.env)
         mailer.process_and_create_queue(
-            file_content, self.send_to_client, self.email_cc
+            file_content, self.send_to_client, email_cc=",".join(email_cc)
         )
 
         return {
