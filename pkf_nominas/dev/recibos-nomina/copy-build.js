@@ -13,22 +13,11 @@ if (!fs.existsSync(dstDir)) {
 }
 
 // Se definen los archivos destino
-const dstJS = path.resolve(dstDir, "timesheet_build.js");
-const dstCSS = path.resolve(dstDir, "timesheet.css");
+const dstJS = path.resolve(dstDir, "recibos_nomina_build.js");
 
 // Se elminan lo que ya estan guardados
 if (fs.existsSync(dstJS)) fs.unlinkSync(dstJS);
-if (fs.existsSync(dstCSS)) fs.unlinkSync(dstCSS);
 
 // Se copia el JS principal
-const buildPath = path.resolve(srcDir, "timesheet_build.js");
+const buildPath = path.resolve(srcDir, "recibos_nomina_build.js");
 fs.copyFileSync(buildPath, dstJS);
-
-// Se copia el CSS
-const assets = path.resolve(srcDir, "assets");
-fs.readdirSync(assets).forEach((file) => {
-  if (file.endsWith(".css")) {
-    const srcCSS = path.resolve(assets, file);
-    fs.copyFileSync(srcCSS, dstCSS);
-  }
-});
