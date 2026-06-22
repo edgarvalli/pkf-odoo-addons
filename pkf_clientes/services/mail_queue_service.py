@@ -3,32 +3,24 @@ import base64
 import random
 import tempfile
 from lxml import etree
-from odoo import fields
 from pathlib import Path
 from zipfile import ZipFile
-from string import Template
 from datetime import timedelta
-from odoo.api import Environment
+from odoo import fields, models
 from odoo.exceptions import UserError
 from .mailer import Mailer, Attachment
 from datetime import datetime, timezone
 from odoo.modules.module import get_module_path
 from odoo.tools.mimetypes import guess_mimetype
 from ..types.mail_queue_types import (
-    LogDic,
-    EmailDict,
     ContextDict,
     AttachmentDict,
 )
+from jinja2 import Template
 
 
-class MailQueueService:
-    env: Environment
-
-    def __init__(self, env):
-        self.env = env
-        self.temp_path = None
-        self.attachments = {}
+class MailQueueService(models.AbstractModel):
+    _name = "pkf.mail.queue.service"
 
     # =====================================================
     # Setters
@@ -129,39 +121,35 @@ class MailQueueService:
 
         template_path = (
             Path(get_module_path("pkf_clientes"))
-            / "templates/email_queue_template.html"
+            / "templates"
+            / "email_queue_template.html"
         )
 
         if not template_path.exists():
             return "Se envían las facturas anexas"
 
-        with open(str(template_path), "r", encoding="utf-8") as f:
+        template_content = template_path.read_text(encoding="utf-8")
 
-            template_content = f.read()
+        total_attachments = len(ctx.get("attachment_ids", []))
 
-            total_attachments = len(ctx.get("attachment_ids", []))
-
-            msg = (
+        values = {
+            "msg": (
                 "le hacemos llegar sus facturas"
                 if total_attachments > 1
                 else "le hacemos llegar su factura"
-            )
+            ),
+            "client": ctx.get("razon_social") or "Cliente",
+        }
 
-            values = {
-                "msg": msg,
-                "client": ctx.get("razon_social", "Cliente"),
-            }
+        return self.render_html(template_content, values)
 
-            return Template(template_content).safe_substitute(values)
-
-    def _map_context(self):
+    def _map_context(self, attachments: dict[str, AttachmentDict]):
 
         ctx_list = {}
 
-        for item in self.attachments.values():
+        for item in attachments.values():
 
             xml_ctx = item.get("context")
-
             if not xml_ctx or not xml_ctx.get("uuid"):
                 continue
 
@@ -306,13 +294,11 @@ class MailQueueService:
 
             f.write(zip_bytes)
 
-            self.temp_path = Path(f.name)
+            return Path(f.name)
 
-        return self
+    def build_attachments(self, zip_path: Path) -> dict[str, AttachmentDict]:
 
-    def build_attachments(self):
-
-        with ZipFile(str(self.temp_path), "r") as z:
+        with ZipFile(str(zip_path), "r") as z:
 
             grouped: dict[str, AttachmentDict] = {}
 
@@ -358,12 +344,8 @@ class MailQueueService:
                 )
 
                 if attach_id:
-
                     cursor["attachment_ids"].append(attach_id.id)
-
-            self.attachments = grouped
-
-            return self
+            return grouped
 
     # =====================================================
     # Queue Creator
@@ -376,13 +358,13 @@ class MailQueueService:
         email_cc=None,
     ):
 
-        self.build_temp_path(zip_bytes)
+        temp_path = self.build_temp_path(zip_bytes)
 
         try:
 
-            self.build_attachments()
+            attachments = self.build_attachments(temp_path)
 
-            ctx_list = self._map_context()
+            ctx_list = self._map_context(attachments)
 
             if not ctx_list:
                 return
@@ -402,12 +384,16 @@ class MailQueueService:
 
         finally:
 
-            if self.temp_path and self.temp_path.exists():
-                self.temp_path.unlink()
+            if temp_path and temp_path.exists():
+                temp_path.unlink()
 
     # =====================================================
     # Queue Processor
     # =====================================================
+
+    def render_html(self, template_content: str, values: dict):
+        t = Template(template_content)
+        return t.render(values)
 
     def process_queue(self):
 

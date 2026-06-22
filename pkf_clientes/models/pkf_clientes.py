@@ -20,3 +20,43 @@ class PKFClientes(AbstractModel):
     def enviar_estado_cuenta(self, idcliente: int, emails: list[str] = None):
         srv = EstadoCuentaService(self.env)
         return srv.enviar_estado_cuenta_cliente(idcliente, emails)
+
+    def buscar_clientes(self, **args):
+        fields = args.get(
+            "fields",
+            [
+                "CIDCLIENTEPROVEEDOR",
+                "CCODIGOCLIENTE",
+                "CRAZONSOCIAL",
+                "CRFC",
+            ],
+        )
+        val = args.get("val", "")
+        limit = args.get("limit", 50)
+        sql = f"""
+            SELECT TOP {limit} {",".join(fields)} FROM admClientes
+            WHERE (CRAZONSOCIAL LIKE ? OR CRFC LIKE ?) AND (CIDCLIENTEPROVEEDOR > 1)
+        """
+        dbname = self.env.company.ev_contpaqi_comercial_db.dbname
+        with self.env["ev.tools.mssql"].connect(dbname) as db:
+            return db.fetchall(sql, (f"%{val}%", f"%{val}%"))
+
+    def get_monedas(self):
+
+        dbname = self.env.company.ev_contpaqi_comercial_db.dbname
+
+        if not dbname:
+            return []
+
+        sql = """
+            SELECT
+                CIDMONEDA idmoneda,
+                CNOMBREMONEDA nombre,
+                CSIMBOLOMONEDA simbolo,
+                CPLURAL plural,
+                CCLAVESAT claveSat
+            FROM admMonedas;
+        """
+
+        with self.env["ev.tools.mssql"].connect(dbname) as db:
+            return db.fetchall(sql)

@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_pkf_clientes_wizard,access_pkf_clientes_wizard,model_pkf_clientes_wizard,base.group_user,1,1,1,1
+access_pkf_email_queue,access_pkf_email_queue,model_pkf_email_queue,base.group_user,1,1,1,1
+access_pkf_envios_logs,access_pkf_envios_logs,model_pkf_envios_logs,base.group_user,1,1,1,1
+access_pkf_factura_template,access_pkf_factura_template,model_pkf_factura_template,base.group_user,1,1,1,1
+access_pkf_factura_template_moves,access_pkf_factura_template_moves,model_pkf_factura_template_moves,base.group_user,1,1,1,1

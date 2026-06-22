@@ -1,0 +1,17 @@
+.min-h {
+  min-height: 0;
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+dialog {
+  border: none;
+  border-radius: 5px;
+
+  box-shadow: 0 3px 20px rgba(0, 0, 0, 0.4);
+  &::backdrop {
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+}

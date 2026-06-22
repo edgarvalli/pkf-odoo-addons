@@ -1,0 +1,37 @@
+.ev-tabs,
+.m-h-1 {
+  min-height: 1rem;
+}
+.ev-tabs__options {
+  display: flex;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-bottom: solid 1px var(--secondary);
+  li {
+    cursor: pointer;
+    opacity: 1;
+    padding: 0.25rem;
+    transition: all 0.25s ease-in-out;
+  }
+
+  li:hover {
+    opacity: 0.3;
+    border-bottom: solid 2px var(--primary);
+  }
+
+  li.active {
+    border-bottom: solid 2px var(--primary);
+  }
+}
+
+.ev-var__option {
+  cursor: pointer;
+
+  transition: all 0.25s ease-in-out;
+  &:hover {
+    background-color: var(--primary);
+    color: white;
+  }
+}

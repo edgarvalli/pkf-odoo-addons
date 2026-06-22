@@ -1,0 +1,17 @@
+.input-search {
+  --gray: #dee2e6;
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: solid thin var(--gray);
+  padding: 0.25rem;
+  border-radius: 5px;
+  gap: 0.25rem;
+
+  & input {
+    border: none;
+    border-right: solid thin var(--gray);
+  }
+}

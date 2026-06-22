@@ -1,5 +1,4 @@
 from odoo import models, fields
-from ..services import MailQueueService
 
 email_help = "Correos separados por comas (,)"
 
@@ -30,10 +29,9 @@ class PKFPartnerMail(models.Model):
     )
 
     error_notes = fields.Text("Notas de Error", readonly=True)
+    extra_data = fields.Text("Datos Extras")
     date_sent = fields.Datetime("Fecha de Envío", readonly=True)
     processing_date = fields.Datetime(index=True)
 
     def process_queue(self):
-        self = self.sudo()
-        srv = MailQueueService(self.env)
-        srv.process_queue()
+        self.env["pkf.mail.queue.service"].process_queue()
