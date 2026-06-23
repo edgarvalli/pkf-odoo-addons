@@ -42,7 +42,7 @@ class EstadoCuentaService(models.AbstractModel):
     def _get_groups(self) -> GroupKeysDict:
         return {
             "vencido": {
-                "title": "Vencido a más de 90 días",
+                "title": "Vencido a más de 60 días",
                 "color": "#0f3780",
                 "order": 1,
                 "facturas": [],
@@ -50,7 +50,7 @@ class EstadoCuentaService(models.AbstractModel):
                 "saldopendiente": 0,
             },
             "vencido60": {
-                "title": "Vencido a 60 días",
+                "title": "Vencido a 30 días",
                 "color": "#0f3780",
                 "order": 2,
                 "facturas": [],
