@@ -105,8 +105,9 @@ class EstadoCuentaService(models.AbstractModel):
                     inv["fecha"] = format_fecha(inv["fecha"])
 
     def _format_context(self, ctx: ContextType):
-        facturas: list[GroupDict] = list(ctx.get("facturas_group").values())
 
+        ctx["saldototal"] = format_money(ctx["saldototal"])
+        facturas: list[GroupDict] = list(ctx.get("facturas_group").values())
         if facturas:
             for fact in facturas:
                 fact["total"] = format_money(fact["total"])
