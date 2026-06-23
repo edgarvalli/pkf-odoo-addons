@@ -8,10 +8,9 @@
 
         <field name="auto_delete" eval="True" />
 
-        <field name="subject">Estado de cuenta - {{ ctx.get('razon_social', '') }}</field>
+        <field name="subject">Estado de cuenta - {{ ctx.get('razonsocial', '') }}</field>
 
         <field name="body_html" type="html">
-            <t t-set="metadata" t-value="ctx.get('metadata', {})" />
             <div style="font-family: sans-serif; font-size:14px; color:#333; padding: 5px;">
 
                 <table class="table"
@@ -42,7 +41,7 @@
                         total:
                     </span>
                     <![CDATA[&nbsp;]]>
-                    <t t-out="metadata.get('saldo_total')" />
+                    <t t-out="ctx.get('saldototal')" />
                 </p>
 
                 <br />
@@ -96,7 +95,7 @@
                                         </td>
                                         <td
                                             t-att-style="cell_style">
-                                            <t t-out="inv.get('serie_folio')" />
+                                            <t t-out="inv.get('seriefolio')" />
                                         </td>
                                         <td
                                             t-att-style="cell_style">
@@ -120,7 +119,7 @@
                                         <t t-out="fact.get('total', 0)" />
                                     </td>
                                     <td style="text-align: center;font-weight: bold;">
-                                        <t t-out="fact.get('total_pendiente', 0)" />
+                                        <t t-out="fact.get('saldopendiente', 0)" />
                                     </td>
                                 </tr>
                             </tfoot>
