@@ -84,7 +84,7 @@ class EstadoCuentaService:
             key = inv.get("estatus")
             group = groups.get(key)
 
-            if not group or key == "vigente":
+            if not group:
                 continue
 
             total = float(inv.get("total") or 0)
