@@ -18,7 +18,7 @@ class FacturaRow(TypedDict):
     referencia: str
     uuid: str
     diascredito: int
-    estatus: Literal["vigente", "vencido60", "vencido"]
+    estatus: Literal["vigente", "vencido30", "vencido60", "vencido"]
     total: float
     pendiente: float
 

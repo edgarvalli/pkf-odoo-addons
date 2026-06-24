@@ -7,4 +7,4 @@ class PKFTaskScheduler(models.AbstractModel):
 
     def run_saldos_comercial(self):
         srv = self.env["pkf.estado.cuenta.service"]
-        srv.enviar_estado_de_cuenta_bulk()
+        srv.enviar_estado_de_cuenta()
