@@ -1,9 +1,9 @@
 import uuid
 from email.message import EmailMessage
 from smtplib import SMTP_SSL
+from odoo.models import BaseModel
 
 from .attachment_builder import AttachmentBuilder
-from ...models import PKFEmailQueue
 
 
 class Mailer:
@@ -72,13 +72,13 @@ class Mailer:
     # Build
     # =========================
 
-    def build_params(self, email: "PKFEmailQueue"):
+    def build_params(self, email: "BaseModel"):
         self._normalize_emails(email.email_to)
         self._normalize_emails(email.email_cc)
         self._normalize_emails(email.email_bcc)
         self._normalize_emails(email.email_reply_to)
 
-    def build_email(self, email: "PKFEmailQueue"):
+    def build_email(self, email: "BaseModel"):
 
         self.build_params(email)
 
