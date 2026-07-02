@@ -1,6 +1,6 @@
 import base64
 from odoo import http
-from ..services.mailer import Mailer, Attachment
+from ..services.mailer_bak import Mailer, Attachment
 
 
 class ApiController(http.Controller):

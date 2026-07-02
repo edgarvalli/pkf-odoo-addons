@@ -8,7 +8,7 @@ from zipfile import ZipFile
 from datetime import timedelta
 from odoo import fields, models
 from odoo.exceptions import UserError
-from .mailer import Mailer, Attachment
+from .mailer_bak import Mailer, Attachment
 from datetime import datetime, timezone
 from odoo.modules.module import get_module_path
 from odoo.tools.mimetypes import guess_mimetype
