@@ -8,7 +8,6 @@ class EmailRepository:
 
     def __init__(self, env: Environment):
         self.env = env
-        self.load()
 
     def get_from_sql(self, uuids: list[str] | None = None) -> list[Email]:
         dbname = self.env.company.ev_contpaqi_comercial_db.dbname
