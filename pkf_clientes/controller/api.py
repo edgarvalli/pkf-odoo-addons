@@ -9,7 +9,7 @@ class ApiController(http.Controller):
     def test_fact(self):
         return "Workd"
 
-    @http.route("/pkfmty/process", type="http", auth="none", methods=["GET"])
+    @http.route("/pkfmty/process", type="http", auth="public", methods=["GET"])
     def process_status(self):
         data = http.request.env["pkf.email.queue"].search([("status", "=", "error")])
         if not data:
