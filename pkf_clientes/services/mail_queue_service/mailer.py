@@ -111,10 +111,7 @@ class Mailer:
 
         msg.set_content("Tu cliente de correo no soporta contenido HTML.")
 
-        msg.add_alternative(
-            email.body_html,
-            subtype="html",
-        )
+        msg.add_alternative(email.body_html, subtype="html")
 
         if attachments:
             for attach in attachments:
