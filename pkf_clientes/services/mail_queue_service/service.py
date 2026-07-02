@@ -58,6 +58,7 @@ class MailQueueService:
                 print(email)
                 try:
                     email_data = EmailMapper.from_queue(email)
+                    print(email_data)
                     mailer.send(email_data)
 
                     email.write(
