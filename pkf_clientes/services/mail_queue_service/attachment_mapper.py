@@ -18,8 +18,12 @@ class AttachmentMapper:
         return maintype, subtype
 
     @staticmethod
-    def map(attachment_ids: "IrAttachment") -> list[Attachment]:
+    def map(attachment_ids: "IrAttachment" = None) -> list[Attachment]:
         items = []
+
+        if not attachment_ids:
+            return items
+
         for item in attachment_ids:
             maintype, subtype = AttachmentMapper.get_types(item.mimetype)
 
