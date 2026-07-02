@@ -33,7 +33,7 @@ class EmailQueueRepository:
                 }
             )
 
-    def get_ready(self) -> list["BaseModel"]:
+    def get_ready(self) -> BaseModel:
 
         self.unlock_queue()
 

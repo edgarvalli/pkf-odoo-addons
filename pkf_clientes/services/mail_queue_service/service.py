@@ -47,7 +47,9 @@ class MailQueueService:
 
         with Mailer() as mailer:
 
-            for email in self.queuerepo.get_ready():
+            emails = self.queuerepo.get_ready()
+            print(emails)
+            for email in emails:
 
                 try:
                     mailer.build_email(email).send()
