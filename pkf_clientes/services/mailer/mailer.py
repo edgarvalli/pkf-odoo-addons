@@ -1,5 +1,5 @@
 from smtplib import SMTP_SSL
-from .models import Attachment, MailData
+from .models import MailData
 from .mail_builder import MailBuilder
 
 
@@ -11,8 +11,6 @@ class Mailer:
         self.SMTP_PWD = "yHyL2gYvDzVv"
 
         self.smtp_cxn = None
-        self.recipients = None
-        self.emaildata = None
 
     def connect(self):
         """Conecta solo cuando sea necesario"""
@@ -36,6 +34,9 @@ class Mailer:
             raise
 
     def send(self, email: MailData):
+
+        if self.smtp_cxn is None:
+            raise RuntimeError("No existe una conexión SMTP.")
 
         if not email.to:
             raise ValueError("El correo debe tener al menos un destinatario.")

@@ -55,10 +55,10 @@ class MailQueueService:
             emails = self.queuerepo.get_ready()
 
             for email in emails:
-                print(email)
                 try:
+
                     email_data = EmailMapper.from_queue(email)
-                    print(email_data)
+                    _logger.info(f"Enviando correo a {",".join(email_data.to)}")
                     mailer.send(email_data)
 
                     email.write(

@@ -36,6 +36,7 @@ class MailBuilder:
         msg.add_alternative(email.body_html, subtype="html")
 
         MailBuilder.build_attachments(msg, email.attachments)
+        return msg
 
     @staticmethod
     def build_attachments(
