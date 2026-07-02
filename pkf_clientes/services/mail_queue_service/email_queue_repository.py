@@ -33,7 +33,7 @@ class EmailQueueRepository:
                 }
             )
 
-    def get_ready(self) -> list[PKFEmailQueue]:
+    def get_ready(self) -> list["PKFEmailQueue"]:
         queue = self.env["pkf.email.queue"]
 
         emails = queue.search(

@@ -1,5 +1,3 @@
-from typing import TYPE_CHECKING
-
 import base64
 from pathlib import Path
 from zipfile import ZipFile
@@ -8,11 +6,8 @@ from odoo.tools.mimetypes import guess_mimetype
 
 from .models import Attachment
 from .utils import build_temppath
-from .models import AttachmentContext, Context
+from .models import AttachmentContext, IrAttachment
 from .context_builder import ContextBuilder
-
-if TYPE_CHECKING:
-    from odoo.addons.base.models.ir_attachment import IrAttachment
 
 
 class AttachmentBuilder:

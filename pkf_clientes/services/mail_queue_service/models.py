@@ -1,3 +1,8 @@
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from odoo.addons.base.models.ir_attachment import IrAttachment
+
 from dataclasses import dataclass, field
 
 
