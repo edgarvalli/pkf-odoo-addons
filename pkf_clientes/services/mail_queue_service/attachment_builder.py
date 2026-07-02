@@ -13,8 +13,6 @@ from .context_builder import ContextBuilder
 
 if TYPE_CHECKING:
     from odoo.addons.base.models.ir_attachment import IrAttachment
-else:
-    from addons.base.models.ir_attachment import IrAttachment
 
 
 class AttachmentBuilder:
@@ -24,7 +22,7 @@ class AttachmentBuilder:
 
     @staticmethod
     def build_mail_attachments(
-        attachment_ids: list[IrAttachment],
+        attachment_ids: list["IrAttachment"],
     ) -> dict[str, AttachmentContext]:
 
         attachments = []
