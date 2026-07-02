@@ -55,7 +55,7 @@ class MailQueueService:
             emails = self.queuerepo.get_ready()
 
             for email in emails:
-
+                print(email)
                 try:
                     email_data = EmailMapper.from_queue(email)
                     mailer.send(email_data)
