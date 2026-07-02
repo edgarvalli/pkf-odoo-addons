@@ -51,7 +51,7 @@
                                 readonly="[('state', '=', 'sent')]" />
                         </page>
                         <!-- Esta pestaña solo aparece si hay un error reportado -->
-                        <page string="Logs de Error" invisible="[('error_notes', '=', False)]">
+                        <page string="Logs de Error">
                             <field name="error_notes"
                                 placeholder="Detalles técnicos del fallo del SMTP..." />
                         </page>
