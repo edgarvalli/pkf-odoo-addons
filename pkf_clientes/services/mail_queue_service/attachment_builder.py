@@ -6,8 +6,13 @@ from odoo.tools.mimetypes import guess_mimetype
 
 from .models import Attachment
 from .utils import build_temppath
-from .models import AttachmentContext, IrAttachment
+from .models import AttachmentContext
 from .context_builder import ContextBuilder
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from odoo.addons.base.models.ir_attachment import IrAttachment
 
 
 class AttachmentBuilder:
