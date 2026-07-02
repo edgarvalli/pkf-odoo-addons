@@ -34,6 +34,9 @@ class EmailQueueRepository:
             )
 
     def get_ready(self) -> list["BaseModel"]:
+
+        self.unlock_queue()
+
         queue = self.env["pkf.email.queue"]
 
         emails = queue.search(
@@ -42,7 +45,7 @@ class EmailQueueRepository:
         )
 
         if not emails:
-            return
+            return []
 
         emails.write(
             {
