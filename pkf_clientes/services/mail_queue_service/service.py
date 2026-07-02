@@ -49,8 +49,6 @@ class MailQueueService:
 
             for email in self.queuerepo.get_ready():
 
-                print(email)
-
                 try:
                     mailer.build_email(email).send()
 
