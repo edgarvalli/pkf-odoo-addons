@@ -1,10 +1,10 @@
 from datetime import datetime, timedelta, timezone
 from odoo.api import Environment
 from odoo.fields import Datetime
+from odoo.models import BaseModel
 
 from .models import Context
 from .utils import render_body
-from ...models import PKFEmailQueue
 
 
 class EmailQueueRepository:
@@ -33,7 +33,7 @@ class EmailQueueRepository:
                 }
             )
 
-    def get_ready(self) -> list["PKFEmailQueue"]:
+    def get_ready(self) -> list["BaseModel"]:
         queue = self.env["pkf.email.queue"]
 
         emails = queue.search(
