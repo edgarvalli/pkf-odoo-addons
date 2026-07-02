@@ -11,7 +11,11 @@ class ApiController(http.Controller):
 
     @http.route("/pkfmty/process", type="http", auth="none", methods=["GET"])
     def process_status(self):
-        return http.request.env["pkf.email.queue"].search([("status", "=", "error")])
+        data = http.request.env["pkf.email.queue"].search([("status", "=", "error")])
+        if not data:
+            return {"error": True, "message": "No se encontro informacion"}
+
+        return {"error": False, "data": data}
 
     @http.route(
         "/pkfmty/api/v1/factura-template/process",
