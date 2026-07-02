@@ -9,7 +9,7 @@ from .models import Attachment, MailData
 class MailBuilder:
 
     @staticmethod
-    def build(email: MailData, reply_to: str):
+    def build(email: MailData, sender: str):
         if not email.to:
             raise UserError("email_to is required")
 
@@ -17,7 +17,7 @@ class MailBuilder:
 
         msg["To"] = ",".join(email.to)
 
-        msg["From"] = f"Facturacion PKF Monterrey <{reply_to}>"
+        msg["From"] = f"Facturacion PKF Monterrey <{sender}>"
 
         msg["Subject"] = email.subject
 
@@ -26,7 +26,7 @@ class MailBuilder:
         if email.reply_to:
             msg["Reply-To"] = ",".join(email.reply_to)
         else:
-            msg["Reply-To"] = reply_to
+            msg["Reply-To"] = sender
 
         if email.cc:
             msg["Cc"] = ",".join(email.cc)
