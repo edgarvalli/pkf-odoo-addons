@@ -73,10 +73,17 @@ class Mailer:
     # =========================
 
     def build_params(self, email: "BaseModel"):
-        self._normalize_emails(email.email_to)
-        self._normalize_emails(email.email_cc)
-        self._normalize_emails(email.email_bcc)
-        self._normalize_emails(email.email_reply_to)
+        if email.email_to:
+            self._normalize_emails(email.email_to)
+
+        if email.email_cc:
+            self._normalize_emails(email.email_cc)
+
+        if email.email_bcc:
+            self._normalize_emails(email.email_bcc)
+
+        if email.email_reply_to:
+            self._normalize_emails(email.email_reply_to)
 
     def build_email(self, email: "BaseModel"):
 
@@ -107,7 +114,8 @@ class Mailer:
 
         # IMPORTANTE:
         # BCC NO debe ir en headers visibles
-        self._bcc = email.email_bcc
+        if email.email_bcc:
+            self._bcc = email.email_bcc
 
         msg.set_content("Tu cliente de correo no soporta contenido HTML.")
 

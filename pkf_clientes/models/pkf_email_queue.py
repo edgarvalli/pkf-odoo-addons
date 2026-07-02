@@ -8,7 +8,7 @@ class PKFEmailQueue(models.Model):
     _name = "pkf.email.queue"
     _description = "PKF - Cola de correos"
     _rec_name = "subject"
-    _order = "create_date asc"
+    _order = "create_date desc"
 
     subject = fields.Char("Asunto")
     email_to = fields.Char("Email To", help=email_help)

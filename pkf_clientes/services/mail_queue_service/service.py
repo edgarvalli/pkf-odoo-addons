@@ -48,7 +48,7 @@ class MailQueueService:
         with Mailer() as mailer:
 
             emails = self.queuerepo.get_ready()
-            print(emails)
+
             for email in emails:
 
                 try:
