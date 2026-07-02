@@ -29,7 +29,6 @@ class MailQueueService:
             attachments = attach.build(zip_bytes)
 
         ctx_list = ContextBuilder.context_mapper(attachments)
-
         if not ctx_list:
             return
 
