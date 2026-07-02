@@ -1,5 +1,6 @@
 import time
 import random
+import logging
 from odoo.api import Environment
 from odoo.fields import Datetime
 
@@ -13,6 +14,8 @@ from .attachment_builder import AttachmentBuilder
 from .email_queue_repository import EmailQueueRepository
 
 from .email_mapper import EmailMapper
+
+_logger = logging.getLogger(__name__)
 
 
 class MailQueueService:
@@ -79,7 +82,7 @@ class MailQueueService:
                     time.sleep(random.uniform(2, 5))
 
                 except Exception as e:
-
+                    _logger.error(str(e))
                     email.write(
                         {
                             "state": "error",
