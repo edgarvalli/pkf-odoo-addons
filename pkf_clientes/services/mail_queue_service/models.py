@@ -1,8 +1,3 @@
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from odoo.addons.base.models.ir_attachment import IrAttachment
-
 from dataclasses import dataclass, field
 
 
@@ -37,14 +32,6 @@ class Context:
     @property
     def subject(self) -> str:
         return f"[INV] Factura CFDI 4.0 {self.serie}{self.folio}"
-
-
-@dataclass
-class Attachment:
-    data: bytes
-    maintype: str
-    subtype: str
-    filename: str
 
 
 @dataclass(slots=True)

@@ -4,49 +4,15 @@ from zipfile import ZipFile
 from odoo.api import Environment
 from odoo.tools.mimetypes import guess_mimetype
 
-from .models import Attachment
 from .utils import build_temppath
 from .models import AttachmentContext
 from .context_builder import ContextBuilder
-
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from odoo.addons.base.models.ir_attachment import IrAttachment
 
 
 class AttachmentBuilder:
 
     def __init__(self, env: Environment):
         self.env = env
-
-    @staticmethod
-    def build_mail_attachments(
-        attachment_ids: list["IrAttachment"],
-    ) -> dict[str, AttachmentContext]:
-
-        attachments = []
-
-        for attach in attachment_ids:
-
-            mimetype = attach.mimetype or "application/octet-stream"
-
-            parts = mimetype.split("/")
-
-            maintype = parts[0]
-
-            subtype = parts[1] if len(parts) > 1 else "octet-stream"
-
-            attachments.append(
-                Attachment(
-                    data=base64.b64decode(attach.datas),
-                    maintype=maintype,
-                    subtype=subtype,
-                    filename=attach.name,
-                )
-            )
-
-        return attachments
 
     def build(self, zip_bytes: bytes):
 

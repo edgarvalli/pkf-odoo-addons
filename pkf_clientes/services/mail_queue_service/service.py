@@ -4,13 +4,15 @@ from odoo.api import Environment
 from odoo.fields import Datetime
 
 from .utils import logger
-from .mailer import Mailer
+from ..mailer import Mailer
 from .types import LogDict
 from .models import Context, Email
 from .context_builder import ContextBuilder
 from .email_repository import EmailRepository
 from .attachment_builder import AttachmentBuilder
 from .email_queue_repository import EmailQueueRepository
+
+from .email_mapper import EmailMapper
 
 
 class MailQueueService:
@@ -52,7 +54,8 @@ class MailQueueService:
             for email in emails:
 
                 try:
-                    mailer.build_email(email).send()
+                    email_data = EmailMapper.from_queue(email)
+                    mailer.send(email_data)
 
                     email.write(
                         {
