@@ -7,7 +7,7 @@ import { SidebarSave } from "./sidebar-save";
 export function Sidebar() {
   const [projectId, setProjectId] = useState<number | null>(null);
   return (
-    <aside className="row flex-lg-column bg-white p-2 shadow sidebar">
+    <aside className="row flex-lg-column p-2 h-100">
       <h6 className="mb-4 d-none d-lg-block">Control de Tiempos</h6>
       <div className="col-12 col-sm-3 col-lg-12 mb-3">
         <ClientCard />

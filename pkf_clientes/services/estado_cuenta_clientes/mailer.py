@@ -1,5 +1,10 @@
+import time
+import random
+import logging
 from .types import ContextType
 from odoo.api import Environment
+
+_logger = logging.getLogger(__name__)
 
 
 def enviar_correo(env: Environment, ctx: ContextType, **kwargs):
@@ -8,6 +13,8 @@ def enviar_correo(env: Environment, ctx: ContextType, **kwargs):
     email_values = {
         "email_from": "PKF Monterrey <no-reply@pkfmty.com>",
         "email_to": ctx.get("emails", env.user.email),
+        "isbatch": True,
+        "state": "cancel",
     }
 
     if not email_cc == env.user.email:
@@ -18,3 +25,18 @@ def enviar_correo(env: Environment, ctx: ContextType, **kwargs):
         force_send=kwargs.get("force_send", False),
         email_values=email_values,
     )
+
+
+def cronjob_sendmail(env: Environment):
+    mails = env["mail.mail"].search(
+        [("isbatch", "=", True), ("state", "=", "cancel")], limit=10
+    )
+
+    if not mails:
+        _logger.info("No hay correos de estado de cuentas por procesar.")
+
+    mails.update({"state": "outgoing"})
+
+    for mail in mails:
+        mail.send()
+        time.sleep(random.uniform(2, 5))

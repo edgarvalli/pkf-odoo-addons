@@ -11,7 +11,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     <div
       ref={setHeightRef}
       className="d-flex flex-column"
-      style={{ width: "100wv", overflow: "hidden" }}
+      style={{ width: "100vw", overflow: "hidden" }}
     >
       {children}
     </div>

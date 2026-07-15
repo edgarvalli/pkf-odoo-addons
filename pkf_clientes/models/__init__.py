@@ -1,3 +1,4 @@
+from .mail_mail import MailMail
 from .pkf_clientes import PKFClientes
 from .pkf_envios_logs import PKFEnviosLog
 from .pkf_email_queue import PKFEmailQueue

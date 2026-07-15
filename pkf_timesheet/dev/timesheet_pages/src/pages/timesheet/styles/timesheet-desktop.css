@@ -1,0 +1,12 @@
+@media (min-width: 1024px) {
+  .ev-notification {
+    width: 30%;
+  }
+
+  .sidebar {
+    width: 20%;
+  }
+  .content {
+    width: 80%;
+  }
+}

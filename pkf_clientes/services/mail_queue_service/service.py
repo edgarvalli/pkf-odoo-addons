@@ -58,7 +58,8 @@ class MailQueueService:
                 try:
 
                     email_data = EmailMapper.from_queue(email)
-                    _logger.info(f"Enviando correo a {",".join(email_data.to)}")
+                    emails_list = ",".join(email_data.to)
+                    _logger.info(f"Enviando correo a {emails_list}")
                     mailer.send(email_data)
 
                     email.write(

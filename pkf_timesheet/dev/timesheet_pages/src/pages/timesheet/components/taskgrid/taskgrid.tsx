@@ -5,6 +5,12 @@ import "./taskgrid.css";
 
 export function TimesheetTaskGrid() {
   const ctx = useTimesheet();
-  if (!ctx.project) return <TaskGridInit />;
-  return <TaskGridEntries />;
+  const Component = ctx.project ? TaskGridEntries : TaskGridInit;
+  return (
+    <div className="p-2 d-flex flex-grow-1 h-100">
+      <div className="box w-100 p-2">
+        <Component />
+      </div>
+    </div>
+  );
 }

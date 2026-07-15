@@ -45,6 +45,7 @@ class MetadataDict(TypedDict):
 
 class ContextType(TypedDict):
     id: int
+    uid: str
     codigo: str
     razonsocial: str
     rfc: str

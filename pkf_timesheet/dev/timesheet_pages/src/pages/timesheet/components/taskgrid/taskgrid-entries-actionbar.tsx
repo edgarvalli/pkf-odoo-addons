@@ -12,8 +12,8 @@ export function TaskGridEntriesActionBar(props: {
 
   const ctx = useTimesheet();
   return (
-    <div className="box p-2 pt-3 pb-3">
-      <div className="row">
+    <div className="d-flex p-2 pt-3 pb-3">
+      <div className="row w-100">
         <div className="col-5">
           <Autocomplete
             options={ctx.project?.phases ?? []}

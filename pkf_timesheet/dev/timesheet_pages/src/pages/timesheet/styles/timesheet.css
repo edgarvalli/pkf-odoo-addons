@@ -16,11 +16,13 @@
 }
 
 .sidebar {
+  border-right: solid thin #e1e1e1;
   width: 100%;
+}
 
-  @media (min-width: 1024px) {
-    width: 25%;
-  }
+.content {
+  width: 100%;
+  min-height: 0;
 }
 
 .ev-notification {
@@ -30,10 +32,6 @@
   right: 10px;
   .MuiLinearProgress-bar {
     transition: transform 0.1s linear;
-  }
-
-  @media (min-width: 1024px) {
-    width: 30%;
   }
 }
 

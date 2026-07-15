@@ -12,7 +12,7 @@ export function TaskGridEntriesTable({
   if (!phase) return <></>;
 
   return (
-    <div className="box ev-taskgrid">
+    <div className="ev-taskgrid">
       <table>
         <TaskGridEntriesTHead phase={phase} />
         <TaskGridEntriesTBody phase={phase} onChange={onChange} />

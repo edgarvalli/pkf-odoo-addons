@@ -1,4 +1,3 @@
-import requests
 from odoo.exceptions import UserError
 from odoo import fields, models, api
 

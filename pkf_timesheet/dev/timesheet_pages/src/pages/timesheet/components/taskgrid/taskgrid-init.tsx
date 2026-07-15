@@ -29,11 +29,11 @@ export function TaskGridInit() {
   };
 
   return (
-    <div className="d-flex flex-column w-100 p-4" style={{ overflowX: "auto" }}>
-      <div className="box p-3 mb-3">
+    <div className="d-flex flex-column overflow-x-auto flex-grow-1">
+      <div className="p-3 mb-3">
         <h4>No se ha seleccionado un proyecto.</h4>
       </div>
-      <div className="box ev-taskgrid">
+      <div className="ev-taskgrid">
         <table>
           <thead>
             <tr>

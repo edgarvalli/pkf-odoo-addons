@@ -11,16 +11,6 @@ import type { Phase } from "@/types/models";
 import { EntryRangeForm } from "../entry-range";
 import type { EntryRangeRef } from "src/types/entry";
 
-export type EntryRange = {
-  project_id: number;
-  phase_id: number;
-  task_id: number;
-  hours: number;
-  startdate: string;
-  enddate: string;
-  note: string;
-};
-
 export function TaskGridEntriesNewEntry({
   hidden,
   phase,
