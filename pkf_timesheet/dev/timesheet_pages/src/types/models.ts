@@ -31,10 +31,18 @@ export interface Phase {
   tasks: Task[];
 }
 
+export interface PeriodProject {
+  open: boolean;
+  type: "weekly" | "biweekly" | "monthly";
+  startDate: Date;
+  endDate: Date;
+}
+
 export interface Project {
   id: number;
   name: string;
   note: string;
+  period: PeriodProject;
   client: Client;
   phases: Phase[];
 }

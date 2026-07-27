@@ -19,6 +19,7 @@ class HrExpense(models.Model):
             # Si total_amount_spend depende de total_hour_cost_amount, Odoo lo disparará,
             # pero puedes llamar a los métodos manualmente si no tienen store=True.
             project._compute_total_spend()
+
         return result
 
     def create(self, vals_list):

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_partner_inherit_pkf_timesheet" model="ir.ui.view">
+        <field name="name">res.partner.view.form.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='category_id']" position="after">
+                <label for="pkf_partner_group" string="Nombre del Group" />
+                <div class="o_row" name="timesheet_group_name">
+                    <field name="pkf_partner_group" class="oe_inline" />
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="pkf_res_partner_group_view_tree" model="ir.ui.view">
+        <field name="name">pkf_res_partner_group.view.list</field>
+        <field name="model">pkf.partner.group</field>
+        <field name="arch" type="xml">
+            <list string="Grupos Clientes PKF" editable="top">
+                <field name="name" />
+                <field name="active" />
+            </list>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,5 @@
+Bloquear fechas pasadas
+Fases que no impacten en el costo de la hora
+Modulo de categorias de Fases
+
+#### No esta guardando los datos el fronted revisar el servicio project_service funcion get_project_data

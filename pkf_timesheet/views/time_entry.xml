@@ -27,7 +27,7 @@
                             <field name="project_id" string="Proyecto" readonly="True" />
                         </group>
                         <group string="Actividad">
-                            <field name="phase_id" string="Fase" />
+                            <field name="phase_id" string="Rubro" />
                             <field name="task_id" string="Tarea" />
                         </group>
                     </group>

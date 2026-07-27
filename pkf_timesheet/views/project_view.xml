@@ -49,7 +49,9 @@
 
                     <group>
                         <group string="Información de Proyecto">
-                            <field name="client_id" />
+                            <field name="partner_group_id" />
+                            <field name="partner_id" invisible="not partner_group_id"
+                                domain="[('pkf_partner_group','=',partner_group_id)]" />
                             <field name="cancellation_porcentage" widget="float" />
                             <field name="state" string="Estatus" />
                         </group>
@@ -57,6 +59,12 @@
                             <field name="manager_id" widget="many2one_avatar_user" />
                             <field name="director_id" widget="many2one_avatar_user"
                                 string="Socio/Director" />
+                        </group>
+                        <group string="Periodo">
+                            <field name="period_open" />
+                            <field name="period_type" readonly="period_open" />
+                            <field name="period_start_date" readonly="True" force_save="True" />
+                            <field name="period_end_date" readonly="True" force_save="True" />
                         </group>
                     </group>
 
@@ -78,7 +86,10 @@
                             </field>
                         </page>
 
-                        <page name="phases" string="Fases">
+                        <page name="phases" string="Rubros">
+                            <group>
+                                <field name="phase_group_id" />
+                            </group>
                             <field name="phase_ids">
                                 <list editable="top">
                                     <field name="name" />
@@ -120,7 +131,7 @@
             <list string="Proyectos">
                 <field name="code" />
                 <field name="name" />
-                <field name="client_id" />
+                <field name="partner_id" />
                 <field name="manager_id" widget="many2one_avatar_user" />
                 <field name="total_budget_amount" sum="Total Presupuestos" />
                 <field name="state" widget="badge"
@@ -140,7 +151,7 @@
             <kanban default_group_by="state" class="o_kanban_project_tasks" quick_create="false">
                 <field name="state" />
                 <field name="name" />
-                <field name="client_id" />
+                <field name="partner_id" />
                 <field name="manager_id" />
                 <field name="total_budget_amount" />
                 <field name="total_amount_spend" />
@@ -161,7 +172,7 @@
                                                     </strong>
                                                     <span class="d-block text-muted">
                                                         <i class="fa fa-user" title="Cliente" />
-                                                        <field name="client_id" />
+                                                        <field name="partner_id" />
                                                     </span>
                                                 </div>
                                             </div>

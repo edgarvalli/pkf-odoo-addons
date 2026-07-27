@@ -5,7 +5,7 @@
         <field name="name">pkf.timesheet.project.phase.view.form</field>
         <field name="model">pkf.timesheet.project.phase</field>
         <field name="arch" type="xml">
-            <form string="Fases del proyecto">
+            <form string="Rubros del proyecto">
                 <sheet>
                     <group>
                         <group>

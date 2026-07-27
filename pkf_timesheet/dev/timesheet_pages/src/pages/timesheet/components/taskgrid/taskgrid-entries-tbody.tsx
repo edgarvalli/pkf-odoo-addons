@@ -3,12 +3,13 @@ import type { Phase, Task, TimeEntry } from "@/types/models";
 import { TimeEntryCell } from "./taskgrid-entries-cell";
 import { useCallback } from "react";
 
-export function TaskGridEntriesTBody(props: {
+type TaskGridEntriesTBodyProps = {
   phase: Phase;
   onChange?: (val: TimeEntry) => void;
-}) {
-  const { rangeDate } = useTimesheet();
+};
 
+export function TaskGridEntriesTBody(props: TaskGridEntriesTBodyProps) {
+  const { rangeDate } = useTimesheet();
   const renderCols = useCallback(
     (task: Task) => {
       return rangeDate.map((date) => {

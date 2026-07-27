@@ -9,4 +9,5 @@ export interface TimesheetContext {
   orm: ReturnType<typeof useOrm>;
   rangeDate: RangeDate[];
   setRangeDate: Dispatch<SetStateAction<RangeDate[]>>;
+  isAllowedDateInProject: (d: Date) => Boolean;
 }

@@ -20,6 +20,14 @@
             sequence="1" />
 
         <menuitem
+            id="pkf_timesheet_res_partner"
+            name="Clientes"
+            groups="pkf_timesheet.group_manager"
+            action="pkf_timesheet_res_partner_action"
+            sequence="2"
+        />
+
+        <menuitem
             id="pkf_timesheet_settings_menu"
             name="Configuraciones"
             groups="pkf_timesheet.group_manager"
@@ -27,7 +35,7 @@
 
             <menuitem
                 id="pkf_timesheet_setting_phase_menu"
-                name="Fases"
+                name="Rubros"
                 action="pkf_timesheet_phase_action"
                 sequence="0" />
             <menuitem
@@ -35,6 +43,17 @@
                 name="Tareas"
                 action="pkf_timesheet_task_action"
                 sequence="1" />
+
+            <menuitem
+                id="pkf_timesheet_setting_group_menu"
+                name="Groupo de Rubros"
+                action="pkf_timesheet_phase_group_action"
+                sequence="2" />
+            <menuitem
+                id="pkf_timesheet_setting_res_partner_group_menu"
+                name="Grupo de Clientes PKF"
+                action="pkf_res_partner_group_action"
+                sequence="3" />
 
         </menuitem>
     </menuitem>

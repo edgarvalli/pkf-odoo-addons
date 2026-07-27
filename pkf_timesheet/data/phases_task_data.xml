@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="pkf_phase_others" model="pkf.timesheet.project.phase">
+        <field name="name">Otros</field>
+    </record>
+
+    <record id="pkf_task_vacation" model="pkf.timesheet.project.task">
+        <field name="name">Vacaciones</field>
+        <field name="include_in_cost" eval="False" />
+        <field name="order">0</field>
+        <field name="phase_id" ref="pkf_phase_others" />
+    </record>
+
+    <record id="pkf_task_falta" model="pkf.timesheet.project.task">
+        <field name="name">Ausencia laboral</field>
+        <field name="order">1</field>
+        <field name="include_in_cost" eval="False" />
+        <field name="phase_id" ref="pkf_phase_others" />
+    </record>
+
+    <record id="pkf_phase_group_all" model="pkf.timesheet.phase.group">
+        <field name="name">Todos los Rubros</field>
+        <field name="is_all" eval="True" />
+    </record>
+
+</odoo>

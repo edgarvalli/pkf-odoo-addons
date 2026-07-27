@@ -11,13 +11,13 @@ import type { Phase } from "@/types/models";
 import { EntryRangeForm } from "../entry-range";
 import type { EntryRangeRef } from "src/types/entry";
 
-export function TaskGridEntriesNewEntry({
-  hidden,
-  phase,
-}: {
+type TaskGridEntriesNewEntryProps = {
   hidden?: boolean;
   phase: Phase | null;
-}) {
+};
+
+export function TaskGridEntriesNewEntry(props: TaskGridEntriesNewEntryProps) {
+  const { phase, hidden } = props;
   const [open, setOpen] = useState(false);
   const { project, orm } = useTimesheet();
   const formRef = useRef<EntryRangeRef | null>(null);

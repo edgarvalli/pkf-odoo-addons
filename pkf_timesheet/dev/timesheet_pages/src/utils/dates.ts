@@ -1,5 +1,9 @@
 import type { RangeDate } from "../types/dates";
 
+export function isBetweenDate(date: Date, startDate: Date, endDate: Date) {
+  return date >= startDate && date <= endDate;
+}
+
 export const parseDate = (date: Date) => {
   return date.toISOString().split("T")[0];
 };

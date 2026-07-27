@@ -17,6 +17,11 @@ export function useProject() {
       { startdate, enddate },
     );
 
+    if (result) {
+      result.period.startDate = new Date(result.period.startDate);
+      result.period.endDate = new Date(result.period.endDate);
+    }
+
     setProject(result);
     const dateRange = getRangeDates(startdate, enddate);
     setRangeDate(dateRange);

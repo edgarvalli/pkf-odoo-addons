@@ -7,3 +7,7 @@ access_pkf_timesheet_task_user,access.pkf.timesheet.task.user,model_pkf_timeshee
 access_pkf_timesheet_task_manager,access.pkf.timesheet.task.manager,model_pkf_timesheet_project_task,pkf_timesheet.group_manager,1,1,1,1
 access_pkf_timesheet_time_entry_user,access.pkf.timesheet.time.entry.user,model_pkf_timesheet_time_entry,pkf_timesheet.group_user,1,1,1,0
 access_pkf_timesheet_time_entry_manager,access.pkf.timesheet.time.entry.manager,model_pkf_timesheet_time_entry,pkf_timesheet.group_manager,1,1,1,1
+access_pkf_timesheet_group_manager,access.pkf.timesheet.group.manager,model_pkf_timesheet_phase_group,pkf_timesheet.group_manager,1,1,1,1
+access_pkf_timesheet_group_user,access.pkf.timesheet.group.user,model_pkf_timesheet_phase_group,pkf_timesheet.group_user,1,0,0,0
+access_pkf_partner_group_manager,accesspkf.partner.group.manager,model_pkf_partner_group,pkf_timesheet.group_manager,1,1,1,1
+access_pkf_partner_group_user,accesspkf.partner.group.user,model_pkf_partner_group,pkf_timesheet.group_user,1,1,1,1

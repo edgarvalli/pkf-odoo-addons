@@ -9,7 +9,7 @@ import "./styles/timesheet-desktop.css";
 export default function Timesheet() {
   return (
     <TimesheetProvider>
-      <div className="d-flex flex-grow-1">
+      <div className="d-sm-flex flex-sm-grow-1">
         <div className="sidebar">
           <Sidebar />
         </div>

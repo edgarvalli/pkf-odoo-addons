@@ -9,6 +9,7 @@ import type { TimesheetContext as CtxType } from "@/types/context";
 import type { Project } from "@/types/models";
 import { useOrm } from "@/hooks/use-orm";
 import type { RangeDate } from "@/types/dates";
+import { isBetweenDate } from "../utils/dates";
 
 export const TimesheetContext = createContext<CtxType | null>(null);
 
@@ -34,6 +35,15 @@ export function TimesheetProvider({ children }: { children: ReactNode }) {
       orm,
       rangeDate,
       setRangeDate,
+      isAllowedDateInProject: (d: Date) => {
+        if (!project) return false;
+        if (project.period.open) return true;
+        return isBetweenDate(
+          d,
+          project.period.startDate,
+          project.period.endDate,
+        );
+      },
     }),
     [project, orm, rangeDate],
   );

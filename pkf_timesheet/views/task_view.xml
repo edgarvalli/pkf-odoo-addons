@@ -16,6 +16,7 @@
                         <group>
                             <field name="name" />
                             <field name="estimated_hours" />
+                            <field name="include_in_cost" />
                         </group>
                     </group>
                     <group name="description">
@@ -47,7 +48,6 @@
             <search>
                 <field name="code" />
                 <field name="name" />
-
             </search>
         </field>
     </record>

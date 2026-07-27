@@ -61,6 +61,7 @@ export function useTaskActions() {
     try {
       await orm.call<boolean>("pkf.timesheet.time.entry", "save_bulk", [[]], {
         entries,
+        project_id: project.id,
       });
 
       return {

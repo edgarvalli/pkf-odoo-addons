@@ -1,5 +1,7 @@
 from odoo import fields, models, api, _
-from ..services.project_services import ProjectService
+from ..services import ProjectService
+from ..repositories import HrExpenseRepository
+from ..domain import DatePeriod
 
 
 class PKFTimeSheetProject(models.Model):
@@ -14,7 +16,12 @@ class PKFTimeSheetProject(models.Model):
         "Código", compute="_compute_code", store=True
     )  # store=True para poder buscar por código
     name = fields.Char("Proyecto", required=True, tracking=True)
-    client_id = fields.Many2one(
+
+    partner_group_id = fields.Many2one(
+        "pkf.partner.group", string="Grupo de Cliente", required=True, tracking=True
+    )
+
+    partner_id = fields.Many2one(
         "res.partner", string="Cliente", required=True, tracking=True
     )
 
@@ -24,10 +31,12 @@ class PKFTimeSheetProject(models.Model):
         default=lambda self: self.env.user.employee_id,
         tracking=True,
     )
+
     director_id = fields.Many2one("hr.employee", string="Director", tracking=True)
 
     assigned_user_ids = fields.Many2many("hr.employee", string="Equipo Asignado")
-    phase_ids = fields.Many2many("pkf.timesheet.project.phase", string="Fases")
+    phase_ids = fields.Many2many("pkf.timesheet.project.phase", string="Rubro")
+    phase_group_id = fields.Many2one("pkf.timesheet.phase.group", string="Grupo Rubro")
 
     total_budget_amount = fields.Float("Presupuesto")
     total_expenses_amount = fields.Float(
@@ -68,6 +77,20 @@ class PKFTimeSheetProject(models.Model):
         compute="_compute_hours_count", string="Cantidad de horas"
     )
 
+    period_open = fields.Boolean("Periodo Abierto", default=False)
+    period_type = fields.Selection(
+        selection=[
+            ("weekly", "Semanal"),
+            ("biweekly", "Quincenal"),
+            ("monthly", "Mensual"),
+        ],
+        tracking=True,
+        required=True,
+        string="Tipo de Periodo",
+    )
+    period_start_date = fields.Date("Fecha Inicio Periodo")
+    period_end_date = fields.Date("Fecha Final Periodo")
+
     # --- Computes ----
 
     @api.depends("name")
@@ -86,13 +109,8 @@ class PKFTimeSheetProject(models.Model):
                 rec.total_expenses_amount = 0.0
                 continue
 
-            # Nota: Asegúrate que el modelo es 'hr.expense' (singular es el estándar de Odoo)
-            expenses = self.env["hr.expense"].search(
-                [
-                    ("pfk_timesheet_project_id", "=", rec.id),
-                    ("state", "in", ["posted", "in_payment", "paid", "refused"]),
-                ]
-            )
+            expense_repo = HrExpenseRepository(self.env)
+            expenses = expense_repo.get_by_project_id(self.id)
             rec.total_expenses_amount = sum(expenses.mapped("total_amount"))
 
     @api.depends(
@@ -102,25 +120,9 @@ class PKFTimeSheetProject(models.Model):
     )
     def _compute_total_hours(self):
 
+        project_srv = ProjectService(self.env)
         for rec in self:
-
-            service = ProjectService(self.env, rec.id)
-            entries = service._get_entries(ignore_dates=True)
-            total_amount = 0
-
-            for employee in rec.assigned_user_ids:
-                # Odoo usa timesheet_cost en hr.employee para el costo por hora
-                cost_per_hour = employee.timesheet_cost * (
-                    (rec.cancellation_porcentage / 100) + 1
-                )
-
-                hours_spend = sum(
-                    entries.filtered(lambda e: e.employee_id.id == employee.id).mapped(
-                        "hours"
-                    )
-                )
-                total_amount += cost_per_hour * hours_spend
-            rec.total_timesheet_cost_amount = total_amount
+            project_srv.calculate_total_timesheet_cost(rec)
 
     @api.depends(
         "total_budget_amount", "total_timesheet_cost_amount", "total_expenses_amount"
@@ -142,14 +144,23 @@ class PKFTimeSheetProject(models.Model):
     def _compute_hours_count(self):
         for rec in self:
             entries = self.env["pkf.timesheet.time.entry"].search(
-                [("project_id", "=", rec.id)]
+                [("project_id", "=", rec.id), ("task_id.include_in_cost", "=", True)]
             )
-
-            print(entries)
-
             rec.hours_spend_count = sum(entries.mapped("hours"))
 
     # --- Onchanges ---
+
+    @api.onchange("period_type")
+    def _onchange_period_type(self):
+        for rec in self:
+            if not rec.period_type:
+                rec.period_start_date = False
+                rec.period_end_date = False
+                continue
+
+            dates = DatePeriod(rec.period_type)
+            rec.period_start_date = dates.start_date
+            rec.period_end_date = dates.end_date
 
     @api.onchange("manager_id")
     def _onchange_manager_id(self):
@@ -167,6 +178,15 @@ class PKFTimeSheetProject(models.Model):
         if subordinates:
             self.assigned_user_ids = subordinates
 
+    @api.onchange("phase_group_id")
+    def _onchange_group_phase_id(self):
+        if self.phase_group_id.is_all:
+            phases = self.env["pkf.timesheet.project.phase"].search([])
+        else:
+            phases = self.phase_group_id.phase_ids
+
+        self.phase_ids = [(6, 0, phases.ids)]
+
     # --- Business Logic ---
 
     def search_projects_by_user(self, value=None, **kwargs):
@@ -181,8 +201,8 @@ class PKFTimeSheetProject(models.Model):
         return self.search_read(domain, ["id", "name"], **kwargs)
 
     def get_full_data(self, startdate, enddate):
-        srv = ProjectService(self.env, self.id)
-        return srv.get_project_data(startdate, enddate)
+        srv = ProjectService(self.env)
+        return srv.get_project_data(self.id, startdate, enddate)
 
     # --- Actions ---
 

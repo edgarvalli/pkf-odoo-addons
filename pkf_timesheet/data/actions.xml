@@ -20,6 +20,12 @@
         </field>
     </record>
 
+    <record id="pkf_timesheet_res_partner_action" model="ir.actions.act_window">
+        <field name="name">Clientes</field>
+        <field name="res_model">res.partner</field>
+        <field name="domain">[('pkf_partner_group', '!=', None)]</field>
+    </record>
+
     <record id="pkf_timesheet_phase_action" model="ir.actions.act_window">
         <field name="name">PKF - Fases</field>
         <field name="res_model">pkf.timesheet.project.phase</field>
@@ -45,6 +51,36 @@
         <field name="help" type="html">
             <div>
                 <h1>Tareas del pryecto</h1>
+            </div>
+        </field>
+    </record>
+
+    <record id="pkf_timesheet_phase_group_action" model="ir.actions.act_window">
+        <field name="name">PKF - Grupo de Fases</field>
+        <field name="res_model">pkf.timesheet.phase.group</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{
+            'search_default_group_by_phase': 1
+            }</field>
+        <field name="help" type="html">
+            <div>
+                <h1>Grupo de Proyectos</h1>
+            </div>
+        </field>
+    </record>
+
+    <record id="pkf_res_partner_group_action" model="ir.actions.act_window">
+        <field name="name">PKF - Grupo de Clientes PKF</field>
+        <field name="res_model">pkf.partner.group</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{
+            'search_default_group_by_phase': 1
+            }</field>
+        <field name="help" type="html">
+            <div>
+                <h1>Grupo de Clientes PKF</h1>
             </div>
         </field>
     </record>

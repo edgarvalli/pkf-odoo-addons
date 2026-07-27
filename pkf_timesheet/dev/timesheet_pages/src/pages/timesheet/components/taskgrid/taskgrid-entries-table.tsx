@@ -2,13 +2,13 @@ import type { Phase, TimeEntry } from "@/types/models";
 import { TaskGridEntriesTBody } from "./taskgrid-entries-tbody";
 import { TaskGridEntriesTHead } from "./taskgrid-entries-thead";
 
-export function TaskGridEntriesTable({
-  phase,
-  onChange,
-}: {
+type TaskGridEntriesTableProps = {
   phase: Phase | null;
   onChange?: (entry: TimeEntry) => void;
-}) {
+};
+
+export function TaskGridEntriesTable(props: TaskGridEntriesTableProps) {
+  const { phase, onChange } = props;
   if (!phase) return <></>;
 
   return (

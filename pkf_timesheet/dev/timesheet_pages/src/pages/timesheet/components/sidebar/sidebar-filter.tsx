@@ -23,6 +23,7 @@ export function SidebarFilter(props: { projectId: number | null }) {
     const { startdate, enddate } = rangeDates;
     await getProject(props.projectId, startdate, enddate);
   };
+
   return (
     <div className="row">
       <div className="col col-lg-12 mb-3">

@@ -17,6 +17,13 @@ def enviar_correo(env: Environment, ctx: ContextType, **kwargs):
         "state": "cancel",
     }
 
+    mail_server_id = env["ir.mail_server"].search(
+        [("smtp_user", "=", "facturacion@pkfmty.com")]
+    )
+
+    if mail_server_id:
+        email_values["mail_server_id"] = mail_server_id.id
+
     if not email_cc == env.user.email:
         email_values["email_cc"] = email_cc
 
@@ -38,5 +45,6 @@ def cronjob_sendmail(env: Environment):
     mails.update({"state": "outgoing"})
 
     for mail in mails:
+        _logger.info(f"Enviando correo a {mail.email_to}")
         mail.send()
         time.sleep(random.uniform(2, 5))

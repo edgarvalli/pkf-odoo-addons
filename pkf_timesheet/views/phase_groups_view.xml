@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="pkf_timesheet_phase_group_view" model="ir.ui.view">
+        <field name="name">pkf.timesheet..phase.group.view</field>
+        <field name="model">pkf.timesheet.phase.group</field>
+        <field name="arch" type="xml">
+            <form string="Agrupar Rubros">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" />
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page name="phases" string="Rubros">
+                            <field name="phase_ids">
+                                <list editable="top">
+                                    <field name="name" />
+                                    <!-- Agrega aquí más campos de tus fases si existen -->
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>
