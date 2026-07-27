@@ -54,3 +54,4 @@ class ContextType(TypedDict):
     fecha: str
     facturas_group: GroupKeysDict
     facturas: list[GroupDict]
+    mail_server_id: int

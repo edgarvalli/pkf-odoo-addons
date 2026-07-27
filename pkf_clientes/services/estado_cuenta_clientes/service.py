@@ -24,11 +24,15 @@ class EstadoCuentaService(models.AbstractModel):
         repo = EstadoCuentaRepository(envsudo)
         builder = ContextBuilder(repo)
         include_vigentes = kwargs.get("include_vigentes", False)
+        mail_server_id = self.env["ir.mail_server"].search(
+            [("smtp_user", "=", "facturacion@pkfmty.com")]
+        )
 
         try:
             for ctx in builder.build(idcliente, emails, include_vigentes):
 
                 edologger.set_context(ctx)
+                ctx["mail_server_id"] = mail_server_id.id
 
                 try:
                     _emails = ctx.get("emails")

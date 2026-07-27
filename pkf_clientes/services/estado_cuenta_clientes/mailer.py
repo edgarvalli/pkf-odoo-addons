@@ -17,9 +17,7 @@ def enviar_correo(env: Environment, ctx: ContextType, **kwargs):
         "state": "cancel",
     }
 
-    mail_server_id = env["ir.mail_server"].search(
-        [("smtp_user", "=", "facturacion@pkfmty.com")]
-    )
+    mail_server_id = ctx.get("mail_server_id")
 
     if mail_server_id:
         email_values["mail_server_id"] = mail_server_id.id
