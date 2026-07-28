@@ -20,7 +20,7 @@ def enviar_correo(env: Environment, ctx: ContextType, **kwargs):
     mail_server_id = ctx.get("mail_server_id")
 
     if mail_server_id:
-        email_values["mail_server_id"] = mail_server_id.id
+        email_values["mail_server_id"] = mail_server_id
 
     if not email_cc == env.user.email:
         email_values["email_cc"] = email_cc

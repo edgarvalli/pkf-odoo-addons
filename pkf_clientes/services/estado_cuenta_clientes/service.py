@@ -41,12 +41,15 @@ class EstadoCuentaService(models.AbstractModel):
                         edologger.info("No tiene correos configurados para envio.")
 
                     else:
-                        _logger.info(
-                            f"Enviando estado de cuenta a cliente {edologger.razonsocial}"
-                        )
+
                         enviar_correo(envsudo, ctx, **kwargs)
+
                         _logger.info(
                             f"Correo programado para el cliente {edologger.razonsocial}"
+                        )
+
+                        _logger.info(
+                            f"Enviando estado de cuenta a cliente {edologger.razonsocial}"
                         )
 
                         edologger.info(f"Correo enviado a los correos {_emails}")
@@ -54,11 +57,11 @@ class EstadoCuentaService(models.AbstractModel):
                 except Exception as e:
                     edologger.error(str(e))
 
-        # except Exception as e:
-        #     _logger.error(f"Ocurrio un error {e}")
+        except Exception as e:
+            _logger.error(f"Ocurrio un error {e}")
 
         finally:
-            edologger.send_bitacora()
+            edologger.send_bitacora(mail_server_id.id)
 
     def run_cronjob(self):
         cronjob_sendmail(self.sudo().env)

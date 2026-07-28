@@ -36,7 +36,10 @@ class EstadoCuentaLogger:
         self.rfc = ctx.get("rfc")
         self.razonsocial = ctx.get("razonsocial")
 
-    def send_bitacora(self):
+    def send_bitacora(self, mail_server_id: int = None):
         self.env["pkf.envios.logs"].send_bitacora(
-            uid=self.uid, start=self.start_process, end=datetime.now()
+            uid=self.uid,
+            start=self.start_process,
+            end=datetime.now(),
+            mail_server_id=mail_server_id,
         )
