@@ -146,6 +146,7 @@ class ProcesarZipContpaqi:
                 "email_cc": email_cc,
                 "isbatch": True,
                 "state": "cancel",
+                "recipient_ids": [],
                 "attachment_ids": self._create_attachments(client.attachments),
             }
 
