@@ -7,11 +7,11 @@
         <field name="target">main</field>
     </record>
 
-    <record id="action_edo_cliente" model="ir.actions.client">
+    <!-- <record id="action_edo_cliente" model="ir.actions.client">
         <field name="name">Estado Cuenta Cliente</field>
         <field name="tag">pkf_clientes.EstadoCuentaCliente</field>
         <field name="target">main</field>
-    </record>
+    </record> -->
 
     <record id="action_upload_invoices_wizard" model="ir.actions.act_window">
         <field name="name">Subir Facturas</field>
@@ -22,7 +22,7 @@
     </record>
 
     <!-- Acción de Ventana (Window Action) -->
-    <record id="action_pkf_email_queue" model="ir.actions.act_window">
+    <!-- <record id="action_pkf_email_queue" model="ir.actions.act_window">
         <field name="name">Cola de Correos PKF</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">pkf.email.queue</field>
@@ -36,5 +36,5 @@
                 'Listo para enviar'.
             </p>
         </field>
-    </record>
+    </record> -->
 </odoo>

@@ -1,5 +1,6 @@
 from odoo import models, fields
-from ..services import MailQueueService
+
+# from ..services import MailQueueService
 
 email_help = "Correos separados por comas (,)"
 
@@ -35,6 +36,6 @@ class PKFEmailQueue(models.Model):
     date_sent = fields.Datetime("Fecha de Envío", readonly=True)
     processing_date = fields.Datetime(index=True)
 
-    def process_queue(self):
-        srv = MailQueueService(self.env)
-        srv.process_queue()
+    # def process_queue(self):
+    #     srv = MailQueueService(self.env)
+    #     srv.process_queue()

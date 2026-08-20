@@ -1,7 +1,9 @@
 import base64
 from odoo import models, fields
 from odoo.exceptions import UserError
-from ..services.mail_queue_service import MailQueueService
+from ..services import ProcesarZipContpaqi
+
+# from ..services import MailQueueService
 
 
 class PKFClientesWizard(models.TransientModel):
@@ -13,6 +15,9 @@ class PKFClientesWizard(models.TransientModel):
     email_cc = fields.Text(string="CC", help="Correos separados por coma")
     send_to_client = fields.Boolean("Enviar al cliente")
 
+    def run(self):
+        return
+
     def action_run(self):
         self.ensure_one()
 
@@ -20,12 +25,13 @@ class PKFClientesWizard(models.TransientModel):
             raise UserError("Debe subir un archivo ZIP")
 
         file_content = base64.b64decode(self.file)
+
         email_cc = self.email_cc.split(",") if self.email_cc else []
         email_cc.append(self.env.user.email)
-        mailer = MailQueueService(self.env)
-        mailer.process_and_create_queue(
-            file_content, self.send_to_client, email_cc=",".join(email_cc)
-        )
+        email_cc = ",".join(email.strip() for email in email_cc)
+
+        srv = ProcesarZipContpaqi(self.sudo().env)
+        srv.procesar(file_content, email_cc)
 
         return {
             "type": "ir.actions.client",

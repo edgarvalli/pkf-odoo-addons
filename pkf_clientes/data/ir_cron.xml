@@ -2,10 +2,10 @@
 <odoo>
     <data noupdate="1">
         <record id="cron_process_pkf_email_queue" model="ir.cron">
-            <field name="name">PKF: Procesar Cola de Correos de Facturación</field>
-            <field name="model_id" ref="model_pkf_email_queue" />
+            <field name="name">PKF - Procesar Cola de Correos</field>
+            <field name="model_id" ref="model_pkf_process_email_queue_service" />
             <field name="state">code</field>
-            <field name="code">model.process_queue()</field>
+            <field name="code">model.run()</field>
             <field name="user_id" ref="base.user_root" />
             <field name="interval_number">5</field>
             <field name="interval_type">minutes</field>
