@@ -128,7 +128,11 @@ class ProcesarZipContpaqi:
         return docs
 
     def _schedule_email(
-        self, datas: dict[str, Cliente], email_cc: str, document_type: str
+        self,
+        datas: dict[str, Cliente],
+        email_cc: str,
+        document_type: str,
+        send_to_client=True,
     ):
         template_name = (
             "envio_pago_template"
@@ -138,17 +142,20 @@ class ProcesarZipContpaqi:
         template = self.env.ref(f"pkf_clientes.{template_name}").sudo()
 
         mailid = self._get_mail_server_id()
+        user_email = self.env.user.email
 
         for client in datas.values():
             email_values = {
                 "email_from": "PKF Monterrey <no-reply@pkfmty.com>",
-                "email_to": client.correos,
-                "email_cc": email_cc,
+                "email_to": client.correos if send_to_client else user_email,
                 "isbatch": True,
                 "state": "cancel",
                 "recipient_ids": [],
                 "attachment_ids": self._create_attachments(client.attachments),
             }
+
+            if send_to_client:
+                email_values["email_cc"] = email_cc
 
             if mailid:
                 email_values["mail_server_id"] = mailid.id
@@ -169,7 +176,13 @@ class ProcesarZipContpaqi:
                 email_values=email_values,
             )
 
-    def procesar(self, file_content: bytes, email_cc: str, document_type: str):
+    def procesar(
+        self,
+        file_content: bytes,
+        email_cc: str,
+        document_type: str,
+        send_to_client=True,
+    ):
         datas = self._unpackage_zip(file_content)
-        self._schedule_email(datas, email_cc, document_type)
+        self._schedule_email(datas, email_cc, document_type, send_to_client)
         return True

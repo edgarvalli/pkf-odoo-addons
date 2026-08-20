@@ -20,9 +20,6 @@ class PKFClientesWizard(models.TransientModel):
     email_cc = fields.Text(string="CC", help="Correos separados por coma")
     send_to_client = fields.Boolean("Enviar al cliente")
 
-    def run(self):
-        return
-
     def action_run(self):
         self.ensure_one()
 
@@ -36,7 +33,7 @@ class PKFClientesWizard(models.TransientModel):
         email_cc = ",".join(email.strip() for email in email_cc)
 
         srv = ProcesarZipContpaqi(self.sudo().env)
-        srv.procesar(file_content, email_cc, self.document_type)
+        srv.procesar(file_content, email_cc, self.document_type, self.send_to_client)
 
         return {
             "type": "ir.actions.client",
