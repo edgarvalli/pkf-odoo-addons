@@ -127,8 +127,15 @@ class ProcesarZipContpaqi:
 
         return docs
 
-    def _schedule_email(self, datas: dict[str, Cliente], email_cc: str):
-        template = self.env.ref("pkf_clientes.envio_factura_template").sudo()
+    def _schedule_email(
+        self, datas: dict[str, Cliente], email_cc: str, document_type: str
+    ):
+        template_name = (
+            "envio_pago_template"
+            if document_type == "payment"
+            else "envio_factura_template"
+        )
+        template = self.env.ref(f"pkf_clientes.{template_name}").sudo()
 
         mailid = self._get_mail_server_id()
 
@@ -151,7 +158,7 @@ class ProcesarZipContpaqi:
 
             ctx = {
                 "subject": subject,
-                "facturas": client.attachments,
+                "documentos": client.attachments,
                 "razon_social": client.razon_social,
             }
 
@@ -161,7 +168,7 @@ class ProcesarZipContpaqi:
                 email_values=email_values,
             )
 
-    def procesar(self, file_content: bytes, email_cc: str):
+    def procesar(self, file_content: bytes, email_cc: str, document_type: str):
         datas = self._unpackage_zip(file_content)
-        self._schedule_email(datas, email_cc)
+        self._schedule_email(datas, email_cc, document_type)
         return True

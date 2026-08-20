@@ -8,6 +8,7 @@
             <form string="Subir Factura">
                 <group>
                     <field name="file" filename="filename" />
+                    <field name="document_type" />
                     <field name="send_to_client" />
                     <field
                         name="email_cc"

@@ -12,6 +12,11 @@ class PKFClientesWizard(models.TransientModel):
 
     file = fields.Binary("Facturas", required=True)
     filename = fields.Char()
+    document_type = fields.Selection(
+        [("invoice", "Factura"), ("payment", "Complemento de Pago")],
+        string="Tipo de Documento",
+        required=True,
+    )
     email_cc = fields.Text(string="CC", help="Correos separados por coma")
     send_to_client = fields.Boolean("Enviar al cliente")
 
@@ -31,7 +36,7 @@ class PKFClientesWizard(models.TransientModel):
         email_cc = ",".join(email.strip() for email in email_cc)
 
         srv = ProcesarZipContpaqi(self.sudo().env)
-        srv.procesar(file_content, email_cc)
+        srv.procesar(file_content, email_cc, self.document_type)
 
         return {
             "type": "ir.actions.client",

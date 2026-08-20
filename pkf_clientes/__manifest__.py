@@ -9,6 +9,7 @@
     "data": [
         "templates/estado_cuenta_email_template.xml",
         "templates/envio_factura_template.xml",
+        "templates/envio_pago_template.xml",
         "views/upload_invoices_view.xml",
         # "views/pkf_email_queue.xml",
         "data/actions.xml",
