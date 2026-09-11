@@ -1,17 +1,28 @@
-export interface Client {
+export interface Partner {
   id: number;
   name: string;
   avatar: string;
 }
 
-export interface TimeEntry {
+export interface ModelBase {
+  createDate?: Date | null;
+  createBy?: string;
+  createById?: number;
+  writeDate?: Date | null;
+  writeBy?: string;
+  writeById?: number;
+}
+
+export interface TimeEntry extends ModelBase {
   id: number;
-  date: string | Date;
+  date: Date;
+  employeeId: number;
+  employeeName: string;
   hours: number;
   note: string;
-  project_id: number;
-  task_id: number;
-  phase_id: number;
+  project: Project;
+  phase: Phase;
+  task: Task;
 }
 
 export interface Task {
@@ -27,6 +38,7 @@ export interface Task {
 export interface Phase {
   id: number;
   name: string;
+  code: string;
   description: string;
   tasks: Task[];
 }
@@ -43,14 +55,33 @@ export interface Project {
   name: string;
   note: string;
   period: PeriodProject;
-  client: Client;
+  partner: Partner;
   phases: Phase[];
+  isNotCargable: boolean;
+  totalHours: Record<string, number>;
+  totalHoursNoCost: Record<string, number>;
 }
 
-export interface TaskValue {
-  phaseIndex: number;
-  taskIndex: number;
-  entryId?: number;
-  key: string;
-  value: string;
+export interface OdooContext {
+  lang: string;
+  tz: string;
+  uid: number;
+}
+
+export interface OdooSession {
+  activeIdsLimit: number;
+  isAdmin: boolean;
+  isInternalUser: boolean;
+  isSystem: boolean;
+  maxFileUploadSize: number;
+  name: string;
+  partnerDisplayName: string;
+  partnerId: number;
+  partnerWriteDate: Date | null;
+  registryHash: string;
+  serverVersion: string;
+  uid: number;
+  userContext: OdooContext;
+  username: string;
+  ["web.base.url"]: string;
 }

@@ -1,3 +1,2 @@
-from .project_service import ProjectService
-from .time_entry_service import TimeEntryService
-from .project_cron_service import PKFTimesheetProjectCronService
+from .timesheet_entry import TimeEntryService
+from .timesheet_project import TimesheetProject

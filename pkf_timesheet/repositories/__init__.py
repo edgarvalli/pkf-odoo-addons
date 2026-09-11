@@ -1,2 +1,3 @@
-from .time_entry_repository import TimeEntryRepository
-from .hr_expense_repository import HrExpenseRepository
+from .hr_expense import HrExpenseRepository
+from .timesheet_entry import TimeEntryRepository
+from .timesheet_project import TimesheetProjectRepository

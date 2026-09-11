@@ -1,56 +1,35 @@
-import type { RangeDate } from "../types/dates";
-
-export function isBetweenDate(date: Date, startDate: Date, endDate: Date) {
-  return date >= startDate && date <= endDate;
+export function isSameDay(a: Date, b: Date) {
+  return (
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate()
+  );
 }
 
-export const parseDate = (date: Date) => {
+export function parseISODate(date: Date) {
   return date.toISOString().split("T")[0];
-};
-export function getLimitDates(dates: RangeDate[]) {
-  const startdate = parseDate(dates[0].date);
-  const enddate = parseDate(dates[dates.length - 1].date);
-  return {
-    startdate,
-    enddate,
-  };
 }
 
-export function getRangeDates(
-  startDateStr: string,
-  endDateStr: string,
-): RangeDate[] {
-  const daysLabel = [
-    "Domingo",
-    "Lunes",
-    "Martes",
-    "Miercoles",
-    "Jueves",
-    "Viernes",
-    "Sabado",
-  ];
+export function parseDateMX(date: Date) {
+  return date.toLocaleDateString("es-MX", {
+    month: "2-digit",
+    day: "2-digit",
+    year: "numeric",
+  });
+}
 
-  // Parseo manual para evitar problemas de zona horaria local
-  const [syear, smonth, sday] = startDateStr.split("-").map(Number);
-  const [eyear, emonth, eday] = endDateStr.split("-").map(Number);
+export function safeDateLocal(date?: string): Date | null {
+  if (!date) return null;
 
-  // Restamos 1 al mes porque en JS los meses son 0-11
-  const current = new Date(syear, smonth - 1, sday);
-  const end = new Date(eyear, emonth - 1, eday);
+  const [datePart, timePart] = date.split(" ");
+  const [year, month, day] = datePart.split("-").map(Number);
 
-  const rangeDates: RangeDate[] = [];
+  const currentDate = new Date(year, month - 1, day);
 
-  // Usamos el valor numérico (timestamp) para comparar fechas de forma segura
-  while (current <= end) {
-    rangeDates.push({
-      // Creamos una nueva instancia para no mutar la misma referencia
-      date: new Date(current),
-      label: daysLabel[current.getDay()], // .getDay() devuelve 0-6
-    });
-
-    // Avanzamos un día
-    current.setDate(current.getDate() + 1);
+  if (timePart) {
+    const [h, m, s] = timePart.split(":").map(Number);
+    currentDate.setHours(h ?? 0, m ?? 0, s ?? 0);
   }
 
-  return rangeDates;
+  return currentDate;
 }

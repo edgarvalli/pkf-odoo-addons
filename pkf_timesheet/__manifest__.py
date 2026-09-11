@@ -22,6 +22,7 @@
         "data/menu.xml",
         "data/phases_task_data.xml",
         "data/ir_cron.xml",
+        "data/ir_rule.xml",
     ],
     "assets": {
         "web.assets_backend": [

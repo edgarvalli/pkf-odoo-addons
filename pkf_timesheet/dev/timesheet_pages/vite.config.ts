@@ -32,6 +32,11 @@ export default defineConfig({
         secure: false,
         target,
       },
+      "/web/session/get_session_info": {
+        changeOrigin: true,
+        secure: false,
+        target,
+      },
     },
   },
 });

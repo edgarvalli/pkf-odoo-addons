@@ -1,0 +1,17 @@
+.dropdown-button {
+  position: relative;
+}
+
+.dropdown-items {
+  position: absolute;
+  z-index: 1080;
+  box-shadow: 1px 0.5rem 1rem #e1e3e3;
+  max-height: 250px;
+  width: 8rem;
+  transition: all 0.2s ease-in-out;
+  transform: scale(0);
+}
+
+.dropdown-items.show {
+  transform: scale(1);
+}

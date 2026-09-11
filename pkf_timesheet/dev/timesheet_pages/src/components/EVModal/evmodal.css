@@ -1,0 +1,94 @@
+.ev-modal {
+  position: fixed;
+  inset: 0; /* equivale a top:0, right:0, bottom:0, left:0 */
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3); /* fondo semi-transparente */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1080;
+  animation: fadeIn 0.3s ease;
+}
+
+.ev-modal-card {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 90%;
+  height: auto;
+  max-height: 100vh;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  animation: slideUp 0.3s ease;
+}
+
+.ev-modal-card__header {
+  position: relative;
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+  font-weight: bold;
+  height: 4rem;
+}
+
+.ev-modal-card__body {
+  flex-grow: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+}
+
+.ev-modal-card__footer {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid #eee;
+  text-align: right;
+  height: 4rem;
+}
+
+.ev-modal-close {
+  background: transparent;
+  border: none;
+  font-size: 1.25rem;
+  font-weight: bold;
+  cursor: pointer;
+  color: #666;
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  line-height: 1;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.ev-modal-close:hover {
+  color: #000;
+  transform: scale;
+}
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

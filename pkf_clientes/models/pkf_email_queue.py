@@ -35,7 +35,3 @@ class PKFEmailQueue(models.Model):
     extra_data = fields.Text("Datos Extras")
     date_sent = fields.Datetime("Fecha de Envío", readonly=True)
     processing_date = fields.Datetime(index=True)
-
-    # def process_queue(self):
-    #     srv = MailQueueService(self.env)
-    #     srv.process_queue()

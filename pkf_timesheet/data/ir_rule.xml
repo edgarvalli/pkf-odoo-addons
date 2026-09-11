@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- User: solo ve proyectos donde es asignado -->
+    <record id="pkf_timesheet_project_rule_user" model="ir.rule">
+        <field name="name">Proyectos propios del usuario</field>
+        <field name="model_id" ref="model_pkf_timesheet_project" />
+        <field name="groups" eval="[(4, ref('pkf_timesheet.group_user'))]" />
+        <field name="domain_force">[('assigned_user_ids','in',user.employee_id.id)]</field>
+    </record>
+
+    <!-- Manager: solo ve proyectos donde es manager -->
+    <record id="pkf_timesheet_project_rule_manager" model="ir.rule">
+        <field name="name">Proyectos propios del manager</field>
+        <field name="model_id" ref="model_pkf_timesheet_project" />
+        <field name="groups" eval="[(4, ref('pkf_timesheet.group_manager'))]" />
+        <field name="domain_force">[('manager_id','=',user.employee_id.id)]</field>
+    </record>
+
+    <!-- Superuser: ve todos los proyectos -->
+    <record id="pkf_timesheet_project_rule_superuser" model="ir.rule">
+        <field name="name">Todos los proyectos para superuser</field>
+        <field name="model_id" ref="model_pkf_timesheet_project" />
+        <field name="groups" eval="[(4, ref('pkf_timesheet.group_superuser'))]" />
+        <field name="domain_force">[(1,'=',1)]</field>
+    </record>
+</odoo>

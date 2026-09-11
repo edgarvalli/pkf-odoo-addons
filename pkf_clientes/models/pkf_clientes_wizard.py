@@ -1,9 +1,7 @@
 import base64
 from odoo import models, fields
 from odoo.exceptions import UserError
-from ..services import ProcesarZipContpaqi
-
-# from ..services import MailQueueService
+from ..services import ProcesarCorreosZip
 
 
 class PKFClientesWizard(models.TransientModel):
@@ -32,7 +30,7 @@ class PKFClientesWizard(models.TransientModel):
         email_cc.append(self.env.user.email)
         email_cc = ",".join(email.strip() for email in email_cc)
 
-        srv = ProcesarZipContpaqi(self.sudo().env)
+        srv = ProcesarCorreosZip(self.sudo().env)
         srv.procesar(file_content, email_cc, self.document_type, self.send_to_client)
 
         return {

@@ -10,6 +10,7 @@
                     <group>
                         <group>
                             <field name="code" />
+                            <field name="include_in_cost" />
                         </group>
                         <group>
                             <field name="name" />
@@ -23,11 +24,13 @@
                                     <group>
                                         <field name="code" />
                                         <field name="name" />
+                                        <field name="include_in_cost" />
                                     </group>
                                 </form>
                                 <list editable="top">
                                     <field name="code" />
                                     <field name="name" />
+                                    <field name="include_in_cost" />
                                 </list>
                             </field>
                         </page>

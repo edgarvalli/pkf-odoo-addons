@@ -1,7 +1,7 @@
 from odoo import fields, models, api, _
-from ..services import ProjectService
-from ..repositories import HrExpenseRepository
 from ..domain import DatePeriod
+from ..services import TimesheetProject
+from ..repositories import HrExpenseRepository, TimesheetProjectRepository
 
 
 class PKFTimeSheetProject(models.Model):
@@ -15,6 +15,7 @@ class PKFTimeSheetProject(models.Model):
     code = fields.Char(
         "Código", compute="_compute_code", store=True
     )  # store=True para poder buscar por código
+
     name = fields.Char("Proyecto", required=True, tracking=True)
 
     partner_group_id = fields.Many2one(
@@ -120,7 +121,7 @@ class PKFTimeSheetProject(models.Model):
     )
     def _compute_total_hours(self):
 
-        project_srv = ProjectService(self.env)
+        project_srv = TimesheetProject(self.env)
         for rec in self:
             project_srv.calculate_total_timesheet_cost(rec)
 
@@ -150,7 +151,7 @@ class PKFTimeSheetProject(models.Model):
 
     # --- Onchanges ---
 
-    @api.onchange("period_type")
+    @api.onchange("period_type", "period_open")
     def _onchange_period_type(self):
         for rec in self:
             if not rec.period_type:
@@ -189,19 +190,29 @@ class PKFTimeSheetProject(models.Model):
 
     # --- Business Logic ---
 
+    def refresh_codes(self):
+        records = self.search([])
+        for rec in records:
+            if not rec.code:
+                rec._compute_code()
+
+    def recalculate_codes(self):
+        self.refresh_codes()
+        self.env["pkf.timesheet.project.task"].refresh_codes()
+        self.env["pkf.timesheet.project.phase"].refresh_codes()
+
     def search_projects_by_user(self, value=None, **kwargs):
         # El employee_id del usuario actual es un recordset, pasamos su ID
         employee = self.env.user.employee_id
-        domain = [
-            ("assigned_user_ids", "in", employee.ids),
-            ("state", "=", "in_progress"),
-        ]
-        if value:
-            domain.append(("name", "ilike", value))  # ilike es case-insensitive
-        return self.search_read(domain, ["id", "name"], **kwargs)
+        repo = TimesheetProjectRepository(self.sudo().env)
+        return repo.search_projects_by_user(employee.ids, value, **kwargs)
+
+    def get_by_id(self, include_phases=False):
+        repo = TimesheetProjectRepository(self.sudo().env)
+        return repo.get_by_id(self.id, include_phases)
 
     def get_full_data(self, startdate, enddate):
-        srv = ProjectService(self.env)
+        srv = TimesheetProject(self.sudo().env)
         return srv.get_project_data(self.id, startdate, enddate)
 
     # --- Actions ---

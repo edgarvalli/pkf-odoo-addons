@@ -1,6 +1,5 @@
 from odoo import models, fields
 from ..services import TimeEntryService
-from ..repositories import TimeEntryRepository
 
 
 class PKFTimeSheetTimeEntry(models.Model):
@@ -36,8 +35,15 @@ class PKFTimeSheetTimeEntry(models.Model):
             if not result:
                 response = {"error": True, "message": "Ocurrio un error al guardar."}
         except Exception as e:
-            print(e)
             response = {"error": True, "message": str(e)}
 
         finally:
             return response
+
+    def get_entries_by_user(self, startdate, enddate):
+        srv = TimeEntryService(self.env)
+        return srv.get_by_user(startdate, enddate)
+
+    def totalize_by_project(self, startdate, enddate):
+        srv = TimeEntryService(self.env)
+        return srv.totalize_entries_by_date(startdate, enddate)

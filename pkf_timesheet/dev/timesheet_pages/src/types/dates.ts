@@ -1,4 +1,1 @@
-export interface RangeDate {
-  date: Date;
-  label: string;
-}
+export type PeriodType = "weekly" | "biweekly" | "monthly";

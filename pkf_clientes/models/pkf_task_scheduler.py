@@ -1,4 +1,5 @@
 from odoo import models
+from ..services import EstadoCuentaService
 
 
 class PKFTaskScheduler(models.AbstractModel):
@@ -6,5 +7,5 @@ class PKFTaskScheduler(models.AbstractModel):
     _description = "Tareas Programadas PKF"
 
     def run_saldos_comercial(self):
-        srv = self.env["pkf.estado.cuenta.service"]
+        srv = EstadoCuentaService(self.sudo().env)
         srv.enviar_estado_de_cuenta()

@@ -10,19 +10,19 @@
             id="pkf_ts_dashboard_menu"
             name="Control de Tiempos"
             action="action_pkf_ts_dashboard"
-            groups="pkf_timesheet.group_manager,pkf_timesheet.group_user"
+            groups="pkf_timesheet.group_superuser,pkf_timesheet.group_manager,pkf_timesheet.group_user"
             sequence="0" />
         <menuitem
             id="pkf_timesheet_project_menu"
             name="Proyectos"
-            groups="pkf_timesheet.group_manager"
+            groups="pkf_timesheet.group_superuser,pkf_timesheet.group_manager"
             action="pkf_timesheet_project_action"
             sequence="1" />
 
         <menuitem
             id="pkf_timesheet_res_partner"
             name="Clientes"
-            groups="pkf_timesheet.group_manager"
+            groups="pkf_timesheet.group_superuser,pkf_timesheet.group_manager"
             action="pkf_timesheet_res_partner_action"
             sequence="2"
         />
@@ -30,7 +30,7 @@
         <menuitem
             id="pkf_timesheet_settings_menu"
             name="Configuraciones"
-            groups="pkf_timesheet.group_manager"
+            groups="pkf_timesheet.group_superuser,pkf_timesheet.group_manager"
             sequence="10">
 
             <menuitem
@@ -54,6 +54,11 @@
                 name="Grupo de Clientes PKF"
                 action="pkf_res_partner_group_action"
                 sequence="3" />
+            <menuitem
+                id="pkf_timesheet_setting_codes"
+                name="Sync Codigos Rubros,Fases y Proyectos"
+                action="pkf_project_refresh_code_action"
+                sequence="4" />
 
         </menuitem>
     </menuitem>

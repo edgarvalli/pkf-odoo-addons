@@ -20,3 +20,9 @@ class PKFTimeSheetTask(models.Model):
                 rec.code = f"TASK{str(rec.id).zfill(5)}"
             else:
                 rec.code = "0".zfill(5)
+
+    def refresh_codes(self):
+        records = self.search([])
+        for rec in records:
+            if not rec.code:
+                rec._compute_code()
