@@ -1,0 +1,15 @@
+.min-h-0 {
+  min-height: 0;
+}
+
+.fs-12px {
+  font-size: 12px;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.bg-gray {
+  background-color: #f5f5f5;
+}

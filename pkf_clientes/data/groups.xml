@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="pkf_group_directores" model="res.groups">
+        <field name="name">PKF - Directores</field>
+    </record>
+
+    <record id="pkf_group_socios" model="res.groups">
+        <field name="name">PKF - Socios</field>
+    </record>
+
+    <record id="pkf_group_gerentes" model="res.groups">
+        <field name="name">PKF - Gerentes</field>
+    </record>
+
+    <record id="pkf_group_staff" model="res.groups">
+        <field name="name">PKF - Staff</field>
+    </record>
+
+</odoo>
