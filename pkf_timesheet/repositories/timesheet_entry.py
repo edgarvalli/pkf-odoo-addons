@@ -1,6 +1,5 @@
 from odoo.api import Environment
-from odoo.models import BaseModel
-from ..dtos import EntryRangeDTO
+from ..services.timesheet_entry.models import EntryRangeDTO, EntryValue
 
 
 class TimeEntryRepository:
@@ -45,13 +44,14 @@ class TimeEntryRepository:
             ]
         )
 
-    def save_bulk(self, entries: list[dict] | None = None):
+    def save_bulk(self, entries: list[EntryValue] | None = None):
 
         entries = entries or []
 
         for entry in entries:
-            entry_id = entry.get("id")
-            vals = {key: value for key, value in entry.items() if key != "id"}
+            entry_id = entry.id
+            entry_dict = entry.to_dict()
+            vals = {key: value for key, value in entry_dict.items() if key != "id"}
 
             if entry_id and entry_id > 0:
                 self.model.browse(entry_id).write(vals)

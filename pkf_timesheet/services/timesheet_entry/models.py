@@ -1,7 +1,45 @@
-from dataclasses import dataclass
-from datetime import date
-
 from odoo import fields
+from datetime import date as date_model
+from dataclasses import dataclass
+
+
+@dataclass
+class EntryValue:
+    id: int
+    employee_id: int
+    task_id: int
+    project_id: int
+    phase_id: int
+    date: date_model
+    hours: float
+    note: str
+
+    def to_dict(self) -> dict:
+        return {
+            "id": self.id,
+            "employee_id": self.employee_id,
+            "task_id": self.task_id,
+            "project_id": self.project_id,
+            "phase_id": self.phase_id,
+            "date": self.date,
+            "hours": self.hours,
+            "note": self.note,
+        }
+
+
+@dataclass
+class EntryDate:
+    date: date_model
+    entries: list[EntryValue]
+    key: str
+
+    @classmethod
+    def from_dict(cls, values: dict) -> "EntryDate":
+        return cls(
+            key=values.get("date").strftime("%Y%m%d"),
+            date=values.get("date"),
+            entries=[],
+        )
 
 
 @dataclass
@@ -11,8 +49,8 @@ class EntryRangeDTO:
     phase_id: int
     task_id: int
     hours: float
-    start_date: date
-    end_date: date
+    start_date: date_model
+    end_date: date_model
     note: str
     is_not_cargable: bool
 

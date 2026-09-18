@@ -2,6 +2,7 @@ from odoo import fields
 from datetime import datetime, date
 from dataclasses import dataclass
 import calendar
+from .models import EntryValue
 
 
 @dataclass
@@ -10,14 +11,14 @@ class DateRange:
     end: date
 
 
-def normalize_entry_dates(entries: list[dict]) -> list[dict]:
+def normalize_entry_dates(entries: list[EntryValue]) -> list[EntryValue]:
     for entry in entries:
-        date = entry.get("date")
+        date = entry.date
 
         if not date or isinstance(date, datetime):
             continue
 
-        entry["date"] = fields.Date.from_string(date)
+        entry.date = fields.Date.from_string(date)
 
     return entries
 

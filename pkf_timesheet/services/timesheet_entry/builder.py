@@ -1,6 +1,6 @@
 from datetime import timedelta
 from odoo.models import BaseModel
-from ...dtos import EntryRangeDTO
+from .models import EntryRangeDTO, EntryValue
 
 
 def totalize_entries_by_date(entries: BaseModel):
@@ -17,7 +17,7 @@ def build_entries_between_dates(
     data: EntryRangeDTO,
     entries: BaseModel,
     employee_id: int,
-) -> list[dict]:
+) -> list[EntryValue]:
     entries_by_date = {entry.date: entry for entry in entries}
     entries_total = totalize_entries_by_date(entries)
 
@@ -33,16 +33,18 @@ def build_entries_between_dates(
             hours = data.hours if hours_dif <= 24 else (24 - total)
 
             result.append(
-                {
-                    "id": existing.id if existing else None,
-                    "employee_id": employee_id,
-                    "task_id": data.task_id,
-                    "project_id": data.project_id,
-                    "phase_id": data.phase_id,
-                    "date": current_date,
-                    "hours": hours,
-                    "note": data.note,
-                }
+                EntryValue(
+                    **{
+                        "id": existing.id if existing else None,
+                        "employee_id": employee_id,
+                        "task_id": data.task_id,
+                        "project_id": data.project_id,
+                        "phase_id": data.phase_id,
+                        "date": current_date,
+                        "hours": hours,
+                        "note": data.note,
+                    }
+                )
             )
 
         current_date += timedelta(days=1)

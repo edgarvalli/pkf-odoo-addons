@@ -22,8 +22,8 @@ class PKFTimeSheetTimeEntry(models.Model):
     note = fields.Text("Notas")
 
     def save_range_hours(self, entry_dict: dict):
-        repo = TimeEntryService(self.env)
-        return repo.save_range_hours(entry_dict)
+        srv = TimeEntryService(self.env)
+        return srv.save_range_hours(entry_dict)
 
     def save_bulk(self, entries: list[dict] = [], project_id: int = None):
         """Save all entries or update and recalculate project totals"""

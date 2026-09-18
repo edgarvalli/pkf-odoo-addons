@@ -1,9 +1,9 @@
 from odoo.api import Environment
 from odoo.models import BaseModel
-from ...dtos import EntryRangeDTO
 from .builder import build_entries_between_dates
 from .utils import normalize_entry_dates, build_biweekly_dates
 from ...repositories import TimeEntryRepository, TimesheetProjectRepository
+from .models import EntryDate, EntryRangeDTO, EntryValue
 
 
 class TimeEntryService:
@@ -16,7 +16,7 @@ class TimeEntryService:
         self.repository = TimeEntryRepository(env)
         self.project_repo = TimesheetProjectRepository(env)
 
-    def _filter_entries_by_period(self, project: dict, entries: list[dict]):
+    def _filter_entries_by_period(self, project: dict, entries: list[EntryValue]):
 
         period_open = project.get("period_open", False)
         if period_open:
@@ -27,7 +27,7 @@ class TimeEntryService:
             for entry in entries
             if (
                 project.get("period_start_date")
-                <= entry["date"]
+                <= entry.date
                 <= project.get("period_end_date")
             )
         ]
@@ -82,6 +82,7 @@ class TimeEntryService:
             ("employee_id", "=", self.employee_id),
             ("date", ">=", startdate),
             ("date", "<=", enddate),
+            ("project_id.state", "=", "in_progress"),
         ]
 
         entries_orm = self.model.search(domain)
@@ -102,7 +103,7 @@ class TimeEntryService:
             entries.append(vals)
         return entries
 
-    def save_bulk(self, entries: list[dict], project_id: int = None):
+    def save_bulk(self, entries: list[EntryValue], project_id: int = None):
 
         if project_id is None or project_id == 0:
             project = {"period_open": True}
@@ -117,10 +118,8 @@ class TimeEntryService:
 
         return self.repository.save_bulk(entries)
 
-    def recalculate_projects(self, entries: list[dict]):
-        project_ids = {
-            entry.get("project_id") for entry in entries if entry.get("project_id")
-        }
+    def recalculate_projects(self, entries: list[EntryValue]):
+        project_ids = {entry.project_id for entry in entries if entry.project_id}
 
         if not project_ids:
             return
