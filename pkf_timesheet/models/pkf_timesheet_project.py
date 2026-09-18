@@ -1,7 +1,10 @@
+import logging
 from odoo import fields, models, api, _
 from ..domain import DatePeriod
 from ..services import TimesheetProject
 from ..repositories import HrExpenseRepository, TimesheetProjectRepository
+
+_logger = logging.getLogger(__name__)
 
 
 class PKFTimeSheetProject(models.Model):
@@ -189,6 +192,32 @@ class PKFTimeSheetProject(models.Model):
         self.phase_ids = [(6, 0, phases.ids)]
 
     # --- Business Logic ---
+
+    def unlink(self):
+        project_ids = self.ids
+        _logger.info("Eliminando proyectos con IDs: %s", project_ids)
+
+        # Primero eliminar las entradas relacionadas
+        entries = self.env["pkf.timesheet.time.entry"].search(
+            [("project_id", "in", project_ids)]
+        )
+        if entries:
+            _logger.info(
+                "Se eliminarán %d entradas de timesheet relacionadas con proyectos %s",
+                len(entries),
+                project_ids,
+            )
+            entries.unlink()
+        else:
+            _logger.debug(
+                "No se encontraron entradas relacionadas para proyectos %s", project_ids
+            )
+
+        # Finalmente eliminar los proyectos
+        result = super().unlink()
+        _logger.info("Proyectos %s eliminados correctamente.", project_ids)
+
+        return result
 
     def refresh_codes(self):
         records = self.search([])
