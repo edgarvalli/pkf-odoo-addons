@@ -1,7 +1,7 @@
 from odoo.api import Environment
 from odoo.models import BaseModel
 from collections import defaultdict
-from ...repositories import TimeEntryRepository
+from ..timesheet_entry.repositories import TimeEntryRepository
 from .builder import build_data
 
 

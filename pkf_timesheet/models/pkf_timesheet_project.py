@@ -2,7 +2,8 @@ import logging
 from odoo import fields, models, api, _
 from ..domain import DatePeriod
 from ..services import TimesheetProject
-from ..repositories import HrExpenseRepository, TimesheetProjectRepository
+from ..repositories import HrExpenseRepository
+from ..services.timesheet_project.repositories import TimesheetProjectRepository
 
 _logger = logging.getLogger(__name__)
 

@@ -2,8 +2,9 @@ from odoo.api import Environment
 from odoo.models import BaseModel
 from .builder import build_entries_between_dates
 from .utils import normalize_entry_dates, build_biweekly_dates
-from ...repositories import TimeEntryRepository, TimesheetProjectRepository
-from .models import EntryDate, EntryRangeDTO, EntryValue
+from .models import EntryRangeDTO, EntryValue
+from .repositories import TimeEntryRepository
+from ..timesheet_project.repositories import TimesheetProjectRepository
 
 
 class TimeEntryService:

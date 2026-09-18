@@ -1,5 +1,5 @@
 from odoo.api import Environment
-from ..services.timesheet_entry.models import EntryRangeDTO, EntryValue
+from .models import EntryRangeDTO, EntryValue
 
 
 class TimeEntryRepository:
