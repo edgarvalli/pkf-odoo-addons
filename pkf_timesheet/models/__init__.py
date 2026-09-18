@@ -8,3 +8,4 @@ from .pkf_timesheet_phase_group import PKFTimesheetPhaseGroup
 from .res_partner import ResPartner
 from .hr_employee import HrEmployee
 from .hr_expense import HrExpense
+from .pkf_timesheet_remainders import PKFTimesheetRemainders

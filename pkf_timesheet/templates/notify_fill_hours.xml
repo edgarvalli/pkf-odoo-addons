@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="notify_fill_hours" model="mail.template">
+        <field name="name">PKF - Notificación de llenado de horas</field>
+        <field name="model_id" ref="base.model_res_users" />
+        <field name="auto_delete" eval="True" />
+        <field name="subject">📌 Recordatorio: Llenado de horas en Control de Tiempos</field>
+        <field name="body_html" type="html">
+            <div
+                style="font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#333;line-height:1.5;">
+
+                <p>Estimado(a) <strong>
+                        <t t-out="ctx.get('name','')" />
+                    </strong>,</p>
+
+                <p>
+                    Este es un recordatorio para que registre sus horas en el sistema de Control de
+                    Tiempos
+                    correspondientes a los siguientes proyectos:
+                </p>
+
+                <ul style="margin:10px 0;padding-left:20px;">
+                    <t t-foreach="ctx.get('projects',[])" t-as="p">
+                        <li>
+                            <t t-out="p.get('name','')" />
+                        </li>
+                    </t>
+                </ul>
+
+                <p style="margin-top:20px;">
+                    Por favor, complete el llenado a la brevedad para mantener actualizado el
+                    seguimiento de actividades.
+                </p>
+
+                <p style="margin-top:30px;color:#555;"> Gracias por su colaboración,<br />
+                    <strong>PKF
+                    Monterrey</strong>
+                </p>
+
+            </div>
+        </field>
+    </record>
+
+</odoo>

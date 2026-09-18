@@ -23,6 +23,7 @@
         "data/phases_task_data.xml",
         "data/ir_cron.xml",
         "data/ir_rule.xml",
+        "templates/notify_fill_hours.xml",
     ],
     "assets": {
         "web.assets_backend": [

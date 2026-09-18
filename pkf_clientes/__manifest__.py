@@ -8,8 +8,7 @@
     "assets": {
         "web.assets_backend": [
             "pkf_clientes/static/lib/estado_cuenta_dashboard.css",
-            "pkf_clientes/static/src/components/estado-cuenta-dashboard/estado_cuenta_dashboard.js",
-            "pkf_clientes/static/src/components/estado-cuenta-dashboard/estado_cuenta_dashboard.xml",
+            "pkf_clientes/static/src/components/**/*",
         ]
     },
     "data": [

@@ -8,9 +8,9 @@ const target = "http://localhost:8069";
 export default defineConfig({
   plugins: [react()],
   build: {
+    modulePreload: false,
     rollupOptions: {
       output: {
-        format: "es",
         entryFileNames: "estado_cuenta_dashboard_build.js",
         manualChunks: undefined,
       },

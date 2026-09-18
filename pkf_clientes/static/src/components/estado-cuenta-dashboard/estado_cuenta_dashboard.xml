@@ -3,6 +3,6 @@
 <templates xml:space="preserve">
     <t t-name="pkf_clientes.EstadoCuentaDashoard">
         <div id="edo-app"></div>
-        <script src="/pkf_clientes/static/lib/estado_cuenta_dashboard_build.js" type="module"></script>
+        <script type="module" src="/pkf_clientes/static/lib/estado_cuenta_dashboard_build.js"></script>
     </t>
 </templates>

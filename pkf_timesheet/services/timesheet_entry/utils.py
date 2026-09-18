@@ -1,6 +1,7 @@
 from odoo import fields
 from datetime import datetime, date
 from dataclasses import dataclass
+import calendar
 
 
 @dataclass
@@ -23,14 +24,13 @@ def normalize_entry_dates(entries: list[dict]) -> list[dict]:
 
 def build_biweekly_dates() -> DateRange:
     today = date.today()
-    start_date: date = None
-    end_date: date = None
 
     if today.day <= 15:
         start_date = date(today.year, today.month, 1)
         end_date = date(today.year, today.month, 15)
     else:
         start_date = date(today.year, today.month, 16)
-        end_date = date(today.year, today.month + 1, 0)
+        last_day = calendar.monthrange(today.year, today.month)[1]
+        end_date = date(today.year, today.month, last_day)
 
     return DateRange(start_date, end_date)
