@@ -21,5 +21,3 @@ access_pkf_timesheet_project_import_manager,access.pkf.import.group.manager,mode
 access_pkf_timesheet_project_import_superuser,access.pkf.import.group.superuser,model_pkf_timesheet_project_import,pkf_timesheet.group_superuser,1,1,1,1
 access_pkf_timesheet_hr_employee_manager,access.pkf.hr.employee.manager,model_hr_employee,pkf_timesheet.group_manager,1,0,0,0
 access_pkf_timesheet_hr_employee_superuser,access.pkf.hr.employee.superuser,model_hr_employee,pkf_timesheet.group_superuser,1,0,0,0
-access_pkf_timesheet_hr_version_manager,access.pkf.hr.version.manager,model_hr_version,pkf_timesheet.group_manager,1,0,0,0
-access_pkf_timesheet_hr_version_superuser,access.pkf.hr.version.superuser,model_hr_version,pkf_timesheet.group_superuser,1,0,0,0
