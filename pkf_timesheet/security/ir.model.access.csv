@@ -14,9 +14,9 @@ access_pkf_timesheet_time_entry_superuser,access.pkf.timesheet.time.entry.superu
 access_pkf_timesheet_group_user,access.pkf.timesheet.group.user,model_pkf_timesheet_phase_group,pkf_timesheet.group_user,1,0,0,0
 access_pkf_timesheet_group_manager,access.pkf.timesheet.group.manager,model_pkf_timesheet_phase_group,pkf_timesheet.group_manager,1,1,1,1
 access_pkf_timesheet_group_superuser,access.pkf.timesheet.group.superuser,model_pkf_timesheet_phase_group,pkf_timesheet.group_superuser,1,1,1,1
-access_pkf_partner_group_user,access.pkf.partner.group.user,model_pkf_partner_group,pkf_timesheet.group_user,1,1,1,1
-access_pkf_partner_group_manager,access.pkf.partner.group.manager,model_pkf_partner_group,pkf_timesheet.group_manager,1,1,1,1
-access_pkf_partner_group_superuser,access.pkf.partner.group.superuser,model_pkf_partner_group,pkf_timesheet.group_superuser,1,1,1,1
+access_pkf_timesheet_partner_group_user,access.pkf.partner.group.user,model_pkf_partner_group,pkf_timesheet.group_user,1,1,1,1
+access_pkf_timesheet_partner_group_manager,access.pkf.partner.group.manager,model_pkf_partner_group,pkf_timesheet.group_manager,1,1,1,1
+access_pkf_timesheet_partner_group_superuser,access.pkf.partner.group.superuser,model_pkf_partner_group,pkf_timesheet.group_superuser,1,1,1,1
 access_pkf_timesheet_project_import_manager,access.pkf.import.group.manager,model_pkf_timesheet_project_import,pkf_timesheet.group_manager,1,1,1,1
 access_pkf_timesheet_project_import_superuser,access.pkf.import.group.superuser,model_pkf_timesheet_project_import,pkf_timesheet.group_superuser,1,1,1,1
 access_pkf_timesheet_hr_employee_manager,access.pkf.hr.employee.manager,model_hr_employee,pkf_timesheet.group_manager,1,0,0,0

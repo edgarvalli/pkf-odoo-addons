@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <data noupdate="1">
+    <data>
         <record id="group_superuser" model="res.groups">
             <field name="name">Control de Tiempos - Super Usuario</field>
-            <field name="implied_ids" eval="[(4, ref('base.group_system'))]" />
+            <field name="implied_ids" eval="[(4, ref('hr.group_hr_user'))]" />
         </record>
         <record id="group_manager" model="res.groups">
             <field name="name">Control de Tiempos - Administrador</field>
-            <field name="implied_ids" eval="[(4, ref('base.group_system'))]" />
+            <field name="implied_ids" eval="[(4, ref('hr.group_hr_user'))]" />
         </record>
         <record id="group_user" model="res.groups">
             <field name="name">Control de Tiempos - Usuario</field>

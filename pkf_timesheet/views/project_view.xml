@@ -77,8 +77,6 @@
                                         nolabel="1" />
                                     <field name="name" />
                                     <field name="work_email" />
-                                    <field name="department_id" />
-                                    <field name="job_id" />
                                     <!-- Asegúrate que este campo exista en hr.employee o usa
                                     timesheet_cost -->
                                     <field name="timesheet_cost" sum="Total Costo Hora" />

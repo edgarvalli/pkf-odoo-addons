@@ -4,7 +4,7 @@ from odoo.api import Environment, DomainType
 class TimesheetProjectRepository:
 
     def __init__(self, env: Environment):
-        self.model = env["pkf.timesheet.project"]
+        self.model = env["pkf.timesheet.project"].sudo()
 
     def _search(self, domain=[], include_phases=False, limit=None):
         projects = self.model.search(domain, limit=limit)

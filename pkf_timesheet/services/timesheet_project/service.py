@@ -9,7 +9,7 @@ class TimesheetProject:
 
     def __init__(self, env: Environment):
         self.env = env
-        self.model = env["pkf.timesheet.project"]
+        self.model = env["pkf.timesheet.project"].sudo()
         self.entry_repo = TimeEntryRepository(env)
 
     def calculate_total_timesheet_cost(self, rec: BaseModel):
