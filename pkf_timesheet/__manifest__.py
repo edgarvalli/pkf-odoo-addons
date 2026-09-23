@@ -9,7 +9,6 @@
     "depends": ["base", "web", "hr", "hr_expense", "contacts"],
     "data": [
         "data/groups.xml",
-        "data/actions.xml",
         "security/ir.model.access.csv",
         "views/project_view.xml",
         "views/hr_employee.xml",
@@ -20,6 +19,7 @@
         "views/phase_groups_view.xml",
         "views/res_partner_view.xml",
         "views/project_import_form.xml",
+        "data/actions.xml",
         "data/menu.xml",
         "data/phases_task_data.xml",
         "data/ir_cron.xml",
