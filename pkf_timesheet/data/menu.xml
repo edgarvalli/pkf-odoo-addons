@@ -59,13 +59,13 @@
 
             <menuitem
                 id="pkf_timesheet_setting_project_import_menu"
-                name="Importar projectos"
+                name="Importar Proyectos"
                 action="pkf_timesheet_project_import_action"
                 sequence="4" />
 
             <menuitem
                 id="pkf_timesheet_setting_codes"
-                name="Sync Codigos Rubros,Fases y Proyectos"
+                name="Sync Codigos Rubros, Fases y Proyectos"
                 action="pkf_project_refresh_code_action"
                 sequence="5" />
 
