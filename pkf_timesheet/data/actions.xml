@@ -103,10 +103,4 @@
         <field name="target">new</field>
     </record>
 
-    <record id="action_download_projectos_template" model="ir.actions.act_url">
-        <field name="name">Download projectos template</field>
-        <field name="url">/pkf_timesheet/static/src/files/projectos_template.xlsx</field>
-        <field name="target">self</field>
-    </record>
-
 </odoo>

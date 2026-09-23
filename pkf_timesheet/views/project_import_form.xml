@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <record id="action_download_projectos_template" model="ir.actions.act_url">
+        <field name="name">Download projectos template</field>
+        <field name="url">/pkf_timesheet/static/src/files/projectos_template.xlsx</field>
+        <field name="target">self</field>
+    </record>
+
     <record id="pkf_project_import_form" model="ir.ui.view">
         <field name="name">pkf.project.import.form</field>
         <field name="model">pkf.timesheet.project.import</field>
