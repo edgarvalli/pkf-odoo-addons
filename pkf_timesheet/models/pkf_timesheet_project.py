@@ -178,8 +178,8 @@ class PKFTimeSheetProject(models.Model):
         # Para Many2many en onchange, es mejor asignar directamente el recordset
         # o usar el comando (6, 0, ids)
         subordinates = (
-            self.sudo()
-            .env["hr.employee"]
+            self.env["hr.employee"]
+            .sudo()
             .search([("parent_id", "=", self.manager_id.id)])
         )
         if subordinates:
