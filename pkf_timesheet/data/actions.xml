@@ -95,4 +95,18 @@
         </field>
     </record>
 
+    <record id="pkf_timesheet_project_import_action" model="ir.actions.act_window">
+        <field name="name">PKF Importer</field>
+        <field name="res_model">pkf.timesheet.project.import</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="pkf_timesheet.pkf_project_import_form" />
+        <field name="target">new</field>
+    </record>
+
+    <record id="action_download_projectos_template" model="ir.actions.act_url">
+        <field name="name">Download projectos template</field>
+        <field name="url">/pkf_timesheet/static/src/files/projectos_template.xlsx</field>
+        <field name="target">self</field>
+    </record>
+
 </odoo>

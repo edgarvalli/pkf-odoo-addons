@@ -38,6 +38,7 @@
                 name="Rubros"
                 action="pkf_timesheet_phase_action"
                 sequence="0" />
+
             <menuitem
                 id="pkf_timesheet_setting_task_menu"
                 name="Tareas"
@@ -49,16 +50,24 @@
                 name="Groupo de Rubros"
                 action="pkf_timesheet_phase_group_action"
                 sequence="2" />
+
             <menuitem
                 id="pkf_timesheet_setting_res_partner_group_menu"
                 name="Grupo de Clientes PKF"
                 action="pkf_res_partner_group_action"
                 sequence="3" />
+
+            <menuitem
+                id="pkf_timesheet_setting_project_import_menu"
+                name="Importar projectos"
+                action="pkf_timesheet_project_import_action"
+                sequence="4" />
+
             <menuitem
                 id="pkf_timesheet_setting_codes"
                 name="Sync Codigos Rubros,Fases y Proyectos"
                 action="pkf_project_refresh_code_action"
-                sequence="4" />
+                sequence="5" />
 
         </menuitem>
     </menuitem>

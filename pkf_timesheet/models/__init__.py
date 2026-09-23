@@ -9,3 +9,4 @@ from .res_partner import ResPartner
 from .hr_employee import HrEmployee
 from .hr_expense import HrExpense
 from .pkf_timesheet_remainders import PKFTimesheetRemainders
+from .pkf_timesheet_project_import import PKFTimesheetProjectImport
