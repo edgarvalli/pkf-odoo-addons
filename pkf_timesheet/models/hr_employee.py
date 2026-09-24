@@ -14,5 +14,9 @@ class HrEmployee(models.Model):
     )
 
     def get_timesheet_employee_ids(self):
+        if not self:
+            return []
+
         self.ensure_one()
+
         return self.search([("id", "child_of", self.id)]).ids
