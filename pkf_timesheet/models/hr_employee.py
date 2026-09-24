@@ -12,3 +12,13 @@ class HrEmployee(models.Model):
         help="Costo operativo de la hora de trabajo para este empleado.",
         store=True,
     )
+
+    def get_timesheet_employee_ids(self):
+        employee = self.env.user.employee_id
+
+        if not employee:
+            return []
+
+        employees = self.env["hr.employee"].search([("id", "child_of", employee.id)])
+
+        return employees.ids

@@ -247,6 +247,15 @@ class PKFTimeSheetProject(models.Model):
         srv = TimesheetProject(self.sudo().env)
         return srv.get_project_data(self.id, startdate, enddate)
 
+    def project_by_manager(self):
+        employee = self.env.user.employee_id
+
+        if not employee:
+            return []
+        employees = self.env["hr.employee"].search([("id", "child_of", employee.id)])
+
+        return employees.ids
+
     # --- Actions ---
 
     def action_view_project_expenses(self):
