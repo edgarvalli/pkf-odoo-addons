@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_solicitud_factura_list" model="ir.ui.view">
+        <field name="name">pkf.solicitud.factura.list</field>
+        <field name="model">pkf.solicitud.factura</field>
+        <field name="arch" type="xml">
+            <list
+                string="Solicitudes de Factura"
+                decoration-info="estatus == 'draft'"
+                decoration-warning="estatus == 'requested'"
+                decoration-success="estatus == 'created'"
+                default_order="create_date desc"
+            >
+                <field name="folio" string="Folio" width="100px" />
+                <field name="create_date" string="Fecha de creación" />
+                <field name="cliente" string="Cliente" />
+                <field name="total" string="Importe" sum="Total solicitado" />
+                <field name="moneda" string="Moneda" optional="show" />
+                <field name="responsable" string="Responsable" optional="show" />
+                <field
+                    name="estatus"
+                    string="Estado"
+                    widget="badge"
+                    decoration-info="estatus == 'draft'"
+                    decoration-warning="estatus == 'requested'"
+                    decoration-success="estatus == 'created'"
+                />
+            </list>
+        </field>
+    </record>
+</odoo>

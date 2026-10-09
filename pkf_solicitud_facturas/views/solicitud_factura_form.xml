@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_solicitud_factura_form" model="ir.ui.view">
+        <field name="name">pkf.solicitud.factura.form</field>
+        <field name="model">pkf.solicitud.factura</field>
+        <field name="arch" type="xml">
+
+            <form string="Solicitud de Factura">
+                <sheet>
+
+                    <!-- Campo auxiliar para evaluar el grupo -->
+                    <field name="es_usuario_facturacion" invisible="True" />
+
+                    <group>
+                        <group>
+                            <h1>
+                                <field name="folio" />
+                            </h1>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group>
+                            <field name="cliente"
+                                readonly="(es_usuario_facturacion and estatus != 'draft') or estatus == 'created'" />
+
+                            <field name="cliente_nuevo"
+                                readonly="(es_usuario_facturacion and estatus != 'draft') or estatus == 'created'" />
+
+                            <field name="csf"
+                                filename="csf_filename"
+                                invisible="not cliente_nuevo"
+                                required="cliente_nuevo"
+                                readonly="(es_usuario_facturacion and estatus != 'draft') or estatus == 'created'" />
+
+                            <field name="moneda"
+                                readonly="(es_usuario_facturacion and estatus != 'draft') or estatus == 'created'" />
+
+                            <field name="metodo_pago"
+                                readonly="(es_usuario_facturacion and estatus != 'draft') or estatus == 'created'" />
+
+                        </group>
+
+                        <group>
+                            <field name="responsable"
+                                readonly="(es_usuario_facturacion and estatus != 'draft') or estatus == 'created'" />
+
+                            <field name="correos_envio"
+                                readonly="(es_usuario_facturacion and estatus != 'draft') or estatus == 'created'" />
+
+                            <field name="estatus" readonly="True" />
+                        </group>
+                    </group>
+
+                    <notebook>
+
+                        <!-- Partidas de la solicitud -->
+                        <page string="Partidas">
+                            <field name="solicitud_factura_lines"
+                                readonly="(es_usuario_facturacion and estatus != 'draft') or estatus == 'created'">
+
+                                <list editable="bottom">
+                                    <field name="concepto" required="True" />
+                                    <field name="referencia" />
+                                    <field name="importe" sum="Total" required="True" />
+                                </list>
+
+                            </field>
+                        </page>
+
+                        <!-- Documentos -->
+                        <page string="Documentos">
+                            <group>
+                                <!-- Solo Facturación puede ver y cargar PDF/XML -->
+                                <field name="pdf"
+                                    filename="pdf_filename"
+                                    groups="pkf_solicitud_facturas.group_facturacion_users"
+                                    readonly="estatus == 'created'" />
+
+                                <field name="xml"
+                                    filename="xml_filename"
+                                    groups="pkf_solicitud_facturas.group_facturacion_users"
+                                    readonly="estatus == 'created'" />
+                            </group>
+                        </page>
+
+                    </notebook>
+
+                </sheet>
+
+                <chatter reload_on_post="True" />
+
+            </form>
+
+        </field>
+    </record>
+
+</odoo>

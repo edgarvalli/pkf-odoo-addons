@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem
+        id="pkf_solicitud_factura_menu"
+        name="Solicitud de Factura"
+        action="pkf_solicitud_facturas.pkf_solicitud_facturas_action"
+        sequence="10" />
+
+</odoo>

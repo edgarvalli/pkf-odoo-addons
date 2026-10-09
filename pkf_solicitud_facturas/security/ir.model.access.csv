@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_pkf_solicitud_factura_all,access.pkf_solicitud.factura.all,model_pkf_solicitud_factura,,1,1,1,1
+access_pkf_solicitud_factura_line_all,access.pkf.solicitud.factura.line.all,model_pkf_solicitud_factura_line,,1,1,1,1

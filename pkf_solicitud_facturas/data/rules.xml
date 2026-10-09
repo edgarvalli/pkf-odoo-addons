@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Regla especial: usuarios del grupo Facturación ven todas -->
+    <record id="rule_solicitud_factura_facturacion" model="ir.rule">
+        <field name="name">Solicitudes - Facturación acceso total</field>
+        <field name="model_id" ref="pkf_solicitud_facturas.model_pkf_solicitud_factura" />
+        <field name="groups" eval="[(4, ref('pkf_solicitud_facturas.group_facturacion_users'))]" />
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="perm_read" eval="True" />
+        <field name="perm_write" eval="True" />
+        <field name="perm_create" eval="True" />
+        <field name="perm_unlink" eval="True" />
+    </record>
+
+    <!-- Regla general: cada usuario solo ve sus propias solicitudes -->
+    <record id="rule_solicitud_factura_user" model="ir.rule">
+        <field name="name">Solicitudes propias</field>
+        <field name="model_id"
+            ref="pkf_solicitud_facturas.model_pkf_solicitud_factura" />
+        <field name="groups"
+            eval="[(4, ref('base.group_user'))]" />
+        <field name="domain_force">
+            [('responsable','=',user.id)]</field>
+        <field name="perm_read" eval="True" />
+        <field
+            name="perm_write" eval="True" />
+        <field name="perm_create" eval="True" />
+        <field
+            name="perm_unlink" eval="True" />
+    </record>
+
+</odoo>
