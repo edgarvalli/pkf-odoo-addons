@@ -60,9 +60,7 @@ class SolicitudFactura(models.Model):
     )
 
     correos_envio = fields.Char(
-        string="Correos para envío",
-        help="Separar los correos por coma (,)",
-        required=True,
+        string="Correos para envío", help="Separar los correos por coma (,)"
     )
 
     estatus = fields.Selection(

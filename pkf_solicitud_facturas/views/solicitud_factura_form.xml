@@ -7,22 +7,36 @@
         <field name="arch" type="xml">
 
             <form string="Solicitud de Factura">
-                <sheet>
+                <header>
+                    <field name="estatus"
+                        widget="statusbar"
+                        statusbar_visible="draft,requested,created"
+                        readonly="True" />
+                </header>
 
-                    <!-- Campo auxiliar para evaluar el grupo -->
+                <sheet>
+                    <!-- Campo auxiliar para controlar edición -->
                     <field name="es_usuario_facturacion" invisible="True" />
 
-                    <group>
-                        <group>
-                            <h1>
-                                <field name="folio" />
-                            </h1>
-                        </group>
-                    </group>
+                    <!-- Encabezado -->
+                    <div class="oe_title">
+                        <label for="folio" string="Solicitud de factura" />
+                        <h1>
+                            <field name="folio" readonly="True" />
+                        </h1>
+                        <div class="text-muted">
+                            <span>Creada el </span>
+                            <field name="create_date" readonly="True" />
+                        </div>
+                    </div>
+
+                    <!-- Información principal -->
+                    <separator string="Información del cliente" />
 
                     <group>
                         <group>
                             <field name="cliente"
+                                placeholder="Nombre o razón social"
                                 readonly="(es_usuario_facturacion and estatus != 'draft') or estatus == 'created'" />
 
                             <field name="cliente_nuevo"
@@ -33,13 +47,6 @@
                                 invisible="not cliente_nuevo"
                                 required="cliente_nuevo"
                                 readonly="(es_usuario_facturacion and estatus != 'draft') or estatus == 'created'" />
-
-                            <field name="moneda"
-                                readonly="(es_usuario_facturacion and estatus != 'draft') or estatus == 'created'" />
-
-                            <field name="metodo_pago"
-                                readonly="(es_usuario_facturacion and estatus != 'draft') or estatus == 'created'" />
-
                         </group>
 
                         <group>
@@ -47,32 +54,72 @@
                                 readonly="(es_usuario_facturacion and estatus != 'draft') or estatus == 'created'" />
 
                             <field name="correos_envio"
+                                placeholder="correo@empresa.com, otro@empresa.com"
                                 readonly="(es_usuario_facturacion and estatus != 'draft') or estatus == 'created'" />
 
-                            <field name="estatus" readonly="True" />
+                            <field name="create_uid"
+                                string="Creada por"
+                                readonly="True" />
                         </group>
                     </group>
 
+                    <!-- Datos de facturación -->
+                    <separator string="Datos de facturación" />
+
+                    <group>
+                        <group>
+                            <field name="moneda"
+                                readonly="(es_usuario_facturacion and estatus != 'draft') or estatus == 'created'" />
+
+                            <field name="metodo_pago"
+                                readonly="(es_usuario_facturacion and estatus != 'draft') or estatus == 'created'" />
+                        </group>
+
+                        <group>
+                            <field name="total"
+                                string="Total sin IVA"
+                                readonly="True"
+                                widget="monetary"
+                                options="{'currency_field': 'moneda'}" />
+                        </group>
+                    </group>
+
+                    <!-- Pestañas -->
                     <notebook>
 
-                        <!-- Partidas de la solicitud -->
-                        <page string="Partidas">
+                        <!-- Partidas -->
+                        <page string="Partidas" name="partidas">
+                            <div class="text-muted">
+                                Desglose de los conceptos que se incluirán en la factura.
+                            </div>
+
                             <field name="solicitud_factura_lines"
                                 readonly="(es_usuario_facturacion and estatus != 'draft') or estatus == 'created'">
-
                                 <list editable="bottom">
-                                    <field name="concepto" required="True" />
-                                    <field name="referencia" />
-                                    <field name="importe" sum="Total" required="True" />
-                                </list>
+                                    <field name="concepto"
+                                        string="Concepto"
+                                        required="True" />
 
+                                    <field name="referencia"
+                                        string="Referencia" />
+
+                                    <field name="importe"
+                                        string="Importe"
+                                        required="True"
+                                        sum="Total de partidas" />
+                                </list>
                             </field>
                         </page>
 
                         <!-- Documentos -->
-                        <page string="Documentos">
+                        <page string="Documentos" name="documentos">
+                            <div class="text-muted">
+                                Archivos asociados a la solicitud y documentación de la factura.
+                            </div>
+
+                            <separator string="Factura emitida" />
+
                             <group>
-                                <!-- Solo Facturación puede ver y cargar PDF/XML -->
                                 <field name="pdf"
                                     filename="pdf_filename"
                                     groups="pkf_solicitud_facturas.group_facturacion_users"

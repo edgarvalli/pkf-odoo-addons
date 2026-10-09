@@ -58,10 +58,8 @@ class NotifyCreatedService:
 
         return {
             "cliente": record.cliente or "",
-            "descripcion": record.descripcion or "",
             "metodo_pago": metodo_pago,
             "responsable": record.responsable.name or "",
-            "referencia": record.referencia or "",
             "correos": record.correos_envio or "",
             "total": f"{record.total:,.2f} {record.moneda}",
             "folio": record.folio or "",
