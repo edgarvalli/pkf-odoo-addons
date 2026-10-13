@@ -50,6 +50,7 @@ export interface Factura {
   estatus: EstatusVencimiento;
   fecha: Date;
   folio: number;
+  referencia: string;
   saldoPendiente: number;
   serie: string;
   total: number;

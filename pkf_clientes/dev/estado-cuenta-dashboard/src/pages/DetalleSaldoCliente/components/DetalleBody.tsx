@@ -1,7 +1,7 @@
 import { formatNumber } from "@/utils/numbers";
 export function DetalleBody(props: { saldo: number; facturasCount: number }) {
   return (
-    <div className="material-card__body detalle-grid">
+    <div className="detalle-grid">
       <div>
         <h6>Saldo Pendiente</h6>
         <span>$ {formatNumber(props.saldo)}</span>

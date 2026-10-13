@@ -3,9 +3,9 @@ export function THead() {
     <thead>
       <tr>
         <th>Fecha</th>
-        <th>Serie</th>
         <th>Folio</th>
         <th>UUID</th>
+        <th>Referencia</th>
         <th>Pendiente</th>
         <th>Total</th>
         <th>Dias Vencidos</th>

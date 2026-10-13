@@ -58,6 +58,7 @@ export function mapFactura(row: Record<string, any>): Factura {
     serie: row.serie,
     uuid: row.uuid,
     estatus: row.estatus,
+    referencia: row.referencia,
     saldoPendiente: Number(row.saldo_pendiente),
     total: Number(row.total),
     cliente: mapClienteByFactura(row),

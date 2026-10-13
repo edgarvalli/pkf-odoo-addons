@@ -152,6 +152,7 @@ class EstadoCuentaRepository:
                 cv.CVALORCLASIFICACION grupo_name,
                 cv.CCODIGOVALORCLASIFICACION grupo_codigo,
                 doc.CIDCONCEPTODOCUMENTO AS concepto_id,
+                doc.CREFERENCIA referencia,
                 doc.CTOTAL AS total,
                 doc.CPENDIENTE saldo_pendiente,
                 folios.CUUID uuid,

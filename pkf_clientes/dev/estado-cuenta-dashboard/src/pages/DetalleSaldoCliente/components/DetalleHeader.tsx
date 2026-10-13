@@ -1,6 +1,8 @@
 import { Placeholder } from "@/components";
-import type { Cliente } from "@/types/models";
 import { useNavigate } from "react-router";
+import { DetalleBody } from "./DetalleBody";
+
+import type { DetalleHeaderPorps } from "../types";
 
 type ValuePlaceholderProps = { value?: string | number; placeholder?: boolean };
 
@@ -9,46 +11,62 @@ function ValuePlaceholder(props: ValuePlaceholderProps) {
   return <span>{props.value}</span>;
 }
 
-export function DetalleHeader({ cliente }: { cliente?: Cliente | null }) {
+export function DetalleHeader(props: DetalleHeaderPorps) {
+  const { cliente, saldo, facturasCount } = props;
   const navigate = useNavigate();
   return (
-    <div className="material-card__header">
-      <div className="pb-2">
+    <div className="material-card d-flex flex-column">
+      {/* 👇 Header fijo */}
+      <div className="material-card__header">
         <i
           className="fa fa-arrow-left cursor-pointer"
           onClick={() => navigate("/")}
         ></i>
       </div>
 
-      <div className="d-flex">
-        <div className="flex-grow-1 d-flex flex-column gap-1">
-          <div>
+      {/* 👇 Body con scroll */}
+      <div
+        className="material-card__body flex-grow-1 overflow-auto"
+        style={{ minHeight: 0 }}
+      >
+        <div className="d-flex">
+          <div className="flex-grow-1 d-flex flex-column gap-1">
             <ValuePlaceholder
               value={cliente?.razonSocial}
               placeholder={!cliente}
             />
+            <div className="text-muted fw-normal fs-6">
+              <span className="me-2">Codigo cliente:</span>
+              <ValuePlaceholder
+                value={cliente?.codigo}
+                placeholder={!cliente}
+              />
+            </div>
+            <div className="text-muted fs-12px fw-normal">
+              <ValuePlaceholder value={cliente?.rfc} placeholder={!cliente} />
+            </div>
+            <div className="text-muted fs-12px fw-normal">
+              <ValuePlaceholder
+                value={cliente?.emails}
+                placeholder={!cliente}
+              />
+            </div>
           </div>
-          <div className="text-muted fw-normal fs-6">
-            <span className="me-2">Codigo cliente:</span>
-            <ValuePlaceholder value={cliente?.codigo} placeholder={!cliente} />
-          </div>
-          <div className="text-muted fs-12px fw-normal">
-            <ValuePlaceholder value={cliente?.rfc} placeholder={!cliente} />
-          </div>
-          <div className="text-muted fs-12px fw-normal">
-            <ValuePlaceholder value={cliente?.emails} placeholder={!cliente} />
-          </div>
-        </div>
 
-        <div className="me-1">
-          <div className="text-end">Grupo</div>
-          <div className="text-muted fs-12px fw-normal">
-            <ValuePlaceholder
-              value={cliente?.grupo?.nombre}
-              placeholder={!cliente}
-            />
+          <div className="me-1">
+            <div className="text-end">Grupo</div>
+            <div className="text-muted fs-12px fw-normal">
+              <ValuePlaceholder
+                value={cliente?.grupo?.nombre}
+                placeholder={!cliente}
+              />
+            </div>
           </div>
         </div>
+      </div>
+
+      <div className="material-card__footer text-center">
+        <DetalleBody saldo={saldo} facturasCount={facturasCount} />
       </div>
     </div>
   );

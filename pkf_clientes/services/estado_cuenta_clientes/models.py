@@ -17,6 +17,7 @@ class Factura:
     grupo_name: str
     grupo_codigo: str
     concepto_id: int
+    referencia: str
     total: float
     saldo_pendiente: float
     uuid: str
@@ -52,6 +53,7 @@ class Factura:
             "grupo_name": self.grupo_name,
             "grupo_codigo": self.grupo_codigo,
             "concepto_id": self.concepto_id,
+            "referencia": self.referencia,
             "total": self.total,
             "saldo_pendiente": self.saldo_pendiente,
             "uuid": self.uuid,

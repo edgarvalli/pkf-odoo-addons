@@ -26,9 +26,11 @@ export function TBody({ facturas }: { facturas: Factura[] }) {
       {facturas.map((f) => (
         <tr key={f.id}>
           <td>{parseDateMX(f.fecha)}</td>
-          <td>{f.serie}</td>
-          <td>{f.folio}</td>
+          <td>
+            {f.serie} {f.folio}
+          </td>
           <td>{f.uuid}</td>
+          <td>{f.referencia}</td>
           <td>{formatNumber(f.saldoPendiente)}</td>
           <td>{formatNumber(f.total)}</td>
           <td>{diasVencidas(f.fecha)}</td>
