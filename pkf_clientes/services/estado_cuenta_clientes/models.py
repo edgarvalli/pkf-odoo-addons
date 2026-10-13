@@ -46,6 +46,8 @@ class Factura:
             "concepto_id": self.concepto_id,
             "referencia": self.referencia,
             "observaciones": self.observaciones,
+            "uuid": self.uuid,
+            "estatus": self.estatus,
             "diasvencidos": self.diasvencidos,
             "total": self.total,
             "saldo_pendiente": self.saldo_pendiente,
