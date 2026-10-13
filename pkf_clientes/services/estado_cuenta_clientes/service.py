@@ -31,7 +31,8 @@ class EstadoCuentaService:
             for ctx in builder.build(idcliente, emails, include_vigentes):
 
                 edologger.set_context(ctx)
-                ctx["mail_server_id"] = mail_server_id.id
+                if mail_server_id:
+                    ctx["mail_server_id"] = mail_server_id.id
 
                 try:
                     _emails = ctx.get("emails")
