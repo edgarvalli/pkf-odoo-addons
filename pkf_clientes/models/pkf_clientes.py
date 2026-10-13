@@ -7,7 +7,7 @@ class PKFClientes(AbstractModel):
     _name = "pkf.clientes"
     _description = "PKF Clientes"
 
-    def saldo_clientes(self, filter={}):
+    def saldo_clientes(self, filter: dict = {}):
         edo = self.env["ev.contpaqi.comercial"].saldo_clientes(
             saldo_cero=bool(int(filter.get("saldocero", 0)))
         )
