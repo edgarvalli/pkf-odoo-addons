@@ -11,7 +11,7 @@ export function useDashboard() {
   const fetchSaldoClientes = async () => {
     const result = await orm.call<Record<string, any>[]>(
       "pkf.clientes",
-      "saldo_clientes",
+      "get_saldo_facturas",
       [[]],
     );
 
