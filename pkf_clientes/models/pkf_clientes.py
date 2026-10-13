@@ -1,6 +1,7 @@
 from odoo.models import AbstractModel
 from odoo.exceptions import UserError
 from ..services.estado_cuenta_clientes.repository import EstadoCuentaRepository
+from ..services.estado_cuenta_clientes import EstadoCuentaService
 
 
 class PKFClientes(AbstractModel):
@@ -18,8 +19,17 @@ class PKFClientes(AbstractModel):
         return edo
 
     def enviar_estado_cuenta(self, idcliente: int, emails: list[str] = None):
-        srv = self.env["pkf.estado.cuenta.service"]
+        srv = EstadoCuentaService(self.env)
         return srv.enviar_estado_de_cuenta(idcliente, emails, include_vigentes=True)
+
+    def enviar_estado_cuenta_bulk(self):
+        srv = EstadoCuentaService(self.env)
+        repo = EstadoCuentaRepository(self.env)
+
+        clientes = repo.get_saldo_facturas()
+
+        for c in clientes:
+            srv.enviar_estado_de_cuenta(c.cliente_id)
 
     def buscar_clientes(self, **args):
         fields = args.get(
