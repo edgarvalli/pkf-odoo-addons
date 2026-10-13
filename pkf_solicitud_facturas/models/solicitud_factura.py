@@ -51,8 +51,8 @@ class SolicitudFactura(models.Model):
 
     metodo_pago = fields.Selection(
         selection=[
-            ("PPD", "Pago en parcialidades diferidas"),
-            ("PUE", "Pago en una sola exhibición"),
+            ("PPD", "PPD - Pago en parcialidades diferidas"),
+            ("PUE", "PUE - Pago en una sola exhibición"),
         ],
         string="Método de pago",
         required=True,
