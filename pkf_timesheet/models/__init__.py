@@ -1,3 +1,4 @@
+from .pkf_timesheet_contract import PKFTimesheetContract
 from .pkf_timesheet_project_cron import PKFTimesheetProjectCron
 from .pkf_timesheet_task import PKFTimeSheetTask
 from .pkf_timesheet_project_phase import PKFTimeSheetPhase
