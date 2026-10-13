@@ -53,6 +53,7 @@
                             <field name="partner_id" invisible="not partner_group_id"
                                 domain="[('pkf_partner_group','=',partner_group_id)]" />
                             <field name="cancellation_porcentage" widget="float" />
+                            <field name="contract_id" />
                             <field name="state" string="Estatus" />
                         </group>
                         <group string="Responsables">
