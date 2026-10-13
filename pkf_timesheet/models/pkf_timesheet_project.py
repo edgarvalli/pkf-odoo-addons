@@ -39,7 +39,7 @@ class PKFTimeSheetProject(models.Model):
 
     director_id = fields.Many2one("hr.employee", string="Director", tracking=True)
 
-    contract_id = fields.Many2one("pkf.timesheet.contract")
+    contract_id = fields.Many2one("pkf.timesheet.contract", string="Numero de Contrato")
     assigned_user_ids = fields.Many2many("hr.employee", string="Equipo Asignado")
     phase_ids = fields.Many2many("pkf.timesheet.project.phase", string="Rubro")
     phase_group_id = fields.Many2one("pkf.timesheet.phase.group", string="Grupo Rubro")
