@@ -74,9 +74,6 @@
                             <field name="metodo_pago"
                                 readonly="(es_usuario_facturacion and estatus != 'draft') or estatus == 'created'" />
 
-                            <field name="forma_pago"
-                                invisible="metodo_pago == 'PPD'"
-                                readonly="(es_usuario_facturacion and estatus != 'draft') or estatus == 'created'" />
                         </group>
 
                         <group>
@@ -85,6 +82,10 @@
                                 readonly="True"
                                 widget="monetary"
                                 options="{'currency_field': 'moneda'}" />
+
+                            <field name="forma_pago"
+                                invisible="metodo_pago == 'PPD'"
+                                readonly="(es_usuario_facturacion and estatus != 'draft') or estatus == 'created'" />
                         </group>
                     </group>
 

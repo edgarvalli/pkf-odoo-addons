@@ -66,6 +66,16 @@
                                     <t t-out="ctx.get('metodo_pago', '')" />
                                 </td>
                             </tr>
+                            <t t-if="ctx.get('metodo_pago','PUE') == 'PUE'">
+                                <tr style="background-color: #f4f6f8;">
+                                    <td style="padding: 10px; border: 1px solid #dddddd;">
+                                        <strong>Forma de pago</strong>
+                                    </td>
+                                    <td style="padding: 10px; border: 1px solid #dddddd;">
+                                        <t t-out="ctx.get('forma_pago', '')" />
+                                    </td>
+                                </tr>
+                            </t>
                             <tr>
                                 <td style="padding: 10px; border: 1px solid #dddddd;">
                                     <strong>Responsable</strong>

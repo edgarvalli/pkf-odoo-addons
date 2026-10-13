@@ -55,10 +55,14 @@ class NotifyCreatedService:
         metodo_pago = dict(record._fields["metodo_pago"].selection).get(
             record.metodo_pago, ""
         )
+        forma_pago = dict(record._fields["forma_pago"].selection).get(
+            record.forma_pago, ""
+        )
 
         return {
             "cliente": record.cliente or "",
             "metodo_pago": metodo_pago,
+            "forma_pago": forma_pago,
             "responsable": record.responsable.name or "",
             "correos": record.correos_envio or "",
             "total": f"{record.total:,.2f} {record.moneda}",
