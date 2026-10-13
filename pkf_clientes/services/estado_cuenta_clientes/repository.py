@@ -122,9 +122,11 @@ class EstadoCuentaRepository:
     def get_saldo_facturas(self, segmento: str = None) -> list[SaldoFactura]:
 
         if segmento:
-            facturas = self.get_facturas(wheres=["mov.CSCMOVTO = ?"], args=(segmento,))
+            facturas = self.getall_facturas(
+                wheres=["mov.CSCMOVTO = ?"], args=(segmento,)
+            )
         else:
-            facturas = self.get_facturas()
+            facturas = self.getall_facturas()
 
         saldos = {}
 
