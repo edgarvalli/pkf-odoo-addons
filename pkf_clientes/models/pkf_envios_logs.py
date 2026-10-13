@@ -111,9 +111,7 @@ class PKFEnviosLog(models.Model):
 
         return attachment
 
-    def send_bitacora(
-        self, uid: str, start: datetime, end: datetime, mail_server_id: int = None
-    ):
+    def send_bitacora(self, uid: str, start: datetime, end: datetime):
         attachment = self.generar_bitacora_excel(uid, startdate=start, enddate=end)
         vals = {
             "subject": f"Bitácora proceso {uid}",
@@ -122,13 +120,10 @@ class PKFEnviosLog(models.Model):
                         <p>UUID: {uid}</p>
                         <p>Se adjunta la bitácora en Excel.</p>
                     """,
-            "email_to": self.env.user.email,
+            "email_to": "evalli@pkf.com.mx,facturacion.mty@pkf.com.mx",
             "email_from": "PKF Monterrey <no-reply@pkfmty.com>",
             "attachment_ids": [(6, 0, [attachment.id])],
         }
-
-        if mail_server_id and isinstance(mail_server_id, int):
-            vals["mail_server_id"] = mail_server_id
 
         mail = self.env["mail.mail"].create(vals)
 

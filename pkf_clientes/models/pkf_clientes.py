@@ -22,14 +22,9 @@ class PKFClientes(AbstractModel):
         srv = EstadoCuentaService(self.env)
         return srv.enviar_estado_de_cuenta(idcliente, emails, include_vigentes=True)
 
-    def enviar_estado_cuenta_bulk(self):
+    def enviar_estado_cuenta_bulk(self, emails: list[str] = None):
         srv = EstadoCuentaService(self.env)
-        repo = EstadoCuentaRepository(self.env)
-
-        clientes = repo.get_saldo_facturas()
-
-        for c in clientes:
-            srv.enviar_estado_de_cuenta(c.cliente_id)
+        srv.enviar_edo_bulk(emails)
 
     def buscar_clientes(self, **args):
         fields = args.get(

@@ -95,7 +95,9 @@
                                         </td>
                                         <td
                                             t-att-style="cell_style">
-                                            <t t-out="inv.get('seriefolio')" />
+                                            <!-- <t t-out="inv.get('seriefolio')" /> -->
+                                             <t t-out="inv.get('serie')" />-<t
+                                                t-out="inv.get('folio')" />
                                         </td>
                                         <td
                                             t-att-style="cell_style">

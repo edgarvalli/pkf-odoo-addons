@@ -1,4 +1,5 @@
 from typing import TypedDict, Literal
+from .models import Factura
 from datetime import date
 
 
@@ -23,13 +24,34 @@ class FacturaRow(TypedDict):
     pendiente: float
 
 
+class FacturaDict(TypedDict):
+    id: int
+    fecha: str  # formato "%Y-%m-%d %H:%M:%S"
+    serie: str
+    folio: int
+    cliente_id: int
+    cliente_codigo: str
+    cliente_name: str
+    cliente_rfc: str
+    grupo_id: int
+    grupo_name: str
+    grupo_codigo: str
+    concepto_id: int
+    referencia: str
+    total: float
+    saldo_pendiente: float
+    uuid: str
+    emails: str
+    estatus: Literal["vigente", "vencida30", "vencida60", "vencida"]
+
+
 class GroupDict(TypedDict):
     title: str
     color: str
     order: int
     total: float
     saldopendiente: float
-    facturas: list
+    facturas: list[FacturaDict]
 
 
 class GroupKeysDict(TypedDict):
@@ -52,6 +74,6 @@ class ContextType(TypedDict):
     emails: str
     saldototal: float
     fecha: str
-    facturas_group: GroupKeysDict
+    facturas_group: dict[str, GroupDict]
     facturas: list[GroupDict]
     mail_server_id: int

@@ -9,7 +9,7 @@ class Factura:
     fecha: datetime
     serie: str
     folio: int
-    cliente_id: str
+    cliente_id: int
     cliente_codigo: str
     cliente_name: str
     cliente_rfc: str
@@ -18,26 +18,17 @@ class Factura:
     grupo_codigo: str
     concepto_id: int
     referencia: str
+    observaciones: str
+    diasvencidos: int
     total: float
     saldo_pendiente: float
     uuid: str
     emails: str
+    estatus: Literal["vigente", "vencida30", "vencida60", "vencida"]
 
-    @property
-    def estatus(self) -> Literal["vigente", "vencida30", "vencida60", "vencida"]:
-        today = datetime.now().date()
-        days = (today - self.fecha.date()).days
-
-        if days <= 0:
-            return "vigente"
-        if days <= 31:
-            return "vigente"
-        if days <= 60:
-            return "vencida30"
-        if days <= 90:
-            return "vencida60"
-        else:
-            return "vencida"
+    def __post_init__(self):
+        self.total = float(self.total)
+        self.saldo_pendiente = float(self.saldo_pendiente)
 
     def to_dict(self) -> dict:
         return {
@@ -54,11 +45,10 @@ class Factura:
             "grupo_codigo": self.grupo_codigo,
             "concepto_id": self.concepto_id,
             "referencia": self.referencia,
+            "observaciones": self.observaciones,
+            "diasvencidos": self.diasvencidos,
             "total": self.total,
             "saldo_pendiente": self.saldo_pendiente,
-            "uuid": self.uuid,
-            "emails": self.emails,
-            "estatus": self.estatus,
         }
 
 

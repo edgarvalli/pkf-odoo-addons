@@ -13,7 +13,7 @@ class MailService:
         self.env = env
 
     def enviar_correo(self, ctx: ContextType, **kwargs):
-        template = self.env.ref("pkf_clientes.estado_cuenta_email_template").sudo()
+        template = self.env.ref("pkf_clientes.estado_cuenta_email_template")
         email_cc = "facturacion.mty@pkf.com.mx"
         email_values = {
             "email_from": "PKF Monterrey <no-reply@pkfmty.com>",

@@ -1,4 +1,3 @@
-from .types import FacturaRow
 from odoo.api import Environment
 from odoo.exceptions import UserError
 from .models import Factura, SaldoFactura
@@ -9,178 +8,116 @@ class EstadoCuentaRepository:
     def __init__(self, env: Environment):
         self.env = env
 
-    # ----------------------------
-    # DB CONNECTION
-    # ----------------------------
     def _get_dbname(self) -> str:
         dbname = self.env.company.ev_contpaqi_comercial_db.dbname
-
         if not dbname:
             raise UserError(
                 "Debe de definir la base de datos de Contpaqi en la empresa."
             )
-
         return dbname
 
     def _execute_query(self, sql: str, args=None) -> list[dict]:
         args = args or ()
         dbname = self._get_dbname()
-
         with self.env["ev.tools.mssql"].connect(dbname) as db:
             return db.fetchall(sql, args)
 
-    # ----------------------------
-    # QUERY BUILDER HELPERS
-    # ----------------------------
     def _base_where(self, include_vigentes: bool) -> list[str]:
         where = [
             "doc.CIDDOCUMENTODE = 4",
             "doc.CPENDIENTE > 0",
         ]
-
-        # SOLO filtra vencidas si no quieres vigentes
         if not include_vigentes:
             where.append(
                 "DATEADD(DAY, clientes.CDIASCREDITOCLIENTE, doc.CFECHA) < @today"
             )
-
         return where
 
     def _build_query(
         self, include_vigentes: bool = False, wheres: list[str] = None
     ) -> str:
         where_clause = self._base_where(include_vigentes)
-        where_clause = [*where_clause, *wheres]
+        if wheres:
+            where_clause.extend(wheres)
 
         sql = f"""
             DECLARE @today DATE = CAST(GETDATE() AS DATE);
 
             WITH Facturas AS (
                 SELECT
-                    doc.CIDDOCUMENTO AS iddocumento,
-                    clientes.CIDCLIENTEPROVEEDOR AS idcliente,
-                    doc.CSERIEDOCUMENTO AS serie,
-                    doc.CFOLIO AS folio,
-                    CONCAT(doc.CSERIEDOCUMENTO, ' ', doc.CFOLIO) AS seriefolio,
+                    doc.CIDDOCUMENTO AS id,
                     doc.CFECHA AS fecha,
-
-                    DATEADD(DAY, clientes.CDIASCREDITOCLIENTE, doc.CFECHA) AS fechavencimiento,
-
-                    DATEDIFF(
-                        DAY,
-                        DATEADD(DAY, clientes.CDIASCREDITOCLIENTE, doc.CFECHA),
-                        @today
-                    ) AS diasvencidos,
-
-                    doc.CRAZONSOCIAL AS razonsocial,
-                    doc.CRFC AS rfc,
-
+                    doc.CSERIEDOCUMENTO AS serie,
+                    CAST(doc.CFOLIO AS INT) AS folio,
+                    doc.CIDCLIENTEPROVEEDOR AS cliente_id,
+                    clientes.CCODIGOCLIENTE AS cliente_codigo,
+                    doc.CRAZONSOCIAL AS cliente_name,
+                    doc.CRFC AS cliente_rfc,
+                    cv.CIDVALORCLASIFICACION AS grupo_id,
+                    cv.CVALORCLASIFICACION AS grupo_name,
+                    cv.CCODIGOVALORCLASIFICACION AS grupo_codigo,
+                    doc.CIDCONCEPTODOCUMENTO AS concepto_id,
+                    doc.CREFERENCIA AS referencia,
+                    doc.COBSERVACIONES AS observaciones,
+                    CAST(doc.CTOTAL AS DECIMAL(18,2)) AS total,
+                    CAST(doc.CPENDIENTE AS DECIMAL(18,2)) AS saldo_pendiente,
+                    folios.CUUID AS uuid,
                     CONCAT_WS(',',
                         NULLIF(clientes.CEMAIL1, ''),
                         NULLIF(clientes.CEMAIL2, ''),
                         NULLIF(clientes.CEMAIL3, '')
                     ) AS emails,
-
-                    doc.COBSERVACIONES AS observaciones,
-                    doc.CREFERENCIA AS referencia,
-                    folios.CUUID AS uuid,
-
-                    clientes.CDIASCREDITOCLIENTE AS diascredito,
-                    doc.CTOTAL AS total,
-                    doc.CPENDIENTE AS pendiente
-
+                    DATEDIFF(DAY, doc.CFECHA, @today) AS diasvencidos
                 FROM admDocumentos doc
-                INNER JOIN admFoliosDigitales folios
-                    ON folios.CIDDOCTO = doc.CIDDOCUMENTO
-                INNER JOIN admClientes clientes
-                    ON clientes.CIDCLIENTEPROVEEDOR = doc.CIDCLIENTEPROVEEDOR
-
+                INNER JOIN admMovimientos mov ON doc.CIDDOCUMENTO = mov.CIDDOCUMENTO
+                INNER JOIN admFoliosDigitales folios ON folios.CIDDOCTO = doc.CIDDOCUMENTO
+                INNER JOIN admClientes clientes ON clientes.CIDCLIENTEPROVEEDOR = doc.CIDCLIENTEPROVEEDOR
+                INNER JOIN admClasificacionesValores cv ON cv.CIDVALORCLASIFICACION = clientes.CIDVALORCLASIFCLIENTE1
                 WHERE {" AND ".join(where_clause)}
             )
-
             SELECT
                 *,
                 CASE
-                    {"WHEN diasvencidos <= 0 THEN 'vigente'" if include_vigentes else ""}
-                    WHEN diasvencidos BETWEEN 31 AND 60 THEN 'vencido30'
-                    WHEN diasvencidos BETWEEN 61 AND 90 THEN 'vencido60'
-                    ELSE 'vencido'
+                    {"WHEN diasvencidos <= 30 THEN 'vigente'" if include_vigentes else ""}
+                    WHEN diasvencidos BETWEEN 31 AND 60 THEN 'vencida30'
+                    WHEN diasvencidos BETWEEN 61 AND 90 THEN 'vencida60'
+                    ELSE 'vencida'
                 END AS estatus
-
             FROM Facturas
-            {"WHERE diasvencidos > diascredito" if not include_vigentes else ""}
+            {"WHERE diasvencidos > 30" if not include_vigentes else ""}
             ORDER BY fecha ASC;
         """
-
         return sql
 
-    # ----------------------------
-    # PUBLIC API
-    # ----------------------------
     def get_facturas(
         self, idcliente: int | None = None, include_vigentes: bool = False
-    ) -> list[FacturaRow]:
-
+    ) -> list[Factura]:
         wheres = []
         params = []
-
         if idcliente:
-            wheres.append(idcliente)
+            wheres.append("doc.CIDCLIENTEPROVEEDOR = ?")
             params.append(idcliente)
 
         sql = self._build_query(include_vigentes, wheres)
+        rows = self._execute_query(sql, tuple(params))
+        return [Factura(**row) for row in rows] if rows else []
 
-        return self._execute_query(sql, tuple(params))
-
-    def get_facturas(
-        self, wheres: list[str] = None, args: tuple = None
+    def getall_facturas(
+        self,
+        include_vigentes: bool = False,
+        wheres: list[str] = None,
+        args: tuple = None,
     ) -> list[Factura]:
-        wheres = wheres or []
-        wheres.extend(["doc.CPENDIENTE > 0", "doc.CIDDOCUMENTODE = 4"])
-
-        sql = f"""
-            SELECT
-                doc.CIDDOCUMENTO id,
-                doc.CFECHA fecha,
-                doc.CSERIEDOCUMENTO AS serie,
-                doc.CFOLIO AS folio,
-                doc.CIDCLIENTEPROVEEDOR cliente_id,
-                clientes.CCODIGOCLIENTE cliente_codigo,
-                doc.CRAZONSOCIAL cliente_name,
-                doc.CRFC cliente_rfc,
-                cv.CIDVALORCLASIFICACION grupo_id,
-                cv.CVALORCLASIFICACION grupo_name,
-                cv.CCODIGOVALORCLASIFICACION grupo_codigo,
-                doc.CIDCONCEPTODOCUMENTO AS concepto_id,
-                doc.CREFERENCIA referencia,
-                doc.CTOTAL AS total,
-                doc.CPENDIENTE saldo_pendiente,
-                folios.CUUID uuid,
-                CONCAT_WS(',',
-                    NULLIF(clientes.CEMAIL1, ''),
-                    NULLIF(clientes.CEMAIL2, ''),
-                    NULLIF(clientes.CEMAIL3, '')
-                ) AS emails
-            FROM admDocumentos doc
-            INNER JOIN admMovimientos mov 
-                ON doc.CIDDOCUMENTO = mov.CIDDOCUMENTO
-            INNER JOIN admFoliosDigitales folios
-                ON folios.CIDDOCTO = doc.CIDDOCUMENTO
-            INNER JOIN admClientes clientes
-                ON clientes.CIDCLIENTEPROVEEDOR = doc.CIDCLIENTEPROVEEDOR
-            INNER JOIN admClasificacionesValores cv
-                ON cv.CIDVALORCLASIFICACION = clientes.CIDVALORCLASIFCLIENTE1
-            WHERE {" AND ".join(wheres)}
-            ORDER BY doc.CFECHA ASC;
-        """
-
+        sql = self._build_query(include_vigentes, wheres or [])
         rows = self._execute_query(sql, args)
-        if rows:
-            return [Factura(**row) for row in rows]
-        return []
+        return [Factura(**row) for row in rows] if rows else []
 
-    def get_facturas_by_segmento(self, segmento: str) -> list[Factura]:
-        return self.get_facturas(wheres=["mov.CSCMOVTO = ?"], args=(segmento,))
+    def get_facturas_by_segmento(
+        self, segmento: str, include_vigentes: bool = False
+    ) -> list[Factura]:
+        sql = self._build_query(include_vigentes, ["mov.CSCMOVTO = ?"])
+        rows = self._execute_query(sql, (segmento,))
+        return [Factura(**row) for row in rows] if rows else []
 
     def get_saldo_facturas(self, segmento: str = None) -> list[SaldoFactura]:
 
