@@ -11,6 +11,7 @@ _logger = logging.getLogger(__name__)
 class EstadoCuentaService:
 
     def __init__(self, env: Environment):
+        self.env = env
         self.mail_service = MailService(env)
 
     def enviar_estado_de_cuenta(
