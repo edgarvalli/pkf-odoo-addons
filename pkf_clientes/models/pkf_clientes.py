@@ -93,7 +93,7 @@ class PKFClientes(AbstractModel):
             return []
         repo = EstadoCuentaRepository(self.env)
 
-        facturas = repo.get_facturas(
+        facturas = repo.getall_facturas(
             wheres=["doc.CIDCLIENTEPROVEEDOR = ?"], args=(cliente_id,)
         )
 
