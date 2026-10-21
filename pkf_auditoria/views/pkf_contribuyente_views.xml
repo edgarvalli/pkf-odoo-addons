@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Vista de lista -->
+    <record id="view_pkf_contribuyente_list" model="ir.ui.view">
+        <field name="name">pkf.contribuyente.list</field>
+        <field name="model">pkf.contribuyente</field>
+        <field name="arch" type="xml">
+            <list
+                string="Contribuyentes SAT"
+                default_order="rfc asc"
+                decoration-warning="situacion == 'presunto'"
+                decoration-danger="situacion == 'definitivo'"
+                decoration-success="situacion == 'sentencia_favorable'"
+            >
+                <field name="rfc" />
+                <field name="nombre" />
+                <field name="situacion" widget="badge" />
+            </list>
+        </field>
+    </record>
+
+    <!-- Vista de búsqueda -->
+    <record id="view_pkf_contribuyente_search" model="ir.ui.view">
+        <field name="name">pkf.contribuyente.search</field>
+        <field name="model">pkf.contribuyente</field>
+        <field name="arch" type="xml">
+            <search string="Buscar contribuyentes">
+                <field name="rfc" />
+                <field name="nombre" />
+                <field name="situacion" />
+            </search>
+        </field>
+    </record>
+
+</odoo>

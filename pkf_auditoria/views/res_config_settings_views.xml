@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_pkf_auditoria" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.pkf.auditoria</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app string="Auditoría PKF" name="pkf_auditoria" groups="base.group_system">
+
+                    <block title="Sincronización SAT" name="pkf_auditoria_sat_settings">
+
+                        <setting
+                            string="URL de los listados SAT"
+                            help="Página desde la que se obtienen los archivos publicados por el SAT.">
+                            <field name="sat_url"
+                                placeholder="https://www.sat.gob.mx/..." />
+                        </setting>
+
+                        <setting
+                            string="Grupos a notificar"
+                            help="Selecciona los grupos de seguridad que recibirán las notificaciones."
+                        >
+                            <field
+                                name="notification_groups"
+                                widget="many2many_tags"
+                                options="{'no_create': True, 'no_create_edit': True}"
+                            />
+                        </setting>
+
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>

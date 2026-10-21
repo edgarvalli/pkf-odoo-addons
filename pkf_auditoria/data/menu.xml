@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem
+        id="pkf_auditoria_menu"
+        name="PKF Auditoria"
+        sequence="10">
+
+        <menuitem
+            id="pkf_lista_contribuyentes_menu"
+            name="Lista de Contribuyentes"
+            action="pkf_contribuyentes_action"
+            sequence="10" />
+
+        <menuitem
+            id="menu_pkf_contribuyente_group"
+            name="Grupos de contribuyentes"
+            action="action_pkf_contribuyente_group"
+            sequence="20"
+        />
+
+        <menuitem
+            id="menu_pkf_dashboard_control_tiempos"
+            name="Control de Tiempos"
+            action="pkf_timesheet.action_pkf_ts_dashboard"
+            groups="pkf_timesheet.group_superuser,pkf_timesheet.group_manager,pkf_timesheet.group_user"
+            sequence="30" />
+    </menuitem>
+
+
+</odoo>

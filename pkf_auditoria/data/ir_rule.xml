@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="rule_pkf_contribuyente_group_member_owner" model="ir.rule">
+        <field name="name">
+            Grupos de contribuyentes: miembros, propietarios y creadores
+        </field>
+        <field name="model_id" ref="model_pkf_contribuyente_group" />
+        <field name="domain_force">
+            ['|', '|',
+            ('member_ids', 'in', [user.id]),
+            ('owner_ids', 'in', [user.id]),
+            ('create_uid', '=', user.id)
+            ]
+        </field>
+        <field name="perm_read" eval="True" />
+        <field name="perm_write" eval="True" />
+        <field name="perm_create" eval="True" />
+        <field name="perm_unlink" eval="True" />
+    </record>
+
+</odoo>
