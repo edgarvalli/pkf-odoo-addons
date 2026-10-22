@@ -69,7 +69,6 @@ class EstadoCuentaRepository:
                     ) AS emails,
                     DATEDIFF(DAY, doc.CFECHA, @today) AS diasvencidos
                 FROM admDocumentos doc
-                INNER JOIN admMovimientos mov ON doc.CIDDOCUMENTO = mov.CIDDOCUMENTO
                 INNER JOIN admFoliosDigitales folios ON folios.CIDDOCTO = doc.CIDDOCUMENTO
                 INNER JOIN admClientes clientes ON clientes.CIDCLIENTEPROVEEDOR = doc.CIDCLIENTEPROVEEDOR
                 INNER JOIN admClasificacionesValores cv ON cv.CIDVALORCLASIFICACION = clientes.CIDVALORCLASIFCLIENTE1
@@ -110,13 +109,6 @@ class EstadoCuentaRepository:
     ) -> list[Factura]:
         sql = self._build_query(include_vigentes, wheres or [])
         rows = self._execute_query(sql, args)
-        return [Factura(**row) for row in rows] if rows else []
-
-    def get_facturas_by_segmento(
-        self, segmento: str, include_vigentes: bool = False
-    ) -> list[Factura]:
-        sql = self._build_query(include_vigentes, ["mov.CSCMOVTO = ?"])
-        rows = self._execute_query(sql, (segmento,))
         return [Factura(**row) for row in rows] if rows else []
 
     def get_saldo_facturas(self, segmento: str = None) -> list[SaldoFactura]:
