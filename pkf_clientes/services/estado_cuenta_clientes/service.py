@@ -25,6 +25,10 @@ class EstadoCuentaService:
 
         try:
             for ctx in ctxs:
+                facturas = ctx.get("facturas")
+
+                if not facturas or len(facturas) == 0:
+                    continue
 
                 self.edologger.set_context(ctx)
 
