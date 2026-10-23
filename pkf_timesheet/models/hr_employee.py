@@ -13,6 +13,8 @@ class HrEmployee(models.Model):
         store=True,
     )
 
+    segmento_pkf = fields.Char("Segmento")
+
     def get_timesheet_employee_ids(self):
         if not self:
             return []

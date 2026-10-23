@@ -1,5 +1,4 @@
 from typing import TypedDict, Literal
-from .models import Factura
 from datetime import date
 
 

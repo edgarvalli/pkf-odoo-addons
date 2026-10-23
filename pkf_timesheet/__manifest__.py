@@ -6,9 +6,16 @@
     "description": """
         Aplicacion para control de tiempos de las actividades de los empleados
     """,
-    "depends": ["base", "web", "hr", "hr_expense", "contacts"],
+    "depends": [
+        "base",
+        "web",
+        "hr",
+        "hr_expense",
+        "contacts",
+        "pkf_app",
+        "pkf_clientes",
+    ],
     "data": [
-        "data/groups.xml",
         "security/ir.model.access.csv",
         "views/project_view.xml",
         "views/hr_employee.xml",
@@ -17,7 +24,6 @@
         "views/task_view.xml",
         "views/time_entry.xml",
         "views/phase_groups_view.xml",
-        "views/res_partner_view.xml",
         "views/project_import_form.xml",
         "data/actions.xml",
         "data/menu.xml",

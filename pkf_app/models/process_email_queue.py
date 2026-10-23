@@ -6,9 +6,9 @@ from odoo import models
 _logger = logging.getLogger(__name__)
 
 
-class ProcessEmailQueueService(models.AbstractModel):
+class ProcessEmailQueue(models.AbstractModel):
 
-    _name = "pkf.process.email.queue.service"
+    _name = "pkf.process.email.queue"
     _description = "PKF - Procesar Cola de Correos"
 
     def run(self):

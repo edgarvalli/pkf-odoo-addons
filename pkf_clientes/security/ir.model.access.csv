@@ -3,6 +3,6 @@ access_pkf_clientes_directores,access.pkf.clientes.directores,model_pkf_clientes
 access_pkf_clientes_socios,access.pkf.clientes.socios,model_pkf_clientes,pkf_group_socios,1,1,1,0
 access_pkf_clientes_gerentes,access.pkf.clientes.gerentes,model_pkf_clientes,pkf_group_gerentes,1,1,0,0
 access_pkf_clientes_staff,access.pkf.clientes.staff,model_pkf_clientes,pkf_group_staff,1,0,0,0
-access_pkf_clientes_wizard,access_pkf_clientes_wizard,model_pkf_clientes_wizard,base.group_user,1,1,1,1
-access_pkf_envios_logs,access_pkf_envios_logs,model_pkf_envios_logs,base.group_user,1,1,1,1
-access_pkf_process_email_queue_service,access_pkf_process_email_queue_service,model_pkf_process_email_queue_service,base.group_user,1,1,1,1
+access_pkf_partner_group_user,access.pkf.partner.group.user,model_pkf_partner_group,pkf_app.group_user,1,1,1,1
+access_pkf_partner_group_manager,access.pkf.partner.group.manager,model_pkf_partner_group,pkf_app.group_manager,1,1,1,1
+access_pkf_partner_group_superuser,access.pkf.partner.group.superuser,model_pkf_partner_group,pkf_app.group_superuser,1,1,1,1

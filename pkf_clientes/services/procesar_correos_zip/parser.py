@@ -2,6 +2,7 @@ import io
 import json
 import zipfile
 from pathlib import PurePosixPath
+
 from .models import Cliente, Attachment
 from .constants import MIME_TYPES
 

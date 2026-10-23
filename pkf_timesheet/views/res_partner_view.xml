@@ -7,7 +7,7 @@
         <field name="inherit_id" ref="base.view_partner_form" />
         <field name="arch" type="xml">
             <xpath expr="//field[@name='category_id']" position="after">
-                <label for="pkf_partner_group" string="Nombre del Group" />
+                <label for="pkf_partner_group" string="Grupo Comercial" />
                 <div class="o_row" name="timesheet_group_name">
                     <field name="pkf_partner_group" class="oe_inline" />
                 </div>
@@ -20,6 +20,7 @@
         <field name="model">pkf.partner.group</field>
         <field name="arch" type="xml">
             <list string="Grupos Clientes PKF" editable="top">
+                <field name="code" />
                 <field name="name" />
                 <field name="active" />
             </list>

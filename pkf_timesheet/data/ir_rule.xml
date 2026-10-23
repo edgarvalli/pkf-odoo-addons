@@ -4,7 +4,7 @@
     <record id="pkf_timesheet_project_rule_user" model="ir.rule">
         <field name="name">Proyectos propios del usuario</field>
         <field name="model_id" ref="model_pkf_timesheet_project" />
-        <field name="groups" eval="[(4, ref('pkf_timesheet.group_user'))]" />
+        <field name="groups" eval="[(4, ref('pkf_app.group_user'))]" />
         <field name="domain_force">[('assigned_user_ids','in',user.employee_id.id)]</field>
     </record>
 
@@ -12,7 +12,7 @@
     <record id="pkf_timesheet_project_rule_manager" model="ir.rule">
         <field name="name">Proyectos propios del manager</field>
         <field name="model_id" ref="model_pkf_timesheet_project" />
-        <field name="groups" eval="[(4, ref('pkf_timesheet.group_manager'))]" />
+        <field name="groups" eval="[(4, ref('pkf_app.group_manager'))]" />
         <field name="domain_force">[('manager_id', 'in',
             user.employee_id.get_timesheet_employee_ids())]</field>
     </record>
@@ -21,7 +21,7 @@
     <record id="pkf_timesheet_project_rule_superuser" model="ir.rule">
         <field name="name">Todos los proyectos para superuser</field>
         <field name="model_id" ref="model_pkf_timesheet_project" />
-        <field name="groups" eval="[(4, ref('pkf_timesheet.group_superuser'))]" />
+        <field name="groups" eval="[(4, ref('pkf_app.group_superuser'))]" />
         <field name="domain_force">[(1,'=',1)]</field>
     </record>
 </odoo>

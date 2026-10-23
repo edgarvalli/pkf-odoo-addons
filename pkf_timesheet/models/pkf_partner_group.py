@@ -5,5 +5,6 @@ class PKFPartnerGroup(models.Model):
     _name = "pkf.partner.group"
     _description = "PKF - Grupo de Cliente"
 
-    name = fields.Char("Nombre Grupo")
+    code = fields.Char("Codigo", index=True)
+    name = fields.Char("Grupo Comercial")
     active = fields.Boolean("Activo", default=True)

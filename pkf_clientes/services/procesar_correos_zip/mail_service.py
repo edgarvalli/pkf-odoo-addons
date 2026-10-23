@@ -1,7 +1,8 @@
 import base64
 from odoo.api import Environment
-from .models import Attachment, Cliente
+
 from .constants import MIME_TYPES
+from .models import Attachment, Cliente
 
 
 class MailService:

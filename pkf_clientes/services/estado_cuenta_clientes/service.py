@@ -1,10 +1,11 @@
 import logging
 from odoo.api import Environment
+
+from .types import ContextType
 from .builder import ContextBuilder
 from .mail_service import MailService
 from .logger import EstadoCuentaLogger
 from .repository import EstadoCuentaRepository
-from .types import ContextType
 
 _logger = logging.getLogger(__name__)
 

@@ -7,16 +7,6 @@
         Aplicacion para control interno de PKF
         Se conecta a la aplicacion de contpaqi
     """,
-    "depends": ["base", "ev_tools", "ev_contpaqi"],
-    "data": [
-        "data/actions.xml",
-        "data/menu.xml",
-        "views/pkf_app_menu.xml",
-        "views/pkf_app_fronted.xml",
-        "data/pkf.app.menu.csv",
-        "security/ir.model.access.csv",
-    ],
-    "assets": {
-        "web.assets_backend": ["pkf_app/static/lib/fontawesome/css/all.min.css"]
-    },
+    "depends": ["base", "mail"],
+    "data": ["data/groups.xml", "data/ir_cron.xml"],
 }
