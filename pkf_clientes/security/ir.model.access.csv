@@ -6,3 +6,4 @@ access_pkf_clientes_staff,access.pkf.clientes.staff,model_pkf_clientes,pkf_group
 access_pkf_partner_group_user,access.pkf.partner.group.user,model_pkf_partner_group,pkf_app.group_user,1,1,1,1
 access_pkf_partner_group_manager,access.pkf.partner.group.manager,model_pkf_partner_group,pkf_app.group_manager,1,1,1,1
 access_pkf_partner_group_superuser,access.pkf.partner.group.superuser,model_pkf_partner_group,pkf_app.group_superuser,1,1,1,1
+access_pkf_partner_group_system,access.pkf.partner.group.system,model_pkf_partner_group,base.group_system,1,1,1,1
