@@ -40,6 +40,7 @@ export interface GrupoValor {
   id: number;
   codigo: string;
   nombre: string;
+  active: boolean;
 }
 
 export interface Factura {
@@ -59,6 +60,7 @@ export interface Factura {
 
 export interface SaldoCliente {
   cliente: Cliente;
+  grupo: GrupoValor;
   saldoVigente: number;
   saldoVencido30: number;
   saldoVencido60: number;

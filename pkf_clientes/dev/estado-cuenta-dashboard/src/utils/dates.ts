@@ -33,3 +33,19 @@ export function safeDateLocal(date?: string): Date | null {
 
   return currentDate;
 }
+
+export function obtenerFechaFormato() {
+  const fecha = new Date();
+
+  const formato = (valor: any) => String(valor).padStart(2, "0");
+
+  return (
+    fecha.getFullYear() +
+    formato(fecha.getMonth() + 1) +
+    formato(fecha.getDate()) +
+    "_" +
+    formato(fecha.getHours()) +
+    formato(fecha.getMinutes()) +
+    formato(fecha.getSeconds())
+  );
+}

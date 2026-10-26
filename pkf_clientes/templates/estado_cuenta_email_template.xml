@@ -41,7 +41,7 @@
                         total:
                     </span>
                     <![CDATA[&nbsp;]]>
-                    <t t-out="ctx.get('saldototal')" />
+                    <t t-out="ctx.get('saldo_total')" />
                 </p>
 
                 <br />
@@ -109,7 +109,7 @@
                                         </td>
                                         <td
                                             t-att-style="cell_style">
-                                            <t t-out="inv.get('pendiente')" />
+                                            <t t-out="inv.get('saldo_pendiente')" />
                                         </td>
                                     </tr>
                                 </t>
@@ -121,7 +121,7 @@
                                         <t t-out="fact.get('total', 0)" />
                                     </td>
                                     <td style="text-align: center;font-weight: bold;">
-                                        <t t-out="fact.get('saldopendiente', 0)" />
+                                        <t t-out="fact.get('saldo_pendiente', 0)" />
                                     </td>
                                 </tr>
                             </tfoot>

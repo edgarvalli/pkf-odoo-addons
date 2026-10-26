@@ -1,7 +1,8 @@
 import uuid
 from datetime import datetime
 from odoo.api import Environment
-from .types import ContextType
+
+from ..models.context import Context
 
 
 class EstadoCuentaLogger:
@@ -32,9 +33,9 @@ class EstadoCuentaLogger:
     def error(self, message):
         self.log(message, "error")
 
-    def set_context(self, ctx: ContextType):
-        self.rfc = ctx.get("rfc")
-        self.razonsocial = ctx.get("razonsocial")
+    def set_context(self, ctx: Context):
+        self.rfc = ctx.rfc
+        self.razonsocial = ctx.razonsocial
 
     def send_bitacora(self):
         self.env["pkf.envios.logs"].send_bitacora(

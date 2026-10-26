@@ -11,6 +11,11 @@
                 <div class="o_row" name="timesheet_group_name">
                     <field name="pkf_partner_group" class="oe_inline" />
                 </div>
+
+                <label for="pkf_partner_code" string="Código Comercial" />
+                <div class="o_row" name="pkf_partner_code">
+                    <field name="pkf_partner_code" class="oe_inline" readonly="True" />
+                </div>
             </xpath>
         </field>
     </record>

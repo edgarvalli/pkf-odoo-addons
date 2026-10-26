@@ -77,6 +77,7 @@ class ClienteService:
 
         if cliente.rfc:
             values["vat"] = cliente.rfc
+            values["company_type"] = "company" if len(cliente.rfc) == 12 else "person"
 
         if cliente.email:
             values["email"] = cliente.email

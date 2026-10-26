@@ -1,6 +1,6 @@
 from odoo.api import Environment
 from odoo.exceptions import UserError
-from .models import Factura, SaldoFactura
+from ..models.factura import Factura, SaldoFactura
 
 
 class EstadoCuentaRepository:
@@ -51,10 +51,10 @@ class EstadoCuentaRepository:
                     CAST(doc.CFOLIO AS INT) AS folio,
                     doc.CIDCLIENTEPROVEEDOR AS cliente_id,
                     clientes.CCODIGOCLIENTE AS cliente_codigo,
-                    doc.CRAZONSOCIAL AS cliente_name,
+                    doc.CRAZONSOCIAL AS cliente_nombre,
                     doc.CRFC AS cliente_rfc,
                     cv.CIDVALORCLASIFICACION AS grupo_id,
-                    cv.CVALORCLASIFICACION AS grupo_name,
+                    cv.CVALORCLASIFICACION AS grupo_nombre,
                     cv.CCODIGOVALORCLASIFICACION AS grupo_codigo,
                     doc.CIDCONCEPTODOCUMENTO AS concepto_id,
                     doc.CREFERENCIA AS referencia,
@@ -80,7 +80,7 @@ class EstadoCuentaRepository:
                     {"WHEN diasvencidos <= 30 THEN 'vigente'" if include_vigentes else ""}
                     WHEN diasvencidos BETWEEN 31 AND 60 THEN 'vencida30'
                     WHEN diasvencidos BETWEEN 61 AND 90 THEN 'vencida60'
-                    ELSE 'vencida'
+                    ELSE 'vencido'
                 END AS estatus
             FROM Facturas
             {"WHERE diasvencidos > 30" if not include_vigentes else ""}
@@ -99,7 +99,7 @@ class EstadoCuentaRepository:
 
         sql = self._build_query(include_vigentes, wheres)
         rows = self._execute_query(sql, tuple(params))
-        return [Factura(**row) for row in rows] if rows else []
+        return [Factura.from_dict(row) for row in rows] if rows else []
 
     def getall_facturas(
         self,
@@ -109,7 +109,7 @@ class EstadoCuentaRepository:
     ) -> list[Factura]:
         sql = self._build_query(include_vigentes, wheres or [])
         rows = self._execute_query(sql, args)
-        return [Factura(**row) for row in rows] if rows else []
+        return [Factura.from_dict(row) for row in rows] if rows else []
 
     def get_saldo_facturas(self, segmento: str = None) -> list[SaldoFactura]:
 
@@ -124,15 +124,10 @@ class EstadoCuentaRepository:
 
         for fact in facturas:
             cursor = saldos.setdefault(
-                fact.cliente_id,
+                fact.cliente.id,
                 {
-                    "cliente_id": fact.cliente_id,
-                    "cliente_name": fact.cliente_name,
-                    "cliente_rfc": fact.cliente_rfc,
-                    "cliente_codigo": fact.cliente_codigo,
-                    "grupo_id": fact.grupo_id,
-                    "grupo_name": fact.grupo_name,
-                    "grupo_codigo": fact.grupo_codigo,
+                    "cliente": fact.cliente,
+                    "grupo": fact.grupo,
                     "saldo_total": 0,
                     "saldo_vigente": 0,
                     "saldo_vencido30": 0,
@@ -149,7 +144,7 @@ class EstadoCuentaRepository:
                 cursor["saldo_vencido30"] += fact.total
             elif fact.estatus == "vencida60":
                 cursor["saldo_vencido60"] += fact.total
-            elif fact.estatus == "vencida":
+            elif fact.estatus == "vencido":
                 cursor["saldo_vencido"] += fact.total
             else:
                 cursor["saldo_vigente"] += fact.total

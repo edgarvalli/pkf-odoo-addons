@@ -2,7 +2,9 @@ from odoo.models import AbstractModel
 from odoo.exceptions import UserError
 
 from ..services.estado_cuenta_clientes import EstadoCuentaService
-from ..services.estado_cuenta_clientes.repository import EstadoCuentaRepository
+from ..services.estado_cuenta_clientes.repositories.estado_cuenta import (
+    EstadoCuentaRepository,
+)
 from ..services.comercial_sync import ComercialService
 
 
@@ -26,7 +28,7 @@ class PKFClientes(AbstractModel):
 
     def enviar_estado_cuenta_bulk(self, emails: list[str] = None):
         srv = EstadoCuentaService(self.env)
-        srv.enviar_edo_bulk(emails)
+        srv.enviar_estado_de_cuenta_masivo(emails)
 
     def buscar_clientes(self, **args):
         fields = args.get(

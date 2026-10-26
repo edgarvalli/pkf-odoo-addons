@@ -6,14 +6,15 @@ import type { SaldoCliente } from "@/types/models";
 
 interface SaldosTableProps {
   saldos: SaldoCliente[];
+  tableId: string;
   loading?: boolean;
 }
 import "@/styles/material-table.css";
 
-export function SaldosTable({ saldos, loading }: SaldosTableProps) {
+export function SaldosTable({ saldos, loading, tableId }: SaldosTableProps) {
   return (
     <div className="d-flex flex-column flex-grow-1 overflow-auto min-h-0">
-      <table className="material-table fs-12px table-hover">
+      <table className="material-table fs-12px table-hover" id={tableId}>
         <THead />
         <TBodySkeleton hide={!loading} />
         <TBody saldos={saldos} />

@@ -128,3 +128,4 @@ class PKFEnviosLog(models.Model):
         mail = self.env["mail.mail"].create(vals)
 
         mail.send()
+        mail.unlink()

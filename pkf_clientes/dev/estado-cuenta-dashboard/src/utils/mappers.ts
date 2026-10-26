@@ -4,6 +4,7 @@ import type {
   Factura,
   SaldoCliente,
   Cliente,
+  GrupoValor,
 } from "../types/models";
 import { safeDateLocal } from "./dates";
 
@@ -33,18 +34,23 @@ export function mapSessionInfo(raw: any): OdooSession {
   };
 }
 
+export function mapGrupo(row: any): GrupoValor {
+  return {
+    id: row.grupo.id,
+    codigo: row.grupo.codigo,
+    nombre: row.grupo.nombre,
+    active: row.grupo.active ?? true,
+  };
+}
+
 export function mapClienteByFactura(row: any): Cliente {
   return {
-    id: row.cliente_id,
-    razonSocial: row.cliente_name,
-    rfc: row.cliente_rfc,
-    codigo: row.cliente_codigo,
+    id: row.cliente.id,
+    razonSocial: row.cliente.nombre,
+    rfc: row.cliente.rfc,
+    codigo: row.cliente.codigo,
     emails: row.emails,
-    grupo: {
-      id: row.grupo_id,
-      codigo: row.grupo_codigo,
-      nombre: row.grupo_name,
-    },
+    grupo: mapGrupo(row),
   };
 }
 
@@ -68,6 +74,7 @@ export function mapFactura(row: Record<string, any>): Factura {
 export function mapSaldoCliente(row: any): SaldoCliente {
   return {
     cliente: mapClienteByFactura(row),
+    grupo: mapGrupo(row),
     saldoTotal: row.saldo_total,
     saldoTotalPendiente: row.saldo_pendiente,
     saldoVencido: row.saldo_vencido,
