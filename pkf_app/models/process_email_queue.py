@@ -26,6 +26,7 @@ class ProcessEmailQueue(models.AbstractModel):
             try:
                 _logger.info(f"Enviando correo a {mail.email_to}")
                 mail.send()
+                _logger.info(f"Estado: {mail.state}")
             except:
                 _logger.error(f"Ocurrio un error al enviar el correo a {mail.email_to}")
             finally:
