@@ -23,6 +23,10 @@ class ProcessEmailQueue(models.AbstractModel):
         mails.update({"state": "outgoing"})
 
         for mail in mails:
-            _logger.info(f"Enviando correo a {mail.email_to}")
-            mail.send()
-            time.sleep(random.uniform(2, 5))
+            try:
+                _logger.info(f"Enviando correo a {mail.email_to}")
+                mail.send()
+            except:
+                _logger.error(f"Ocurrio un error al enviar el correo a {mail.email_to}")
+            finally:
+                time.sleep(random.uniform(2, 5))
