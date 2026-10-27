@@ -23,20 +23,12 @@ class ProcessEmailQueue(models.AbstractModel):
     def _get_mail_servers(self) -> models.Model:
         return self.env["ir.mail_server"].search(
             [
-                (
-                    "smtp_user",
-                    "in",
-                    [
-                        "facturacion@pkfmty.com",
-                        "facturacion.mty@pkf.com.mx",
-                    ],
-                ),
                 ("active", "=", True),
             ],
             order="sequence, id",
         )
 
-    def _process_mail(self, mail: models.Model):
+    def _process_mail(self, mail: models.Model) -> bool:
         mail_id = mail.id
         email_to = mail.email_to
         try:
@@ -51,6 +43,8 @@ class ProcessEmailQueue(models.AbstractModel):
                 state = "eliminado tras el envío"
 
             _logger.info("Correo ID %s: estado %s", mail_id, state)
+
+            return not self.env["mail.mail"].browse(mail_id).exists()
 
         except Exception:
             _logger.exception(
@@ -75,19 +69,34 @@ class ProcessEmailQueue(models.AbstractModel):
             return
 
         for index, mail in enumerate(mails):
-            server = mail_servers[index % len(mail_servers)]
-
-            # mail_server_id pertenece a mail.message.
-            if mail.mail_message_id:
-                mail.mail_message_id.write({"mail_server_id": server.id})
-
-            mail.write({"state": "outgoing"})
-
-            _logger.info(
-                "Correo ID %s asignado al servidor %s (ID %s)",
-                mail.id,
-                server.name,
-                server.id,
+            mail_id = mail.id
+            servers_ordered = (
+                mail_servers[index % len(mail_servers) :]
+                | mail_servers[: index % len(mail_servers)]
             )
 
-            self._process_mail(mail)
+            for server in servers_ordered:
+                current_mail = self.env["mail.mail"].browse(mail_id).exists()
+
+                if not current_mail:
+                    _logger.info(f"El correo ID {mail_id} ya no existe.")
+                    break
+
+                if current_mail.mail_message_id:
+                    current_mail.mail_message_id.write({"mail_server_id": server.id})
+
+                current_mail.write({"state": "outgoing"})
+
+                _logger.info(
+                    "Intentando correo ID %s con servidor %s (ID %s)",
+                    mail_id,
+                    server.name,
+                    server.id,
+                )
+
+                if self._process_mail(current_mail):
+                    break
+                else:
+                    _logger.error(
+                        f"No se pudo completar el envío del correo ID {mail_id} con ningún servidor."
+                    )
