@@ -37,14 +37,20 @@ class ProcessEmailQueue(models.AbstractModel):
         )
 
     def _process_mail(self, mail: models.Model):
+        mail_id = mail.id
+        email_to = mail.email_to
         try:
-            _logger.info("Enviando correo ID %s a %s", mail.id, mail.email_to)
+            _logger.info("Enviando correo ID %s a %s", mail_id, email_to)
 
             mail.send()
 
-            mail.invalidate_recordset(["state"])
+            if self.env["mail.mail"].browse(mail_id).exists():
+                mail.invalidate_recordset(["state"])
+                state = mail.state
+            else:
+                state = "eliminado tras el envío"
 
-            _logger.info("Correo ID %s: estado %s", mail.id, mail.state)
+            _logger.info("Correo ID %s: estado %s", mail_id, state)
 
         except Exception:
             _logger.exception(
