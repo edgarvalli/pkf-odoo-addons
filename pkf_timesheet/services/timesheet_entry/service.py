@@ -83,6 +83,8 @@ class TimeEntryService:
             ("employee_id", "=", self.employee_id),
             ("date", ">=", startdate),
             ("date", "<=", enddate),
+            "|",
+            ("project_id", "=", False),
             ("project_id.state", "=", "in_progress"),
         ]
 
