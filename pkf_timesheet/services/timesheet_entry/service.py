@@ -59,7 +59,6 @@ class TimeEntryService:
 
     def save_range_hours(self, entry_dict: dict):
 
-        print(entry_dict)
         data = EntryRangeDTO.from_dict(entry_dict)
 
         if data.is_not_cargable:

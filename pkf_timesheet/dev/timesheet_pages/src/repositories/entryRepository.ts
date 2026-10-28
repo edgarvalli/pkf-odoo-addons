@@ -53,6 +53,7 @@ export function entryRepository(orm: IUseOrm) {
         hours: entryRange.hours,
         start_date: parseISODate(entryRange.startDate),
         end_date: parseISODate(entryRange.endDate),
+        note: entryRange.note,
       },
     };
 
