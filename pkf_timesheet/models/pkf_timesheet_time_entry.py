@@ -31,7 +31,7 @@ class PKFTimeSheetTimeEntry(models.Model):
         response = {"error": False, "message": "ok"}
         try:
             srv = TimeEntryService(self.env)
-            result = srv.save_bulk(project_id, entries)
+            result = srv.save_bulk(entries, project_id)
             if not result:
                 response = {"error": True, "message": "Ocurrio un error al guardar."}
         except Exception as e:

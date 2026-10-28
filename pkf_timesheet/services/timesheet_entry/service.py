@@ -104,7 +104,7 @@ class TimeEntryService:
             entries.append(vals)
         return entries
 
-    def save_bulk(self, entries: list[EntryValue], project_id: int = None):
+    def save_bulk(self, entries: list[dict], project_id: int = None):
 
         if project_id is None or project_id == 0:
             project = {"period_open": True}
@@ -114,6 +114,8 @@ class TimeEntryService:
         if not project:
             return
 
+        print(entries)
+        entries: list[EntryValue] = [EntryValue(**e) for e in entries]
         entries = normalize_entry_dates(entries)
         entries = self._filter_entries_by_period(project, entries)
 

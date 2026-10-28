@@ -1,6 +1,6 @@
 from odoo import fields
 from datetime import date as date_model
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 
 
 @dataclass
@@ -15,16 +15,17 @@ class EntryValue:
     note: str
 
     def to_dict(self) -> dict:
-        return {
-            "id": self.id,
-            "employee_id": self.employee_id,
-            "task_id": self.task_id,
-            "project_id": self.project_id,
-            "phase_id": self.phase_id,
-            "date": self.date,
-            "hours": self.hours,
-            "note": self.note,
-        }
+        return asdict(self)
+        # return {
+        #     "id": self.id,
+        #     "employee_id": self.employee_id,
+        #     "task_id": self.task_id,
+        #     "project_id": self.project_id,
+        #     "phase_id": self.phase_id,
+        #     "date": self.date,
+        #     "hours": self.hours,
+        #     "note": self.note,
+        # }
 
 
 @dataclass
