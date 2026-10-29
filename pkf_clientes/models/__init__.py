@@ -1,6 +1,5 @@
-from .pkf_clientes import PKFClientes
-from .partner_group import PKFPartnerGroup
-from .res_partner import ResPartner
-
-from .res_config_settings import ResConfigSettings
-from .pkf_clientes_wizard import PKFClientesWizard
+from . import res_partner
+from . import partner_group
+from . import pkf_clientes
+from . import pkf_clientes_wizard
+from . import res_config_settings

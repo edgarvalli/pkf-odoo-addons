@@ -32,7 +32,17 @@ class SolicitudFactura(models.Model):
         domain=[("state", "=", "sale"), ("pkf_solicitud_factura_id", "=", False)],
     )
 
+    codigo_cliente = fields.Char(
+        "Codigo Comercial",
+        compute="_compute_codigo_cliente",
+        store=False,
+    )
+
     cliente = fields.Char(string="Cliente Nuevo", tracking=True)
+
+    client_name = fields.Char(
+        string="Cliente", compute="_compute_client_name", store=False
+    )
 
     cliente_nuevo = fields.Boolean(string="Es cliente nuevo")
 
@@ -139,6 +149,19 @@ class SolicitudFactura(models.Model):
     # ---------------------------------------------------------
     # Campos calculados
     # ---------------------------------------------------------
+
+    @api.depends("partner_id", "cliente", "cliente_nuevo")
+    def _compute_client_name(self):
+        for rec in self:
+            if rec.cliente_nuevo:
+                rec.client_name = rec.cliente
+            else:
+                rec.client_name = rec.partner_id.name
+
+    @api.depends("partner_id", "partner_id.pkf_partner_code")
+    def _compute_codigo_cliente(self):
+        for rec in self:
+            rec.codigo_cliente = rec.partner_id.pkf_partner_code or False
 
     @api.depends("solicitud_factura_lines.importe")
     def _compute_total(self):
@@ -281,7 +304,7 @@ class SolicitudFactura(models.Model):
     @api.onchange("sale_order_id")
     def _onchange_sale_order_id(self):
         for rec in self:
-            rec.solicitud_factura_lines = []
+            rec.solicitud_factura_lines = [fields.Command.clear()]
 
             if not rec.sale_order_id:
                 rec.partner_id = False

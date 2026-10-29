@@ -13,8 +13,7 @@
             >
                 <field name="folio" string="Folio" width="100px" />
                 <field name="create_date" string="Fecha de creación" />
-                <field name="partner_id" string="Cliente" invisible="cliente_nuevo" />
-                <field name="cliente" string="Cliente" invisible="not cliente_nuevo" />
+                <field name="client_name" string="Cliente" />
                 <field name="total" string="Importe" sum="Total solicitado" />
                 <field name="currency_id" string="Moneda" optional="show" />
                 <field name="responsable" string="Responsable" optional="show" />

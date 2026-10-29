@@ -38,6 +38,10 @@
                                 placeholder="Nombre o razón social"
                                 readonly="(es_usuario_facturacion and estatus != 'draft') or estatus == 'created' or cliente_nuevo" />
 
+                            <field name="codigo_cliente"
+                                placeholder="Codigo Comercial"
+                                readonly="True" />
+
                             <field name="cliente_nuevo"
                                 readonly="(es_usuario_facturacion and estatus != 'draft') or estatus == 'created'" />
 

@@ -4,7 +4,14 @@
     "author": "Edgar Valli",
     "license": "LGPL-3",
     "description": "Aplicación para conectar los clientes de contpaqi comercial a Odoo",
-    "depends": ["base", "web", "sale", "ev_tools", "ev_contpaqi", "pkf_app"],
+    "depends": [
+        "base",
+        "web",
+        "sale",
+        "ev_tools",
+        "ev_contpaqi",
+        "pkf_app",
+    ],
     "assets": {
         "web.assets_backend": [
             "pkf_clientes/static/lib/estado_cuenta_dashboard.css",
