@@ -59,15 +59,20 @@ class NotifyCreatedService:
             record.forma_pago, ""
         )
 
-        return {
+        ctx = {
             "cliente": record.cliente or "",
             "metodo_pago": metodo_pago,
             "forma_pago": forma_pago,
             "responsable": record.responsable.name or "",
             "correos": record.correos_envio or "",
-            "total": f"{record.total:,.2f} {record.moneda}",
+            "total": f"{record.total:,.2f} {record.currency_id.name if record.currency_id else ""}",
             "folio": record.folio or "",
         }
+
+        if not record.cliente_nuevo and record.partner_id:
+            ctx["cliente"] = record.partner_id.name
+
+        return ctx
 
     def notify(self, record: BaseModel):
         """Envía la notificación de factura creada."""

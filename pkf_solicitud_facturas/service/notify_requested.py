@@ -35,7 +35,7 @@ class NotifyRequestedService:
             record.metodo_pago, ""
         )
 
-        moneda = record.moneda or ""
+        moneda = record.currency_id.name if record.currency_id else ""
 
         partidas = [
             {
@@ -46,7 +46,7 @@ class NotifyRequestedService:
             for line in record.solicitud_factura_lines
         ]
 
-        return {
+        ctx = {
             "folio": record.folio or "",
             "cliente": record.cliente or "",
             "total": f"{record.total:,.2f} {moneda}",
@@ -56,6 +56,10 @@ class NotifyRequestedService:
             "correos": record.correos_envio or "",
             "partidas": partidas,
         }
+
+        if not record.cliente_nuevo and record.partner_id:
+            ctx["cliente"] = record.partner_id.name
+        return ctx
 
     # ---------------------------------------------------------
     # Adjuntos
