@@ -59,13 +59,15 @@ class NotifyCreatedService:
             record.forma_pago, ""
         )
 
+        currency = record.currency_id.name if record.currency_id else ""
+
         ctx = {
             "cliente": record.cliente or "",
             "metodo_pago": metodo_pago,
             "forma_pago": forma_pago,
             "responsable": record.responsable.name or "",
             "correos": record.correos_envio or "",
-            "total": f"{record.total:,.2f} {record.currency_id.name if record.currency_id else ""}",
+            "total": f"{record.total:,.2f} {currency}",
             "folio": record.folio or "",
         }
 

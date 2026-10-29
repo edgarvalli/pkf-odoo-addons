@@ -2,6 +2,7 @@ from odoo import fields, models, api
 from odoo.exceptions import UserError
 
 from ..utils.folios import get_next_folio
+from ..utils.order_line import create_solicitud_factura_line
 from ..service.notify_requested import NotifyRequestedService
 from ..service.notify_created import NotifyCreatedService
 
@@ -25,7 +26,11 @@ class SolicitudFactura(models.Model):
 
     partner_id = fields.Many2one("res.partner", "Cliente")
 
-    sale_order_id = fields.Many2one("sale.order", "Propuesta")
+    sale_order_id = fields.Many2one(
+        "sale.order",
+        "Propuesta",
+        domain=[("state", "=", "sale"), ("pkf_solicitud_factura_id", "=", False)],
+    )
 
     cliente = fields.Char(string="Cliente Nuevo", tracking=True)
 
@@ -272,3 +277,21 @@ class SolicitudFactura(models.Model):
                         "la solicitud como creada.",
                     }
                 }
+
+    @api.onchange("sale_order_id")
+    def _onchange_sale_order_id(self):
+        for rec in self:
+            rec.solicitud_factura_lines = []
+
+            if not rec.sale_order_id:
+                rec.partner_id = False
+                rec.currency_id = False
+                return
+
+            order = rec.sale_order_id
+
+            rec.partner_id = order.partner_id
+            rec.currency_id = order.currency_id
+            rec.responsable = self.env.user
+
+            rec.solicitud_factura_lines = create_solicitud_factura_line(order)
