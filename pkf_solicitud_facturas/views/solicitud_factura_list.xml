@@ -15,7 +15,7 @@
                 <field name="create_date" string="Fecha de creación" />
                 <field name="cliente" string="Cliente" />
                 <field name="total" string="Importe" sum="Total solicitado" />
-                <field name="moneda" string="Moneda" optional="show" />
+                <field name="currency_id" string="Moneda" optional="show" />
                 <field name="responsable" string="Responsable" optional="show" />
                 <field
                     name="estatus"

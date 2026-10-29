@@ -1,4 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_pkf_solicitud_factura_all,access.pkf_solicitud.factura.all,model_pkf_solicitud_factura,pkf_app.group_user,1,1,1,1
-access_pkf_solicitud_factura_line_all,access.pkf.solicitud.factura.line.all,model_pkf_solicitud_factura_line,pkf_app.group_manager,1,1,1,1
-access_pkf_solicitud_factura_line_all_su,access.pkf.solicitud.factura.line.all,model_pkf_solicitud_factura_line,pkf_app.group_superuser,1,1,1,1
+access_pkf_solicitud_factura_line_users,access.pkf.solicitud.factura.line.users,model_pkf_solicitud_factura_line,pkf_app.group_user,1,1,1,1
+access_pkf_solicitud_factura_line_manager,access.pkf.solicitud.factura.line.manager,model_pkf_solicitud_factura_line,pkf_app.group_manager,1,1,1,1
+access_pkf_solicitud_factura_line_superuser,access.pkf.solicitud.factura.line.superuser,model_pkf_solicitud_factura_line,pkf_app.group_superuser,1,1,1,1

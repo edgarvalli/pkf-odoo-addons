@@ -1,2 +1,3 @@
-from .solicitud_factura_line import SolicitudFacturaLine
-from .solicitud_factura import SolicitudFactura
+from . import sale_order
+from . import solicitud_factura
+from . import solicitud_factura_line

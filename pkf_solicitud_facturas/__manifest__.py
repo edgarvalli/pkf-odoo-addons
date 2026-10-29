@@ -8,16 +8,19 @@
     "description": """
         Modulo para solicitar facturas a departamento de Cobranza
     """,
-    "depends": ["base", "mail", "pkf_app"],
+    "depends": ["base", "mail", "sale", "pkf_app"],
     "data": [
         # Seguridad y accesos
         "security/ir.model.access.csv",
         "data/groups.xml",
         "data/rules.xml",
+        # Data
+        "data/ir_sequence_data.xml",
         # Menús y acciones
         "data/actions.xml",
         "data/menu.xml",
-        # Vistas
+        # Views
+        "views/sale_order.xml",
         "views/solicitud_factura_form.xml",
         "views/solicitud_factura_list.xml",
         # Plantillas de correo

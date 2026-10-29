@@ -1,5 +1,7 @@
 from odoo import fields, models, api
 from odoo.exceptions import UserError
+
+from ..utils.folios import get_next_folio
 from ..service.notify_requested import NotifyRequestedService
 from ..service.notify_created import NotifyCreatedService
 
@@ -8,27 +10,28 @@ class SolicitudFactura(models.Model):
     _name = "pkf.solicitud.factura"
     _description = "PKF - Solicitud de Factura"
     _inherit = ["mail.thread", "mail.activity.mixin"]
+
     _rec_name = "folio"
 
     folio = fields.Char(
         string="Folio",
-        compute="_compute_folio",
-    )
-
-    cliente = fields.Char(
-        string="Cliente",
         required=True,
+        readonly=True,
+        copy=False,
+        default="/",
+        index=True,
         tracking=True,
     )
 
-    cliente_nuevo = fields.Boolean(
-        string="Es cliente nuevo",
-    )
+    partner_id = fields.Many2one("res.partner", "Cliente")
 
-    csf = fields.Binary(
-        string="Constancia de situación fiscal",
-        attachment=True,
-    )
+    sale_order_id = fields.Many2one("sale.order", "Propuesta")
+
+    cliente = fields.Char(string="Cliente Nuevo", tracking=True)
+
+    cliente_nuevo = fields.Boolean(string="Es cliente nuevo")
+
+    csf = fields.Binary(string="Constancia de situación fiscal", attachment=True)
 
     responsable = fields.Many2one(
         "res.users",
@@ -38,16 +41,7 @@ class SolicitudFactura(models.Model):
         tracking=True,
     )
 
-    moneda = fields.Selection(
-        selection=[
-            ("MXN", "Pesos Mexicanos"),
-            ("USD", "Dólares"),
-            ("EUR", "Euros"),
-        ],
-        string="Moneda",
-        required=True,
-        default="MXN",
-    )
+    currency_id = fields.Many2one("res.currency", "Moneda")
 
     metodo_pago = fields.Selection(
         selection=[
@@ -135,6 +129,8 @@ class SolicitudFactura(models.Model):
         compute="_compute_es_usuario_facturacion",
     )
 
+    observaciones = fields.Html("Observaciones")
+
     # ---------------------------------------------------------
     # Campos calculados
     # ---------------------------------------------------------
@@ -143,10 +139,6 @@ class SolicitudFactura(models.Model):
     def _compute_total(self):
         for record in self:
             record.total = sum(record.solicitud_factura_lines.mapped("importe"))
-
-    def _compute_folio(self):
-        for record in self:
-            record.folio = str(record.id).zfill(5) if record.id else "Nuevo"
 
     @api.depends_context("uid")
     def _compute_es_usuario_facturacion(self):
@@ -176,8 +168,11 @@ class SolicitudFactura(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
+
         for vals in vals_list:
             vals["estatus"] = "requested"
+            if not vals.get("folio") or vals["folio"] == "/":
+                vals["folio"] = get_next_folio(self.env, self._name)
 
         records = super().create(vals_list)
 
