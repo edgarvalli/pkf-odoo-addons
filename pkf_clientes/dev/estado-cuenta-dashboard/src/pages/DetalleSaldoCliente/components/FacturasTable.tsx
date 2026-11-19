@@ -6,7 +6,8 @@ import "@/styles/material-table.css";
 export function FacturasTable(props: {
   facturas: Factura[];
   references: string[];
-  onReferenceChange?: (value: string) => void;
+  onReferenceChange?: (value: string[]) => void;
+  referenceSelected?: string[];
 }) {
   return (
     <div className="d-flex flex-column flex-grow-1 overflow-auto min-h-0">
@@ -14,6 +15,7 @@ export function FacturasTable(props: {
         <THead
           references={props.references}
           onChange={props.onReferenceChange}
+          value={props.referenceSelected}
         />
         <TBody facturas={props.facturas} />
       </table>

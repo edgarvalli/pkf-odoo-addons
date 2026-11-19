@@ -1,8 +1,6 @@
 import { FilterReferenceCard } from "./FilterReferenceCard";
-export function THead(props: {
-  references: string[];
-  onChange?: (value: string) => void;
-}) {
+import type { FilterReferenceCardProps } from "../types";
+export function THead(props: FilterReferenceCardProps) {
   return (
     <thead>
       <tr>

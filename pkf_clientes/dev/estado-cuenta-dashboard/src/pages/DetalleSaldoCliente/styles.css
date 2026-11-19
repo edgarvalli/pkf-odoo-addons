@@ -4,23 +4,20 @@
   gap: 5px;
 }
 
-.ev-filter-card {
-  background-color: white;
+.filter-card {
   position: absolute;
-  padding: 0.5rem;
-  width: 10rem;
-  border-radius: 5px;
-  box-shadow: 1px 2px 15px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s;
-  transform: scale(1);
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 1050;
+  width: 280px;
+  padding: 15px;
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.ev-filter-card label {
-  font-size: 10px;
-}
-
-.ev-filter-card.hide {
-  opacity: 0;
-  z-index: -1;
-  transform: scale(0);
+.filter-reference-list {
+  max-height: 220px;
+  overflow-y: auto;
 }

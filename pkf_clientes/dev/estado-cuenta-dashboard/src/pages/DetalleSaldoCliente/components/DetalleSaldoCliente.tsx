@@ -11,6 +11,7 @@ export function DetalleSaldoCliente() {
     totalFacturas,
     facturas,
     references,
+    referenceSelected,
     setReferenceSelected,
   } = useDetalleSaldoCliente();
   return (
@@ -25,6 +26,7 @@ export function DetalleSaldoCliente() {
       <FacturasTable
         facturas={facturas}
         references={references}
+        referenceSelected={referenceSelected}
         onReferenceChange={setReferenceSelected}
       />
     </div>

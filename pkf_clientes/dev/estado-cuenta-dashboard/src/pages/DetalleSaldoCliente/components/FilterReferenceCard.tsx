@@ -1,39 +1,16 @@
-import { useEffect, useId, useRef, useState } from "react";
-
-export function FilterReferenceCard(props: {
-  references: string[];
-  onChange?: (value: string) => void;
-}) {
-  const [show, setShow] = useState(false);
-  const id = useId();
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!show) return;
-
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(e.target as Node)
-      ) {
-        setShow(false);
-      }
-    };
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setShow(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [show]);
+import type { FilterReferenceCardProps } from "../types";
+import { useFilterReference } from "../hooks/useFilterReference";
+export function FilterReferenceCard(props: FilterReferenceCardProps) {
+  const {
+    containerRef,
+    id,
+    show,
+    clearAll,
+    selectAll,
+    setShow,
+    toggleReference,
+    referenceExists,
+  } = useFilterReference(props);
 
   return (
     <div ref={containerRef} className="d-inline-block position-relative">
@@ -43,30 +20,65 @@ export function FilterReferenceCard(props: {
         onClick={() => setShow((prev) => !prev)}
       />
 
-      <div className={`ev-filter-card ${show ? "" : "hide"}`}>
-        <label htmlFor={`filter-ref-${id}`} className="form-label">
-          Selecciona una referencia
-        </label>
+      {show && (
+        <div className="filter-card">
+          <div className="d-flex mb-2 justify-content-between align-items-center">
+            <label className="mb-0 form-label">Selecciona referencias</label>
 
-        <select
-          name="ev-filter-ref"
-          id={`filter-ref-${id}`}
-          className="form-control"
-          defaultValue="ALL"
-          onChange={(e) => {
-            setShow(false);
-            props.onChange?.(e.target.value);
-          }}
-        >
-          <option value="ALL">TODAS</option>
+            <button
+              type="button"
+              className="p-0 btn btn-sm btn-link"
+              onClick={clearAll}
+            >
+              Limpiar
+            </button>
+          </div>
 
-          {props.references.map((r) => (
-            <option value={r} key={`${r}_${id}`}>
-              {r}
-            </option>
-          ))}
-        </select>
-      </div>
+          <div className="d-flex mb-2 justify-content-between">
+            <small>{props.value?.length} seleccionadas</small>
+
+            <button
+              type="button"
+              className="p-0 btn btn-sm btn-link"
+              onClick={selectAll}
+            >
+              Seleccionar todas
+            </button>
+          </div>
+
+          <div className="filter-reference-list">
+            {props.references.map((reference, index) => {
+              const inputId = `${id}-${index}`;
+
+              return (
+                <div className="form-check" key={reference}>
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    id={inputId}
+                    checked={referenceExists(reference)}
+                    onChange={() => toggleReference(reference)}
+                  />
+
+                  <label className="form-check-label" htmlFor={inputId}>
+                    {reference}
+                  </label>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="d-flex mt-3 justify-content-end">
+            <button
+              type="button"
+              className="btn btn-primary btn-sm"
+              onClick={() => setShow(false)}
+            >
+              Aplicar
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
