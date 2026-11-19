@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/web/static/img/favicon.ico" />
+    <link
+      rel="manifest"
+      href="/web/manifest.webmanifest"
+      crossorigin="use-credentials"
+    />
+    <link rel="apple-touch-icon" href="/web/static/img/odoo-icon-ios.png" />
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="/web/assets/0350b70/web.assets_web_print.min.css"
+      media="print"
+    />
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="/web/assets/8994468/web.assets_web.min.css"
+      media="screen"
+    />
+    <title>PKF - Timesheet Dashboard</title>
+  </head>
+  <body class="o_web_client">
+    <header class="o_navbar">
+      <nav class="o_main_navbar d-print-none" data-command-category="disabled">
+        <div class="o_navbar_apps_menu">
+          <button
+            data-hotkey="h"
+            title="Menú de inicio"
+            aria-expanded="false"
+            class="o-dropdown dropdown-toggle dropdown"
+          >
+            <i class="oi oi-apps"></i>
+          </button>
+        </div>
+        <div
+          class="o_menu_systray d-flex flex-shrink-0 ms-auto bg-inherit"
+          role="menu"
+        >
+          <div></div>
+          <div class="dropdown"></div>
+          <div></div>
+          <div class="o-mail-DiscussSystray-class">
+            <button
+              class="bg-transparent o-dropdown dropdown-toggle dropdown"
+              aria-expanded="false"
+            >
+              <i
+                class="fa fa-lg fa-comments"
+                role="img"
+                aria-label="Mensajes"
+              ></i
+              ><span class="o-mail-MessagingMenu-counter badge rounded-pill"
+                >5</span
+              >
+            </button>
+          </div>
+          <div></div>
+          <button
+            aria-expanded="false"
+            class="o-dropdown dropdown-toggle dropdown"
+          >
+            <i
+              class="fa fa-lg fa-clock-o"
+              role="img"
+              aria-label="Actividades"
+            ></i>
+          </button>
+          <div></div>
+          <div class="o_switch_company_menu d-none d-md-block">
+            <button
+              data-hotkey="shift+u"
+              disabled=""
+              title="PKF Monterrey"
+              aria-expanded="false"
+              class="o-dropdown dropdown-toggle dropdown"
+            >
+              <i class="fa fa-building d-lg-none"></i
+              ><span class="oe_topbar_name d-none d-lg-block text-truncate"
+                >PKF Monterrey</span
+              >
+            </button>
+          </div>
+          <div></div>
+          <div class="d-flex" xml:space="preserve">
+            <button
+              class="o_mobile_menu_toggle o_nav_entry o-no-caret d-md-none border-0 pe-3"
+              title="Alternar menú"
+              aria-label="Alternar menú"
+            >
+              <div class="position-relative d-flex flex-shrink-0 bg-inherit">
+                <img
+                  class="o_burger_menu_avatar o_image_24_cover rounded"
+                  alt="Menú"
+                  src="/web/image?model=res.users&amp;field=avatar_128&amp;id=2"
+                />
+                <div
+                  class="o-mail-ImStatus d-flex justify-content-center flex-shrink-0 align-items-center bg-white bg-opacity-100 o-web-UserMenu-imStatus position-absolute o-md rounded-circle"
+                >
+                  <span class="d-flex flex-column smaller"
+                    ><i
+                      class="fa fa-circle text-success"
+                      title="En línea"
+                      role="img"
+                      aria-label="El usuario está conectado"
+                    ></i
+                  ></span>
+                </div>
+              </div>
+            </button>
+          </div>
+          <div></div>
+          <div class="o_user_menu d-none d-md-block pe-0 bg-inherit">
+            <button
+              class="py-1 py-lg-0 o-dropdown dropdown-toggle dropdown"
+              aria-expanded="false"
+            >
+              <div class="position-relative d-flex flex-shrink-0 bg-inherit">
+                <img
+                  class="o_avatar o_user_avatar rounded"
+                  alt="Usuario"
+                  src="http://localhost:8069/web/image/res.partner/3/avatar_128?unique=1793339420000"
+                />
+                <div
+                  class="o-mail-ImStatus d-flex justify-content-center flex-shrink-0 align-items-center bg-white bg-opacity-100 o-web-UserMenu-imStatus position-absolute o-md rounded-circle"
+                >
+                  <span class="d-flex flex-column smaller"
+                    ><i
+                      class="fa fa-circle text-success"
+                      title="En línea"
+                      role="img"
+                      aria-label="El usuario está conectado"
+                    ></i
+                  ></span>
+                </div>
+              </div>
+              <small
+                class="oe_topbar_name d-none ms-2 text-start smaller lh-1 text-truncate"
+                style="max-width: 200px"
+                >Edgar Valli<mark class="d-block font-monospace text-truncate"
+                  ><i class="fa fa-database oi-small me-1"></i>pkf_test_db</mark
+                ></small
+              >
+            </button>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <main id="timesheet-dashboard" class="o-main-components-container"></main>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

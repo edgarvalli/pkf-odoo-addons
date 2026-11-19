@@ -3,25 +3,149 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="/web/static/img/favicon.ico" />
     <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="manifest"
+      href="/web/manifest.webmanifest"
+      crossorigin="use-credentials"
+    />
+    <link rel="apple-touch-icon" href="/web/static/img/odoo-icon-ios.png" />
+    <link
+      type="text/css"
       rel="stylesheet"
-      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
-      crossorigin="anonymous"
+      href="/web/assets/0350b70/web.assets_web_print.min.css"
+      media="print"
     />
     <link
+      type="text/css"
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
+      href="/web/assets/8994468/web.assets_web.min.css"
+      media="screen"
     />
-    <title>PKF - Estado Cuenta Clientes</title>
+    <title>PKF - Timesheet Dashboard</title>
   </head>
-  <body>
-    <header>
-      <nav class="navbar text-white" style="background-color: #71639e">
-        <div class="container-fuild">
-          <div class="row">
-            <div class="col">PKF</div>
+  <body class="o_web_client">
+    <header class="o_navbar">
+      <nav class="d-print-none o_main_navbar" data-command-category="disabled">
+        <div class="o_navbar_apps_menu">
+          <button
+            data-hotkey="h"
+            title="Menú de inicio"
+            aria-expanded="false"
+            class="dropdown-toggle dropdown o-dropdown"
+          >
+            <i class="oi oi-apps"></i>
+          </button>
+        </div>
+        <div
+          class="d-flex flex-shrink-0 ms-auto bg-inherit o_menu_systray"
+          role="menu"
+        >
+          <div></div>
+          <div class="dropdown"></div>
+          <div></div>
+          <div class="o-mail-DiscussSystray-class">
+            <button
+              class="dropdown-toggle dropdown bg-transparent o-dropdown"
+              aria-expanded="false"
+            >
+              <i
+                class="fa fa-lg fa-comments"
+                role="img"
+                aria-label="Mensajes"
+              ></i
+              ><span class="badge rounded-pill o-mail-MessagingMenu-counter"
+                >5</span
+              >
+            </button>
+          </div>
+          <div></div>
+          <button
+            aria-expanded="false"
+            class="dropdown-toggle dropdown o-dropdown"
+          >
+            <i
+              class="fa fa-lg fa-clock-o"
+              role="img"
+              aria-label="Actividades"
+            ></i>
+          </button>
+          <div></div>
+          <div class="d-none d-md-block o_switch_company_menu">
+            <button
+              data-hotkey="shift+u"
+              disabled=""
+              title="PKF Monterrey"
+              aria-expanded="false"
+              class="dropdown-toggle dropdown o-dropdown"
+            >
+              <i class="d-lg-none fa fa-building"></i
+              ><span class="d-none d-lg-block text-truncate oe_topbar_name"
+                >PKF Monterrey</span
+              >
+            </button>
+          </div>
+          <div></div>
+          <div class="d-flex" xml:space="preserve">
+            <button
+              class="d-md-none pe-3 border-0 o_mobile_menu_toggle o_nav_entry o-no-caret"
+              title="Alternar menú"
+              aria-label="Alternar menú"
+            >
+              <div class="d-flex flex-shrink-0 position-relative bg-inherit">
+                <img
+                  class="rounded o_burger_menu_avatar o_image_24_cover"
+                  alt="Menú"
+                  src="/web/image?model=res.users&amp;field=avatar_128&amp;id=2"
+                />
+                <div
+                  class="d-flex flex-shrink-0 justify-content-center align-items-center bg-white bg-opacity-100 position-absolute rounded-circle o-mail-ImStatus o-web-UserMenu-imStatus o-md"
+                >
+                  <span class="d-flex flex-column smaller"
+                    ><i
+                      class="text-success fa fa-circle"
+                      title="En línea"
+                      role="img"
+                      aria-label="El usuario está conectado"
+                    ></i
+                  ></span>
+                </div>
+              </div>
+            </button>
+          </div>
+          <div></div>
+          <div class="d-none d-md-block pe-0 bg-inherit o_user_menu">
+            <button
+              class="py-1 py-lg-0 dropdown-toggle dropdown o-dropdown"
+              aria-expanded="false"
+            >
+              <div class="d-flex flex-shrink-0 position-relative bg-inherit">
+                <img
+                  class="rounded o_avatar o_user_avatar"
+                  alt="Usuario"
+                  src="http://localhost:8069/web/image/res.partner/3/avatar_128?unique=1793339420000"
+                />
+                <div
+                  class="d-flex flex-shrink-0 justify-content-center align-items-center bg-white bg-opacity-100 position-absolute rounded-circle o-mail-ImStatus o-web-UserMenu-imStatus o-md"
+                >
+                  <span class="d-flex flex-column smaller"
+                    ><i
+                      class="text-success fa fa-circle"
+                      title="En línea"
+                      role="img"
+                      aria-label="El usuario está conectado"
+                    ></i
+                  ></span>
+                </div>
+              </div>
+              <small
+                class="d-none ms-2 text-start lh-1 text-truncate oe_topbar_name smaller"
+                style="max-width: 200px"
+                >Edgar Valli<mark class="d-block font-monospace text-truncate"
+                  ><i class="me-1 fa fa-database oi-small"></i>pkf_test_db</mark
+                ></small
+              >
+            </button>
           </div>
         </div>
       </nav>

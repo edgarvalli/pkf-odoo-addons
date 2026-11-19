@@ -9,7 +9,7 @@ class TimesheetProject:
 
     def __init__(self, env: Environment):
         self.env = env
-        self.model = env["pkf.timesheet.project"].sudo()
+        self.Project = env["pkf.timesheet.project"].sudo()
         self.entry_repo = TimeEntryRepository(env)
 
     def calculate_total_timesheet_cost(self, rec: BaseModel):
@@ -22,7 +22,10 @@ class TimesheetProject:
         for entry in entries:
             hours_by_employee[entry.employee_id.id] += entry.hours
 
-        surcharge = 1 + (rec.cancellation_porcentage / 100)
+        surcharge = 1
+
+        if rec.cancellation_porcentage > 0:
+            surcharge += rec.cancellation_porcentage / 100
 
         total_amount = sum(
             employee.timesheet_cost * surcharge * hours_by_employee[employee.id]
@@ -38,7 +41,7 @@ class TimesheetProject:
         end_date: str | None = None,
     ):
 
-        project = self.model.browse(project_id)
+        project = self.Project.browse(project_id)
 
         if not project.exists():
             return None

@@ -1,5 +1,9 @@
+import logging
 from odoo import models, fields
+
 from ..services import TimeEntryService
+
+_logger = logging.getLogger(__name__)
 
 
 class PKFTimeSheetTimeEntry(models.Model):
@@ -47,3 +51,14 @@ class PKFTimeSheetTimeEntry(models.Model):
     def totalize_by_project(self, startdate, enddate):
         srv = TimeEntryService(self.env)
         return srv.totalize_entries_by_date(startdate, enddate)
+
+    def write(self, vals):
+        ok = super().write(vals)
+        if ok:
+            Project = self.project_id
+            _logger.info(f"Calculando el prosupuesto del projecto {Project.name}")
+            Project._compute_hours_count()
+            Project._compute_expense_count()
+            Project._compute_total_spend()
+            Project._compute_total_hours()
+        return ok

@@ -56,7 +56,7 @@ class PKFTimeSheetProject(models.Model):
         "Total Costo Hora", compute="_compute_total_hours", store=True
     )
     total_amount_spend = fields.Float(
-        "Total Gastado", compute="_compute_total_spend", store=True
+        "Restante Presupuesto", compute="_compute_total_spend", store=True
     )
 
     state = fields.Selection(
@@ -139,6 +139,7 @@ class PKFTimeSheetProject(models.Model):
     )
     def _compute_total_spend(self):
         for rec in self:
+            _logger.info("Calculando el presupuesto.")
             # Lógica: Presupuesto - (Costos + Gastos)
             rec.total_amount_spend = rec.total_budget_amount - (
                 rec.total_timesheet_cost_amount + rec.total_expenses_amount
@@ -146,6 +147,7 @@ class PKFTimeSheetProject(models.Model):
 
     def _compute_expense_count(self):
         for rec in self:
+            _logger.info("Calculando los gastos.")
             # Contamos cuántos gastos pertenecen a este proyecto
             rec.expense_count = self.env["hr.expense"].search_count(
                 [("pfk_timesheet_project_id", "=", rec.id)]
@@ -153,6 +155,7 @@ class PKFTimeSheetProject(models.Model):
 
     def _compute_hours_count(self):
         for rec in self:
+            _logger.info("Calculando las horas.")
             entries = self.env["pkf.timesheet.time.entry"].search(
                 [("project_id", "=", rec.id), ("task_id.include_in_cost", "=", True)]
             )

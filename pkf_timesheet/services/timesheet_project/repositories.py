@@ -6,7 +6,7 @@ class TimesheetProjectRepository:
     def __init__(self, env: Environment):
         self.model = env["pkf.timesheet.project"].sudo()
 
-    def _search(self, domain=[], include_phases=False, limit=None):
+    def _search(self, domain=[], include_phases=False, limit=None) -> list[dict]:
         projects = self.model.search(domain, limit=limit)
         result = []
 
@@ -55,7 +55,7 @@ class TimesheetProjectRepository:
         if value:
             domain.append(("name", "ilike", value))
 
-        include_phases = kwargs.pop("include_phases")
+        include_phases = kwargs.pop("include_phases", False)
 
         return self._search(domain, include_phases)
 
