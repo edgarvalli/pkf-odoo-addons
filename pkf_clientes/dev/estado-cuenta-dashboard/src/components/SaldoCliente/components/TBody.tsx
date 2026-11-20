@@ -1,8 +1,9 @@
 import { formatNumber } from "@/utils/numbers";
-import type { SaldoCliente } from "@/types/models";
 import { useNavigate } from "react-router";
 
-export function TBody({ saldos }: { saldos: SaldoCliente[] }) {
+import type { SaldosTableProps } from "../types";
+
+export function TBody({ saldos, cancelClick }: SaldosTableProps) {
   const navigate = useNavigate();
 
   return (
@@ -11,7 +12,9 @@ export function TBody({ saldos }: { saldos: SaldoCliente[] }) {
         <tr
           key={saldo.cliente.id}
           className={`cursor-pointer ${saldo.cliente.estatus === "INCOBRABLE" ? "text-danger" : ""}`}
-          onClick={() => navigate(`detalle/${saldo.cliente.id}`)}
+          onClick={() =>
+            cancelClick ? null : navigate(`detalle/${saldo.cliente.id}`)
+          }
         >
           <td>{saldo.cliente.codigo}</td>
           <td>{saldo.cliente.razonSocial}</td>

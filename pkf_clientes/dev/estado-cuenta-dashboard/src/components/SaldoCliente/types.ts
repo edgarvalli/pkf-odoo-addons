@@ -12,6 +12,7 @@ export interface SaldosTableProps {
   saldos: SaldoCliente[];
   tableId: string;
   loading?: boolean;
+  cancelClick?: boolean;
 }
 
 export interface SaldosModalProps {

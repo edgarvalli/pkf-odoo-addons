@@ -59,7 +59,11 @@ export function ASHeader() {
       <SaldosModal
         show={showModal}
         onClose={() => setShowModal(false)}
-        tableProps={{ tableId: "saldos-table-as", saldos: saldoFiltered }}
+        tableProps={{
+          tableId: "saldos-table-as",
+          saldos: saldoFiltered,
+          cancelClick: true,
+        }}
         headerProps={{}}
       />
     </header>
