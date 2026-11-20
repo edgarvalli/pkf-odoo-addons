@@ -16,7 +16,7 @@ export function DetalleSaldoCliente() {
   } = useDetalleSaldoCliente();
   return (
     <div className="d-flex flex-column p-3 h-100">
-      <div className="mb-2 material-card">
+      <div className="mb-2">
         <DetalleHeader
           cliente={cliente}
           saldo={saldoPendiente}
