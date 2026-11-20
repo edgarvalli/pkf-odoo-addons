@@ -51,6 +51,7 @@ export function mapClienteByFactura(row: any): Cliente {
     codigo: row.cliente.codigo,
     emails: row.emails,
     grupo: mapGrupo(row),
+    estatus: row.cliente.estatus,
   };
 }
 
@@ -81,6 +82,7 @@ export function mapSaldoCliente(row: any): SaldoCliente {
     saldoVencido30: row.saldo_vencido30,
     saldoVencido60: row.saldo_vencido60,
     saldoVigente: row.saldo_vigente,
+    totalFacturas: row.total_facturas,
   };
 }
 

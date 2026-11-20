@@ -1,0 +1,68 @@
+/* Layout principal */
+.router-home {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  width: 100%;
+  min-height: 0;
+  background: #f8f9fa;
+}
+
+.router-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+}
+
+/* Ocultar menús alternativos */
+.router-menu-mobile,
+.router-menu-desktop {
+  display: none;
+}
+
+/* Sidebar: escritorio, tablet e iPad */
+.router-menu-sidebar {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 240px;
+  width: 240px;
+  min-height: 0;
+  background: white;
+  border-right: 1px solid #dee2e6;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+/* Móviles */
+@media (max-width: 1199px) {
+  .router-home {
+    flex-direction: column;
+  }
+
+  .router-menu-sidebar {
+    display: none;
+  }
+
+  .router-menu-mobile {
+    display: block;
+    width: 100%;
+    background: white;
+    border-bottom: 1px solid #dee2e6;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  }
+
+  .router-menu-mobile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    font-weight: 600;
+  }
+
+  .router-menu-mobile-header button {
+    border: 1px solid #dee2e6;
+    background: white;
+    border-radius: 5px;
+    padding: 5px 10px;
+  }
+}

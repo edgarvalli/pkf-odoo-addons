@@ -2,7 +2,7 @@ import { FilterReferenceCard } from "./FilterReferenceCard";
 import type { FilterReferenceCardProps } from "../types";
 export function THead(props: FilterReferenceCardProps) {
   return (
-    <thead>
+    <thead className="sticky-top bg-white">
       <tr>
         <th>Fecha</th>
         <th>Folio</th>

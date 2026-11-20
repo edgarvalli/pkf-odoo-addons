@@ -1,0 +1,1 @@
+export { AntiguedadSaldoPage } from "./provider";

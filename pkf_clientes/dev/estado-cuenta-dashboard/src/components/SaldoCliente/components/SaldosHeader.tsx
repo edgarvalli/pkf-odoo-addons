@@ -1,26 +1,30 @@
-import type { ChangeEvent } from "react";
+import type { SaldosHeaderProps } from "../types";
 
-interface SaldosHeaderProps {
-  searchClientes?: (e: ChangeEvent<HTMLInputElement>) => void;
-  loading?: boolean;
-  downloadReport?: () => void;
-}
 export function SaldosHeader(props: SaldosHeaderProps) {
   return (
-    <header className="d-flex flex-column flex-xl-row align-items-xl-center justify-content-between gap-3 mb-3">
+    <header
+      className="
+        d-flex flex-column flex-xl-row gap-3 mb-3 align-items-xl-center justify-content-between"
+    >
       <div className="flex-shrink-0">
-        <h5 className="fw-semibold text-muted mb-1">Saldo de Clientes</h5>
-        <small className="text-secondary">Consulta y descarga de saldos</small>
+        {!props.hideTitle && (
+          <>
+            <h5 className="mb-1 fw-semibold text-muted">Saldo de Clientes</h5>
+            <small className="text-secondary">
+              Consulta y descarga de saldos
+            </small>
+          </>
+        )}
       </div>
 
-      <div className="d-flex flex-column flex-md-row align-items-stretch align-items-md-center gap-2">
+      <div className="d-flex flex-column flex-md-row gap-2 align-items-stretch align-items-md-center">
         <div className="input-group">
           <span className="input-group-text">
             <i className="fa fa-search" aria-hidden="true" />
           </span>
           <input
             type="search"
-            className="form-control"
+            className="form-control bg-white"
             id="search"
             placeholder="Buscar cliente, código o grupo..."
             aria-label="Buscar clientes"
@@ -33,7 +37,7 @@ export function SaldosHeader(props: SaldosHeaderProps) {
           type="button"
           onClick={props.downloadReport}
         >
-          <i className="fa fa-download me-2" />
+          <i className="me-2 fa fa-download" />
           Descargar reporte
         </button>
       </div>

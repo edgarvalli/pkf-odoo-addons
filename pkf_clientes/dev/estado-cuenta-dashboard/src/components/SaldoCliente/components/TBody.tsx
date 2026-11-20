@@ -10,13 +10,14 @@ export function TBody({ saldos }: { saldos: SaldoCliente[] }) {
       {saldos.map((saldo) => (
         <tr
           key={saldo.cliente.id}
-          className="cursor-pointer"
-          onClick={() => navigate(`/detalle/${saldo.cliente.id}`)}
+          className={`cursor-pointer ${saldo.cliente.estatus === "INCOBRABLE" ? "text-danger" : ""}`}
+          onClick={() => navigate(`detalle/${saldo.cliente.id}`)}
         >
           <td>{saldo.cliente.codigo}</td>
           <td>{saldo.cliente.razonSocial}</td>
           <td>{saldo.cliente.rfc}</td>
           <td>{saldo.cliente.grupo?.nombre}</td>
+          <td>{saldo.cliente.estatus}</td>
           <td className="text-end text-success">
             {formatNumber(saldo.saldoVigente)}
           </td>

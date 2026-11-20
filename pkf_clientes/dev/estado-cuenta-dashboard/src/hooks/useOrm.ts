@@ -14,7 +14,7 @@ import { mapSessionInfo } from "../utils/mappers";
  * Hook para interactuar con el ORM de Odoo a través de llamadas JSON-RPC.
  * Proporciona métodos estándar para operaciones CRUD y ejecución de acciones.
  */
-export function useOrm(): IUseOrm {
+export function useOrm(initSession?: boolean): IUseOrm {
   const [fetching, setFetching] = useState(false);
   const [userSession, setSession] = useState<OdooSession | null>(null);
 
@@ -184,8 +184,8 @@ export function useOrm(): IUseOrm {
   };
 
   useEffect(() => {
-    getSessionInfo();
-  }, []);
+    if (initSession) getSessionInfo();
+  }, [initSession]);
 
   return {
     fetching,

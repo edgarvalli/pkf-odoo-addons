@@ -1,10 +1,17 @@
 import { createHashRouter, type RouteObject } from "react-router";
 import { RouterHome } from "./router/RouterHome";
-import { DashboardPage, DetalleSaldoCliente } from "./pages";
+import { DashboardPage, DetalleSaldoCliente, EstadoCuentaPage } from "./pages";
 
 const routes: RouteObject[] = [
   { path: "", Component: DashboardPage },
-  { path: "detalle/:clienteId", Component: DetalleSaldoCliente },
+  {
+    path: "estado-cuenta",
+    Component: EstadoCuentaPage,
+  },
+  {
+    path: "estado-cuenta/detalle/:clienteId",
+    Component: DetalleSaldoCliente,
+  },
 ];
 
 export const routerPaths = createHashRouter([

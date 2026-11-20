@@ -1,27 +1,19 @@
 import { useEffect, useId, useRef, useState, type ChangeEvent } from "react";
 
 import { exportTableToExcel } from "@/utils/exports";
-import { useOrm } from "@/hooks/useOrm";
-import type { SaldoCliente } from "@/types/models";
-import { mapSaldoCliente } from "@/utils/mappers";
+import { useSaldoClientes } from "@/hooks/useSaldoClientes";
 
-export function useDashboard() {
+import type { SaldoCliente } from "@/types/models";
+
+export function useEstadoCuenta() {
   const [saldos, setSaldos] = useState<SaldoCliente[]>([]);
 
   const snapSaldos = useRef<SaldoCliente[]>([]);
   const tableId = useId();
-
-  const orm = useOrm();
+  const { loading, getSaldos } = useSaldoClientes();
 
   const fetchSaldoClientes = async () => {
-    const result = await orm.call<Record<string, any>[]>(
-      "pkf.clientes",
-      "saldo_by_segmento",
-      [[]],
-    );
-
-    if (!result) return;
-    const saldos = result.map(mapSaldoCliente);
+    const saldos = await getSaldos();
     snapSaldos.current = saldos;
     setSaldos(saldos);
   };
@@ -52,7 +44,7 @@ export function useDashboard() {
 
   return {
     saldos,
-    loading: orm.fetching,
+    loading,
     tableId,
     fetchSaldoClientes,
     searchClientes,

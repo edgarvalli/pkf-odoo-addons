@@ -36,6 +36,7 @@ class Factura:
             codigo=values.pop("cliente_codigo", ""),
             nombre=values.pop("cliente_nombre", ""),
             rfc=values.pop("cliente_rfc", ""),
+            estatus=values.pop("cliente_estatus", ""),
         )
 
         grupo = Grupo(
@@ -60,6 +61,7 @@ class SaldoFactura:
     saldo_vencido60: float
     saldo_vencido: float
     saldo_pendiente: float
+    total_facturas: int
 
     def to_dict(self):
         return asdict(self)

@@ -1,0 +1,14 @@
+.saldo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.saldo-grid-item {
+  background-color: white;
+  transition: all 0.3s;
+}
+.saldo-grid-item:hover {
+  background-color: #f5f5f5;
+  cursor: pointer;
+}

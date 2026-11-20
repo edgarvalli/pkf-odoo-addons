@@ -53,6 +53,10 @@ class EstadoCuentaRepository:
                     clientes.CCODIGOCLIENTE AS cliente_codigo,
                     doc.CRAZONSOCIAL AS cliente_nombre,
                     doc.CRFC AS cliente_rfc,
+                    COALESCE(
+                        NULLIF(est.CVALORCLASIFICACION, '(Ninguna)'),
+                        'VIGENTE'
+                    ) AS cliente_estatus,
                     cv.CIDVALORCLASIFICACION AS grupo_id,
                     cv.CVALORCLASIFICACION AS grupo_nombre,
                     cv.CCODIGOVALORCLASIFICACION AS grupo_codigo,
@@ -67,20 +71,29 @@ class EstadoCuentaRepository:
                         NULLIF(clientes.CEMAIL2, ''),
                         NULLIF(clientes.CEMAIL3, '')
                     ) AS emails,
-                    DATEDIFF(DAY, doc.CFECHA, @today) AS diasvencidos
+                    DATEDIFF(
+                        DAY,
+                        DATEADD(
+                            DAY,
+                            COALESCE(clientes.CDIASCREDITOCLIENTE, 0),
+                            doc.CFECHA
+                        ),
+                        @today
+                    ) AS diasvencidos
                 FROM admDocumentos doc
                 INNER JOIN admFoliosDigitales folios ON folios.CIDDOCTO = doc.CIDDOCUMENTO
                 INNER JOIN admClientes clientes ON clientes.CIDCLIENTEPROVEEDOR = doc.CIDCLIENTEPROVEEDOR
-                INNER JOIN admClasificacionesValores cv ON cv.CIDVALORCLASIFICACION = clientes.CIDVALORCLASIFCLIENTE1
+                LEFT JOIN admClasificacionesValores cv ON cv.CIDVALORCLASIFICACION = clientes.CIDVALORCLASIFCLIENTE1
+                LEFT JOIN admClasificacionesValores est ON est.CIDVALORCLASIFICACION = clientes.CIDVALORCLASIFCLIENTE6
                 WHERE {" AND ".join(where_clause)}
             )
             SELECT
                 *,
                 CASE
-                    {"WHEN diasvencidos <= 30 THEN 'vigente'" if include_vigentes else ""}
-                    WHEN diasvencidos BETWEEN 31 AND 60 THEN 'vencida30'
-                    WHEN diasvencidos BETWEEN 61 AND 90 THEN 'vencida60'
-                    ELSE 'vencido'
+                    {"WHEN diasvencidos <= 30 THEN 'VIGENTE'" if include_vigentes else ""}
+                    WHEN diasvencidos BETWEEN 31 AND 60 THEN 'VENCIDO_30'
+                    WHEN diasvencidos BETWEEN 61 AND 90 THEN 'VENCIDO_60'
+                    ELSE 'VENCIDO_MAS_90'
                 END AS estatus
             FROM Facturas
             {"WHERE diasvencidos > 30" if not include_vigentes else ""}
@@ -111,14 +124,16 @@ class EstadoCuentaRepository:
         rows = self._execute_query(sql, args)
         return [Factura.from_dict(row) for row in rows] if rows else []
 
-    def get_saldo_facturas(self, segmento: str = None) -> list[SaldoFactura]:
+    def get_saldo_facturas(
+        self, *, include_vigentes=False, segmento: str = None
+    ) -> list[SaldoFactura]:
 
         if segmento:
             facturas = self.getall_facturas(
                 wheres=["mov.CSCMOVTO = ?"], args=(segmento,)
             )
         else:
-            facturas = self.getall_facturas()
+            facturas = self.getall_facturas(include_vigentes=include_vigentes)
 
         saldos = {}
 
@@ -134,19 +149,23 @@ class EstadoCuentaRepository:
                     "saldo_vencido60": 0,
                     "saldo_vencido": 0,
                     "saldo_pendiente": 0,
+                    "total_facturas": 0,
                 },
             )
 
-            cursor["saldo_total"] += fact.total
-            cursor["saldo_pendiente"] += fact.saldo_pendiente
+            importe = fact.saldo_pendiente
 
-            if fact.estatus == "vencida30":
-                cursor["saldo_vencido30"] += fact.total
-            elif fact.estatus == "vencida60":
-                cursor["saldo_vencido60"] += fact.total
-            elif fact.estatus == "vencido":
-                cursor["saldo_vencido"] += fact.total
+            cursor["saldo_total"] += fact.total
+            cursor["saldo_pendiente"] += importe
+            cursor["total_facturas"] += 1
+
+            if fact.estatus == "VENCIDO_30":
+                cursor["saldo_vencido30"] += importe
+            elif fact.estatus == "VENCIDO_60":
+                cursor["saldo_vencido60"] += importe
+            elif fact.estatus == "VENCIDO_MAS_90":
+                cursor["saldo_vencido"] += importe
             else:
-                cursor["saldo_vigente"] += fact.total
+                cursor["saldo_vigente"] += importe
 
         return [SaldoFactura(**s) for s in saldos.values()]

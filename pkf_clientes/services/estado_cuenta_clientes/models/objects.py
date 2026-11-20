@@ -14,6 +14,7 @@ class Base:
 @dataclass
 class Cliente(Base):
     rfc: str = ""
+    estatus: str = ""
 
 
 @dataclass

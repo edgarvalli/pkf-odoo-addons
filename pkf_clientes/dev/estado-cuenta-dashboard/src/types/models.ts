@@ -34,6 +34,7 @@ export interface Cliente {
   rfc: string;
   emails?: string;
   grupo?: GrupoValor;
+  estatus: string;
 }
 
 export interface GrupoValor {
@@ -67,4 +68,5 @@ export interface SaldoCliente {
   saldoVencido: number;
   saldoTotal: number;
   saldoTotalPendiente: number;
+  totalFacturas: number;
 }

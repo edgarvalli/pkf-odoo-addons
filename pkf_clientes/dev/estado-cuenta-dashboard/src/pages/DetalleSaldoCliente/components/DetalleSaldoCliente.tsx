@@ -2,7 +2,6 @@ import { useDetalleSaldoCliente } from "../hooks/useDetalleSaldoCliente";
 import { DetalleHeader } from "./DetalleHeader";
 import { FacturasTable } from "./FacturasTable";
 import "../styles.css";
-import "@/styles/material-card.css";
 
 export function DetalleSaldoCliente() {
   const {

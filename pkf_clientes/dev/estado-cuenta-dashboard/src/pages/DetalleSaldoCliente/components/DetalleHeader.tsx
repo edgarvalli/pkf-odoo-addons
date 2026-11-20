@@ -24,8 +24,8 @@ export function DetalleHeader(props: DetalleHeaderPorps) {
       <div className="d-flex mb-2 gap-2 align-items-center">
         <button
           type="button"
-          className="btn btn-light btn-sm"
-          onClick={() => navigate("/")}
+          className="btn btn-sm"
+          onClick={() => navigate(-1)}
         >
           <i className="fa fa-arrow-left" />
         </button>

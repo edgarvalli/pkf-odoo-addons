@@ -70,10 +70,10 @@ class PKFClientes(AbstractModel):
         with self.env["ev.tools.mssql"].connect(dbname) as db:
             return db.fetchall(sql)
 
-    def saldo_by_segmento(self):
+    def saldo_by_segmento(self, **kwargs):
         repo = EstadoCuentaRepository(self.env)
-
-        invoices = repo.get_saldo_facturas()
+        include_vigentes = kwargs.get("include_vigentes", False)
+        invoices = repo.get_saldo_facturas(include_vigentes=include_vigentes)
 
         return [inv.to_dict() for inv in invoices]
 

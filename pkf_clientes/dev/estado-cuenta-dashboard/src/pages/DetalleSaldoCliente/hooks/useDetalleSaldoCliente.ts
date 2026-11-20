@@ -1,16 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
-import { useOrm } from "@/hooks/useOrm";
 import { useParams } from "react-router";
 import type { Cliente, Factura } from "@/types/models";
-import { mapFactura } from "@/utils/mappers";
+import { useSaldoClientes } from "@/hooks/useSaldoClientes";
 
 export function useDetalleSaldoCliente() {
   const [referenceSelected, setReferenceSelected] = useState<string[]>([]);
   const [snapFacturas, setSnapFacturas] = useState<Factura[]>([]);
   const [cliente, setCliente] = useState<Cliente | null>(null);
 
-  const orm = useOrm();
   const params = useParams();
+  const { loading, getFacturasByCliente } = useSaldoClientes();
 
   const references = useMemo(
     () => [...new Set(snapFacturas.map((f) => f.referencia))],
@@ -31,18 +30,8 @@ export function useDetalleSaldoCliente() {
   );
 
   const getFacturas = async () => {
-    const cliente_id = Number(params.clienteId);
-
-    const result = await orm.call<any[]>(
-      "pkf.clientes",
-      "facturas_by_cliente",
-      [[]],
-      { cliente_id },
-    );
-
-    if (!result) return;
-
-    const facturas = result.map(mapFactura);
+    const clienteId = Number(params.clienteId);
+    const facturas = await getFacturasByCliente(clienteId);
 
     setSnapFacturas(facturas);
     setCliente(facturas[0]?.cliente ?? null);
@@ -54,7 +43,7 @@ export function useDetalleSaldoCliente() {
   }, [params.clienteId]);
 
   return {
-    loading: orm.fetching,
+    loading,
     facturas,
     cliente,
     references,
