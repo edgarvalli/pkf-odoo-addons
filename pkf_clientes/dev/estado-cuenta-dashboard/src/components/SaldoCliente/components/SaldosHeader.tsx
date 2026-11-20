@@ -22,24 +22,28 @@ export function SaldosHeader(props: SaldosHeaderProps) {
           <span className="input-group-text">
             <i className="fa fa-search" aria-hidden="true" />
           </span>
-          <input
-            type="search"
-            className="form-control bg-white"
-            id="search"
-            placeholder="Buscar cliente, código o grupo..."
-            aria-label="Buscar clientes"
-            onChange={props.searchClientes}
-          />
+          {props.searchClientes && (
+            <input
+              type="search"
+              className="form-control bg-white"
+              id="search"
+              placeholder="Buscar cliente, código o grupo..."
+              aria-label="Buscar clientes"
+              onChange={props.searchClientes}
+            />
+          )}
         </div>
 
-        <button
-          className="btn btn-primary dropdown-toggle text-nowrap w-100"
-          type="button"
-          onClick={props.downloadReport}
-        >
-          <i className="me-2 fa fa-download" />
-          Descargar reporte
-        </button>
+        {props.downloadReport && (
+          <button
+            className="btn btn-primary dropdown-toggle text-nowrap w-100"
+            type="button"
+            onClick={props.downloadReport}
+          >
+            <i className="me-2 fa fa-download" />
+            Descargar reporte
+          </button>
+        )}
       </div>
     </header>
   );
