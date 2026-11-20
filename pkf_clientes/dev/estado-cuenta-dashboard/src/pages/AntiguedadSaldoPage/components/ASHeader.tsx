@@ -1,6 +1,7 @@
 import { SaldosModal } from "@/components";
 import { GridCard } from "./GridCard";
 import { useASContext } from "../hooks/useASContext";
+import { exportTableToExcel } from "src/utils/exports";
 
 export function ASHeader() {
   const {
@@ -64,7 +65,9 @@ export function ASHeader() {
           saldos: saldoFiltered,
           cancelClick: true,
         }}
-        headerProps={{}}
+        headerProps={{
+          downloadReport: () => exportTableToExcel("saldos-table-as"),
+        }}
       />
     </header>
   );
