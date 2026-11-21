@@ -18,11 +18,11 @@ export function SaldosHeader(props: SaldosHeaderProps) {
       </div>
 
       <div className="d-flex flex-column flex-md-row gap-2 align-items-stretch align-items-md-center">
-        <div className="input-group">
-          <span className="input-group-text">
-            <i className="fa fa-search" aria-hidden="true" />
-          </span>
-          {props.searchClientes && (
+        {props.searchClientes && (
+          <div className="input-group">
+            <span className="input-group-text">
+              <i className="fa fa-search" aria-hidden="true" />
+            </span>
             <input
               type="search"
               className="form-control bg-white"
@@ -31,8 +31,8 @@ export function SaldosHeader(props: SaldosHeaderProps) {
               aria-label="Buscar clientes"
               onChange={props.searchClientes}
             />
-          )}
-        </div>
+          </div>
+        )}
 
         {props.downloadReport && (
           <button
