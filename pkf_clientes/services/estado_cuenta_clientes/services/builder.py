@@ -1,8 +1,9 @@
 import uuid
+from datetime import datetime
 
-from ..utils.dates import fecha_mx
 from ..models.factura import Factura
 from ..models.context import Context, Group
+from ..utils.dates import fecha_mx, TZ_MONTERREY
 from ..repositories.estado_cuenta import EstadoCuentaRepository
 
 
@@ -11,6 +12,7 @@ class ContextBuilder:
     def __init__(self, repo: EstadoCuentaRepository):
         self.uid = str(uuid.uuid4())
         self.repo = repo
+        self.today = datetime.now(tz=TZ_MONTERREY).date()
 
     def _build_emails(
         self,
@@ -40,7 +42,7 @@ class ContextBuilder:
             codigo=factura.cliente.codigo,
             razonsocial=factura.cliente.nombre,
             rfc=factura.cliente.rfc,
-            fecha=fecha_mx(factura.fecha),
+            fecha=fecha_mx(self.today),
         )
 
     def build(

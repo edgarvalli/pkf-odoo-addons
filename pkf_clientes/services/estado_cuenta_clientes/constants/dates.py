@@ -1,3 +1,5 @@
+import pytz
+
 MESES_MX = (
     "enero",
     "febrero",
@@ -12,3 +14,5 @@ MESES_MX = (
     "noviembre",
     "diciembre",
 )
+
+TZ_MONTERREY = pytz.timezone("America/Monterrey")

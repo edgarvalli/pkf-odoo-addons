@@ -62,7 +62,7 @@ class EstadoCuentaRepository:
                     cv.CCODIGOVALORCLASIFICACION AS grupo_codigo,
                     doc.CIDCONCEPTODOCUMENTO AS concepto_id,
                     doc.CREFERENCIA AS referencia,
-                    doc.COBSERVACIONES AS observaciones,
+                    mov.COBSERVAMOV AS observaciones,
                     CAST(doc.CTOTAL AS DECIMAL(18,2)) AS total,
                     CAST(doc.CPENDIENTE AS DECIMAL(18,2)) AS saldo_pendiente,
                     folios.CUUID AS uuid,
@@ -71,20 +71,26 @@ class EstadoCuentaRepository:
                         NULLIF(clientes.CEMAIL2, ''),
                         NULLIF(clientes.CEMAIL3, '')
                     ) AS emails,
-                    DATEDIFF(
-                        DAY,
-                        DATEADD(
+                    CASE
+                        WHEN CAST(folios.CFECHAEMI AS DATE) >= @today
+                            THEN 0
+                        ELSE DATEDIFF(
                             DAY,
-                            COALESCE(clientes.CDIASCREDITOCLIENTE, 0),
-                            doc.CFECHA
-                        ),
-                        @today
-                    ) AS diasvencidos
+                            CAST(folios.CFECHAEMI AS DATE),
+                            @today
+                        )
+                    END AS diasvencidos
                 FROM admDocumentos doc
                 INNER JOIN admFoliosDigitales folios ON folios.CIDDOCTO = doc.CIDDOCUMENTO
                 INNER JOIN admClientes clientes ON clientes.CIDCLIENTEPROVEEDOR = doc.CIDCLIENTEPROVEEDOR
                 LEFT JOIN admClasificacionesValores cv ON cv.CIDVALORCLASIFICACION = clientes.CIDVALORCLASIFCLIENTE1
                 LEFT JOIN admClasificacionesValores est ON est.CIDVALORCLASIFICACION = clientes.CIDVALORCLASIFCLIENTE6
+                OUTER APPLY (
+                    SELECT TOP 1
+                        m.COBSERVAMOV
+                    FROM admMovimientos m 
+                    WHERE m.CIDDOCUMENTO = doc.CIDDOCUMENTO
+                ) as mov
                 WHERE {" AND ".join(where_clause)}
             )
             SELECT

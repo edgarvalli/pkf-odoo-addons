@@ -14,7 +14,7 @@ class Group:
 
     @property
     def title(self) -> str:
-        return ESTATUS.get(self.estatus, {}).get("title", "")
+        return ESTATUS.get(self.estatus, {}).get("title", "No se encontro")
 
     @property
     def order(self) -> int:
